@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<h1>{{ product.name }}</h1>
+<p>Precio: ${{ product.price }}</p>
+<a href="{% url 'add_to_cart' product.id %}" class="btn btn-success">Añadir al carrito</a>
+
+<h3>Reseñas</h3>
+{% for review in reviews %}
+    <p><b>{{ review.user.username }}</b>: {{ review.text }} ({{ review.rating }}/5)</p>
+{% empty %}
+    <p>No hay reseñas todavía.</p>
+{% endfor %}
+<a href="{% url 'submit_review' product.id %}" class="btn btn-secondary">Escribir reseña</a>
+{% endblock %}
