@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }} | LEAF & ROOT</title>
+</head>
+<body>
+    <a href="{% url 'home' %}">Volver a la tienda</a>
+    
+    <h1>{{ product.name }}</h1>
+    <p><strong>Precio:</strong> ${{ product.price }}</p>
+    <p><strong>Descripción:</strong> {{ product.description }}</p>
+    <p><strong>Ingredientes:</strong> {{ product.ingredients }}</p>
+    <p><strong>Stock:</strong> {{ product.stock }} unidades</p>
+    {% if product.is_vegan %}
+        <p>🌱 **Este producto es vegano.**</p>
+    {% elif product.is_vegetarian %}
+        <p>🥦 **Este producto es vegetariano.**</p>
+    {% endif %}
+
+    </body>
+</html>
