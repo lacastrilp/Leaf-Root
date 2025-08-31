@@ -25,8 +25,10 @@ urlpatterns = [
     path("register/", views.RegisterView.as_view(), name="register"),
 
     # Carrito
-    path("cart/add/<int:product_id>/", views.AddToCartView.as_view(), name="add_to_cart"),
-    path("cart/remove/<int:product_id>/", views.RemoveFromCartView.as_view(), name="remove_from_cart"),
+    path('add-to-cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/', views.cart_detail, name='cart_detail'),
+    path('cart/remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
+
 
     # Reseñas
     path("product/<int:product_id>/review/", views.SubmitReviewView.as_view(), name="submit_review"),

@@ -70,6 +70,7 @@ class ReviewForm(forms.ModelForm):
         }
 
 
+
 class RegisterForm(UserCreationForm):
     """Formulario de registro de usuarios básicos"""
     email = forms.EmailField(

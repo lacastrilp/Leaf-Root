@@ -10,9 +10,7 @@
             {% if user.is_authenticated %}
                 <span class="me-2">Hola, {{ user.username }} 👋</span>
                 <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Cerrar sesión</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Iniciar sesión</a>
-                <a href="{% url 'register' %}" class="btn btn-primary btn-sm ms-2">Registrarse</a>
+            
             {% endif %}
         </div>
     </div>
@@ -42,7 +40,11 @@
                                 <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">✏️ Editar</a>
                                 <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">🗑 Eliminar</a>
                             {% else %}
-                                <button class="btn btn-primary btn-sm">🛒 Comprar</button>
+                                <form method="post" action="{% url 'add_to_cart' product.pk %}" class="d-flex">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm me-2" style="width:70px;">
+                                    <button type="submit" class="btn btn-primary btn-sm">🛒 Comprar</button>
+                                </form>
                             {% endif %}
                         </div>
                     </div>
@@ -55,3 +57,5 @@
 </div>
 
 {% endblock %}
+
+

@@ -31,6 +31,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
 
 
 class Wishlist(models.Model):
@@ -63,16 +65,28 @@ class Review(models.Model):
         return f"Reseña de {self.customer.name} para {self.product.name}"
 
 
+# store/models.py
+
 class Cart(models.Model):
     id_cart = models.AutoField(primary_key=True)
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
 
-    class Meta:
-        verbose_name = "Carrito de Compras"
-        verbose_name_plural = "Carritos de Compras"
-
     def __str__(self):
         return f"Carrito de {self.customer.name}"
+
+    def add_product(self, product, quantity=1):
+        item, created = ItemCart.objects.get_or_create(cart=self, product=product)
+        if not created:
+            item.quantity += quantity
+            item.save()
+        return item
+
+    def total_items(self):
+        return self.itemcart_set.aggregate(total=models.Sum('quantity'))['total'] or 0
+
+    def total_price(self):
+        return sum([item.get_subtotal() for item in self.itemcart_set.all()])
+
 
 
 class ItemCart(models.Model):
