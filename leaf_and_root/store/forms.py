@@ -94,3 +94,9 @@ class LoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Usuario"})
         self.fields["password"].widget.attrs.update({"class": "form-control", "placeholder": "Contraseña"})
+
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'price', 'stock', 'image']

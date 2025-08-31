@@ -26,6 +26,8 @@ class Product(models.Model):
     stock = models.PositiveIntegerField()
     category = models.CharField(max_length=100)
     image = models.ImageField(upload_to="products/", blank=True, null=True)
+    
+
 
     def __str__(self):
         return self.name
@@ -74,6 +76,7 @@ class Cart(models.Model):
 
 
 class ItemCart(models.Model):
+    id_itemcart = models.AutoField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)

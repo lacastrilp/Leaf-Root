@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{% if product %}Editar Producto{% else %}Agregar Producto{% endif %}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="mb-3">
+        <label for="id_image">Vista previa de imagen:</label><br>
+        <img id="preview" src="{% if product and product.image %}{{ product.image.url }}{% endif %}" 
+             alt="Vista previa" 
+             style="max-width: 200px; max-height: 200px; object-fit: cover; border:1px solid #ccc; padding:4px;">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+<script>
+document.getElementById("id_image").addEventListener("change", function(event) {
+    let reader = new FileReader();
+    reader.onload = function(){
+        let output = document.getElementById("preview");
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+});
+</script>
+
+
+{% endblock %}
+

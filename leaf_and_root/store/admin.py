@@ -50,3 +50,4 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ("id_order", "customer", "status", "order_date")
     list_filter = ("status", "order_date")
     search_fields = ("customer__name", "status")
+    
