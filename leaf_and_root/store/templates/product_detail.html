@@ -13,11 +13,8 @@
 {% endif %}
 
 <hr>
-
-<a href="{% url 'add_to_cart' product.pk %}" class="btn btn-success">🛒 Añadir al carrito</a>
-
+  <a href="{% url 'add_to_cart' product.pk %}" class="btn btn-success">🛒 Añadir al carrito</a>
 <hr>
-
 <h3>Reseñas</h3>
 {% for review in reviews %}
   <p>

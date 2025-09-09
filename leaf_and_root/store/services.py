@@ -1,10 +1,12 @@
-# Autor: [Tu Nombre]
 
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 from io import BytesIO
 from reportlab.pdfgen import canvas
-from .models import Product, ItemCart, Order, Cart, Wishlist, Review, Customer
+from leaf_and_root.carrito.models import Cart, ItemCart
+from leaf_and_root.ordenes.models import Order
+from leaf_and_root.catalogo.models import Product, Review, Wishlist
+from leaf_and_root.users.models import Customer
 
 # ==========================
 # Lógica de Productos

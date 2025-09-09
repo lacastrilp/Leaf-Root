@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import Product, Customer, Cart, ItemCart, Order
+from leaf_and_root.carrito.models import Cart, ItemCart
+from leaf_and_root.ordenes.models import Order
+from leaf_and_root.catalogo.models import Product, Review, Wishlist
+from leaf_and_root.users.models import Customer
 
 
 class ProductModelTest(TestCase):
@@ -87,6 +90,6 @@ class ViewsTest(TestCase):
         self.assertContains(response, "Smartphone")
 
     def test_product_detail_view(self):
-        response = self.client.get(reverse("store:product_detail", args=[self.product.id]))
+        response = self.client.get(reverse("store:product_detail", args=[self.product.id_product]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Smartphone")
