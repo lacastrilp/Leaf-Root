@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from leaf_and_root.catalogo.models import Product
 from leaf_and_root.users.models import Customer 
 from leaf_and_root.carrito.models import Cart, ItemCart
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
+from django.http import HttpResponse
 
 @login_required
 def add_to_cart(request, product_id):
@@ -59,6 +62,17 @@ def cart_detail(request):
         'total_price': total_price,
         'total_items': total_items
     })
+
+class AddToCartView(LoginRequiredMixin, View):
+    def get(self, request, product_id):
+        product = get_object_or_404(Product, pk=product_id)
+        return HttpResponse(f"{product.name} agregado al carrito")
+
+
+class RemoveFromCartView(LoginRequiredMixin, View):
+    def get(self, request, product_id):
+        product = get_object_or_404(Product, pk=product_id)
+        return HttpResponse(f"{product.name} eliminado del carrito")
 
 
 # Create your views here.
