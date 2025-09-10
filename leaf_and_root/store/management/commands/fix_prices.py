@@ -1,7 +1,7 @@
 import random
 from decimal import Decimal
 from django.core.management.base import BaseCommand
-from leaf_and_root.carrito.models import Product
+from carrito.models import Product
 # Rangos de precio por tipo
 price_map = {
     "vegan": (5, 15),

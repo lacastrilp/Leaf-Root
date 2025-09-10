@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
-from leaf_and_root.users.models import Customer
+from users.models import Customer
 
 
 
@@ -16,7 +16,8 @@ class Product(models.Model):
     # Extra (puedes usarlos para filtros avanzados en tu tienda)
     nutriscore = models.CharField(max_length=5, blank=True, null=True)
     labels = models.CharField(max_length=255, blank=True, null=True)
-
+    type = models.CharField(max_length=50, blank=True, null=True)
+    
     def __str__(self):
         return self.name
 

@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from leaf_and_root.catalogo.models import Product, Review
-from leaf_and_root.users.models import Customer
+from catalogo.models import Product, Review
+from users.models import Customer
 
 
 class CustomerRegistrationForm(forms.ModelForm):
@@ -13,6 +13,7 @@ class CustomerRegistrationForm(forms.ModelForm):
     password_confirmation = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Confirma tu contraseña"})
     )
+
 
     class Meta:
         model = Customer
@@ -71,7 +72,6 @@ class ReviewForm(forms.ModelForm):
             "rating": forms.NumberInput(attrs={"class": "form-control", "min": 1, "max": 5}),
             "comment": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "Escribe tu reseña..."}),
         }
-
 
 
 class RegisterForm(UserCreationForm):

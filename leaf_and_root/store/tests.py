@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
-from leaf_and_root.carrito.models import Cart, ItemCart
-from leaf_and_root.ordenes.models import Order
-from leaf_and_root.catalogo.models import Product, Review, Wishlist
-from leaf_and_root.users.models import Customer
+from carrito.models import Cart, ItemCart
+from ordenes.models import Order
+from catalogo.models import Product, Review, Wishlist
+from users.models import Customer
 
 
 class ProductModelTest(TestCase):

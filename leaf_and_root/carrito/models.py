@@ -1,6 +1,6 @@
 from django.db import models
-from leaf_and_root.catalogo.models import Product
-from leaf_and_root.users.models import Customer
+from catalogo.models import Product
+from users.models import Customer
 
 
 class Cart(models.Model):

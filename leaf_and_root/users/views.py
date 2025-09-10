@@ -6,13 +6,13 @@ from django.views.generic.edit import FormView
 from .forms import RegisterForm
 
 class LoginView(AuthLoginView):
-    template_name = "auth/login.html"
+    template_name = "login.html"
 
 class LogoutView(AuthLogoutView):
-    next_page = "/"
+    template_name = "logout.html"
 
 class RegisterView(FormView):
-    template_name = "auth/register.html"
+    template_name = "register.html"
     form_class = RegisterForm
 
     def form_valid(self, form):

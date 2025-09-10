@@ -80,7 +80,7 @@ class Command(BaseCommand):
                     defaults={
                         "description": p.get("ingredients_text", "Sin descripción"),
                         "price": price,
-                        "stock": 10,
+                        "stock": random.randint(5, 50),
                         "category": ",".join(p.get("categories_tags", [])[:1]) or "general",
                         "image_url": p.get("image_url", None),
                         "nutriscore": p.get("nutriscore_grade", None),

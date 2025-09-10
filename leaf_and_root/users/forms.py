@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from leaf_and_root.users.models import Customer
+from users.models import Customer
 
 class CustomerRegistrationForm(forms.ModelForm):
     """Formulario para registrar un cliente asociado a un usuario del sistema"""

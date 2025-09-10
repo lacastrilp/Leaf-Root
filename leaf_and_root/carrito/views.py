@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from leaf_and_root.catalogo.models import Product
-from leaf_and_root.users.models import Customer 
-from leaf_and_root.carrito.models import Cart, ItemCart
+from catalogo.models import Product
+from users.models import Customer 
+from carrito.models import Cart, ItemCart
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.http import HttpResponse
@@ -11,7 +11,7 @@ from django.http import HttpResponse
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    customer = get_object_or_404(Customer, user=request.user)
+    customer, created = Customer.objects.get_or_create(user=request.user)
 
     quantity = int(request.POST.get('quantity', 1))
 
@@ -56,7 +56,7 @@ def cart_detail(request):
     total_price = sum(item.get_subtotal() for item in items)
     total_items = sum(item.quantity for item in items)
 
-    return render(request, 'cart/cart_detail.html', {
+    return render(request, 'cart_detail.html', {
         'cart': cart,
         'items': items,
         'total_price': total_price,

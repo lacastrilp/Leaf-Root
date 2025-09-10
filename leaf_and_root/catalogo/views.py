@@ -6,11 +6,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView, ListView, TemplateView
-from leaf_and_root.carrito.models import Cart, ItemCart
-from leaf_and_root.ordenes.models import Order
-from leaf_and_root.catalogo.models import Product, Review, Wishlist
-from leaf_and_root.users.models import Customer # 👈 agrega Custome
-from .forms import RegisterForm, ReviewForm, ProductForm
+from carrito.models import Cart, ItemCart
+from ordenes.models import Order
+from catalogo.models import Product, Review, Wishlist
+from users.models import Customer # 👈 agrega Custome
+from .forms import RegisterForm, ReviewForm, ProductForm, CustomerRegistrationForm
 
 
 def is_admin(user):
