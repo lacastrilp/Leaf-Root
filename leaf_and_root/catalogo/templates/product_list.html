@@ -40,10 +40,10 @@
                                 <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">✏️ Editar</a>
                                 <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">🗑 Eliminar</a>
                             {% else %}
-                                <form method="post" action="{% url 'add_to_cart' product.pk %}" class="d-flex">
+                                <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
                                     {% csrf_token %}
-                                    <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm me-2" style="width:70px;">
-                                    <button type="submit" class="btn btn-primary btn-sm">🛒 Comprar</button>
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-sm btn-success">Agregar al carrito</button>
                                 </form>
                             {% endif %}
                         </div>

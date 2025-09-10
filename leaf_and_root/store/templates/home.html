@@ -11,14 +11,14 @@
                 <!-- Imagen -->
                 {% if product.image_url %}
                 <img src="{{ product.image_url }}" 
-                     alt="{{ product.name }}" 
-                     class="card-img-top img-fluid" 
-                     style="max-height:200px; object-fit:cover;">
+                    alt="{{ product.name }}" 
+                    class="card-img-top img-fluid" 
+                    style="max-height:200px; object-fit:cover;">
                 {% else %}
                 <img src="https://via.placeholder.com/300x200?text=No+Image" 
-                     alt="No Image" 
-                     class="card-img-top img-fluid" 
-                     style="max-height:200px; object-fit:cover;">
+                    alt="No Image" 
+                    class="card-img-top img-fluid" 
+                    style="max-height:200px; object-fit:cover;">
                 {% endif %}
 
                 <!-- Contenido -->
@@ -27,7 +27,7 @@
                     <p class="card-text text-muted">Precio: ${{ product.price }}</p>
 
                     <!-- Botón carrito -->
-                    <form method="post" action="{% url 'add_to_cart' product.id_product %}" class="mt-auto">
+                    <form method="post" action="{% url 'add_to_cart' product.id_product %}" class="add-to-cart-form">
                         {% csrf_token %}
                         <div class="input-group">
                             <input type="number" name="quantity" value="1" min="1" class="form-control">
