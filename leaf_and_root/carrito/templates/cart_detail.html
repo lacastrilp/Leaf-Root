@@ -7,9 +7,10 @@
         <thead>
             <tr>
                 <th>Producto</th>
-                <th>Precio</th>
                 <th>Cantidad</th>
+                <th>Precio</th>
                 <th>Subtotal</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -17,20 +18,28 @@
             <tr>
                 <td>{{ item.product.name }}</td>
                 <td>
-                    <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}" class="d-flex">
+                    <form method="post" action="{% url 'update_cart_quantity' item.product.id_product %}" class="update-form">
                         {% csrf_token %}
-                        <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm me-2" style="width:70px;">
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        <select name="quantity" class="form-select form-select-sm mt-2" style="width:80px;">
+                            {% for i in quantity_range %}
+                                <option value="{{ i }}" {% if item.quantity == i %}selected{% endif %}>{{ i }}</option>
+                            {% endfor %}
+                        </select>
                     </form>
                 </td>
                 <td>${{ item.product.price }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>${{ item.get_subtotal }}</td>
-                
+                <td>
+                    <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}" class="remove-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4" class="text-center">No hay productos en el carrito.</td>
+                <td colspan="5" class="text-center">No hay productos en el carrito.</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -38,4 +47,3 @@
     <h4>Total: ${{ total_price }}</h4>
 </div>
 {% endblock %}
-

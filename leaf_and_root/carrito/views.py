@@ -10,15 +10,32 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 
 
+def build_cart_response(cart):
+    """Helper: genera JSON con items del carrito."""
+    items = []
+    for i in ItemCart.objects.filter(cart=cart):
+        items.append({
+            "id": i.product.id_product,
+            "name": i.product.name,
+            "quantity": i.quantity,
+            "price": float(i.product.price),
+            "subtotal": float(i.get_subtotal()),
+            "image": i.product.image_url if i.product.image_url else "https://via.placeholder.com/50",
+        })
+    return {
+        "success": True,
+        "cart_items": items,
+        "total_items": sum(i["quantity"] for i in items),
+        "total_price": sum(i["subtotal"] for i in items),
+    }
 
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     customer, _ = Customer.objects.get_or_create(user=request.user)
-
-    quantity = int(request.POST.get('quantity', 1))
-
     cart, _ = Cart.objects.get_or_create(customer=customer)
+
+    quantity = int(request.POST.get("quantity", 1))
     item, created_item = ItemCart.objects.get_or_create(cart=cart, product=product)
 
     if not created_item:
@@ -27,52 +44,23 @@ def add_to_cart(request, product_id):
         item.quantity = quantity
     item.save()
 
-    # 👇 Detectar si la petición es AJAX (fetch) o no
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        print(">>> AJAX:", request.headers.get("x-requested-with"))
-        items = []
-        for i in ItemCart.objects.filter(cart=cart):
-            items.append({
-                "id": i.product.id_product,
-                "name": i.product.name,
-                "quantity": i.quantity,
-                "price": float(i.product.price),
-                "subtotal": float(i.get_subtotal()),
-                "image": i.product.image_url if i.product.image_url else "https://via.placeholder.com/50"
-            })
+        return JsonResponse(build_cart_response(cart))
 
-        return JsonResponse({
-            "success": True,
-            "cart_items": items,
-            "total_items": sum(i["quantity"] for i in items),
-            "total_price": sum(i["subtotal"] for i in items),
-        })
-
-    # Si no es AJAX → redirige al carrito como antes
     return redirect("cart_detail")
-
 
 @login_required
 def remove_from_cart(request, product_id):
-    customer = request.user.customer
-    cart, created = Cart.objects.get_or_create(customer=customer)
+    customer, _ = Customer.objects.get_or_create(user=request.user)
+    cart, _ = Cart.objects.get_or_create(customer=customer)
 
-    try:
-        item = ItemCart.objects.get(cart=cart, product__id_product=product_id)
-    except ItemCart.DoesNotExist:
-        # Si no existe el item, simplemente redirige al carrito
-        return redirect('cart_detail')
+    item = get_object_or_404(ItemCart, cart=cart, product_id=product_id)
+    item.delete()
 
-    qty = int(request.POST.get('quantity', 1))
-    
-    if item.quantity > qty:
-        item.quantity -= qty
-        item.save()
-    else:
-        item.delete()
-    
-    return redirect('cart_detail')
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse(build_cart_response(cart))
 
+    return redirect("cart_detail")
 
 @login_required
 def cart_detail(request):
@@ -86,14 +74,33 @@ def cart_detail(request):
         'cart': cart,
         'items': items,
         'total_price': total_price,
-        'total_items': total_items
+        'total_items': total_items,
+        "quantity_range": list(range(1, 11)),
     })
+
+@login_required
+def update_cart_quantity(request, product_id):
+    customer, _ = Customer.objects.get_or_create(user=request.user)
+    cart, _ = Cart.objects.get_or_create(customer=customer)
+
+    item = get_object_or_404(ItemCart, cart=cart, product_id=product_id)
+    quantity = int(request.POST.get("quantity", 1))
+
+    if quantity > 0:
+        item.quantity = quantity
+        item.save()
+    else:
+        item.delete()
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse(build_cart_response(cart))
+
+    return redirect("cart_detail")
 
 class AddToCartView(LoginRequiredMixin, View):
     def get(self, request, product_id):
         product = get_object_or_404(Product, pk=product_id)
         return HttpResponse(f"{product.name} agregado al carrito")
-
 
 class RemoveFromCartView(LoginRequiredMixin, View):
     def get(self, request, product_id):
