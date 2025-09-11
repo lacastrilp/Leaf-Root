@@ -5,5 +5,5 @@ from .models import Customer
 
 @receiver(post_save, sender=User)
 def create_customer(sender, instance, created, **kwargs):
-    if created:
-        Customer.objects.create(user=instance)
+    if created and not Customer.objects.filter(email=instance.email).exists():
+        Customer.objects.create(user=instance, email=instance.email)
