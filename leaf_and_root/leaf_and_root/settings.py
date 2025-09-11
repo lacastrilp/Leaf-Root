@@ -28,8 +28,8 @@ DEBUG = True
 LOGIN_REDIRECT_URL = '/'   # redirige al home después de login/registro
 LOGOUT_REDIRECT_URL = '/'  # redirige al home después de logout
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ALLOWED_HOSTS = []
 
