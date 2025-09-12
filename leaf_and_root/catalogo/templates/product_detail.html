@@ -1,21 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}{{ product.name }}{% endblock %}
+<style src="{% static 'carrito/css/cart.css' %}"></style>
 
 {% block content %}
 <h1>{{ product.name }}</h1>
-
-<p><strong>Precio:</strong> ${{ product.price }}</p>
-<p><strong>Stock:</strong> {{ product.stock }}</p>
-<p>{{ product.description }}</p>
-
 {% if product.image_url %}
   <img src="{{ product.image_url }}" alt="{{ product.name }}" width="300">
 {% endif %}
 
+<p><strong>Price:</strong> ${{ product.price }}</p>
+<p><strong>Stock:</strong> {{ product.stock }}</p>
+<p>{{ product.description }}</p>
+<form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
+  {% csrf_token %}
+  <input type="hidden" name="quantity" value="1">
+  <button type="submit" class="btn btn-sm btn-success">Add to shopping cart</button>
+</form>
 
-<hr>
-  <a href="{% url 'add_to_cart' product.pk %}" class="btn btn-success">Add to shopping cart</a>
-<hr>
+
 <h3>Reviews</h3>
 
 {% for review in reviews %}
@@ -40,4 +43,5 @@
     <a href="{% url 'login' %}?next={{ request.path }}">Login to write a review</a>
   </p>
 {% endif %}
+<script src="{% static 'carrito/js/cart.js' %}"></script> <!-- JS global de carrito -->
 {% endblock %}
