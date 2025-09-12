@@ -18,29 +18,32 @@
 <form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4">
     <!-- Búsqueda -->
     <div class="col-md-3">
-        <input type="text" name="q" class="form-control" placeholder="Buscar..."
-                value="{{ request.GET.q }}">
+        <input type="text" name="q" class="form-control" placeholder="Buscar productos..."
+                value="{{ request.GET.q|default:'' }}">
     </div>
 
-    <!-- Tipo dinámico -->
+    <!-- Categoría -->
     <div class="col-md-2">
-        <select name="type" class="form-select">
-            <option value="">Tipo</option>
-            {% for t in types %}
-                <option value="{{ t }}" {% if request.GET.type == t %}selected{% endif %}>{{ t }}</option>
+        <select name="category" class="form-control mb-2">
+            <option value="">Todas las categorías</option>
+            {% for c in categories %}
+                <option value="{{ c }}" {% if request.GET.category == c %}selected{% endif %}>
+                    {{ c }}
+                </option>
             {% endfor %}
         </select>
     </div>
 
-    <!-- Nutriscore -->
+    <!-- Nutriscore hay que definir bien los valores
     <div class="col-md-2">
         <select name="nutriscore" class="form-select">
             <option value="">Nutriscore</option>
             {% for n in nutriscores %}
-                <option value="{{ n }}" {% if request.GET.nutriscore == n %}selected{% endif %}>{{ n }}</option>
+                <option value="{{ n }}" {% if request.GET.nutriscore == n %}selected{% endif %}>{{ n|upper }}</option>
             {% endfor %}
         </select>
     </div>
+    -->
 
     <!-- Sort by precios -->
     <div class="col-md-2">
@@ -103,41 +106,43 @@
     {% if is_paginated %}
     <nav>
         <ul class="pagination justify-content-center">
+
+            <!-- Botón Primera y Anterior -->
             {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">Anterior</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Anterior</span>
-            </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&{{ current_filters.urlencode }}">Primera</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">Anterior</a>
+                </li>
             {% endif %}
 
-            {% for num in paginator.page_range %}
+            <!-- Números de página -->
+            {% for num in page_obj.paginator.page_range %}
                 {% if num == page_obj.number %}
-                <li class="page-item active">
-                    <span class="page-link">{{ num }}</span>
-                </li>
-                {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ num }}&{{ current_filters.urlencode }}">{{ num }}</a>
-                </li>
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}&{{ current_filters.urlencode }}">{{ num }}</a>
+                    </li>
                 {% endif %}
             {% endfor %}
 
+            <!-- Botón Siguiente y Última -->
             {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">Siguiente</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Siguiente</span>
-            </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">Última</a>
+                </li>
             {% endif %}
+
         </ul>
     </nav>
     {% endif %}
 </div>
-
 
 {% endblock %}

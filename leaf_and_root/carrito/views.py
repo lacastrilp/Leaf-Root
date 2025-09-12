@@ -67,7 +67,8 @@ def cart_detail(request):
     customer = get_object_or_404(Customer, user=request.user)
     cart, created = Cart.objects.get_or_create(customer=customer)
     items = ItemCart.objects.filter(cart=cart)
-    total_price = sum(item.get_subtotal() for item in items)
+    suma = sum(item.get_subtotal() for item in items)
+    total_price = round(suma, 2)
     total_items = sum(item.quantity for item in items)
 
     return render(request, 'cart_detail.html', {

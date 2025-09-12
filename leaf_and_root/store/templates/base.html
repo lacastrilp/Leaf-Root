@@ -158,7 +158,11 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         // Mostrar sidebar
-        const sidebar = new bootstrap.Offcanvas(document.getElementById("cartSidebar"));
+        const sidebarElement = document.getElementById("cartSidebar");
+        let sidebar = bootstrap.Offcanvas.getInstance(sidebarElement);
+        if (!sidebar) {
+            sidebar = new bootstrap.Offcanvas(sidebarElement);
+        }
         sidebar.show();
 
         // Bind dinámico para selects

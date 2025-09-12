@@ -26,7 +26,7 @@ class Command(BaseCommand):
             "action": "process",
             "tagtype_0": "labels",
             "tag_contains_0": "contains",
-            "tag_0": "vegan",  # Trae vegan, vegetarian y plant-based
+            "tag_0": "vegetarian",  # Trae vegan, vegetarian y plant-based
             "sort_by": "unique_scans_n",
             "page_size": 800,
             "json": 1,
@@ -37,7 +37,7 @@ class Command(BaseCommand):
         updated_count = 0
         skipped_count = 0
 
-        for page in range(1, 3):  # Hasta 3 páginas (~2400 productos máx.)
+        for page in range(1, 8):  # Hasta 7 páginas (~5600 productos máx.)
             params["page"] = page
             response = requests.get(API_URL, params=params)
             if response.status_code != 200:
@@ -65,9 +65,9 @@ class Command(BaseCommand):
                 existing = Product.objects.filter(name=name[:255]).first()
 
                 # Si ya existe y tiene precio válido (> 0), lo saltamos
-                #if existing and existing.price and existing.price > 0:
-                #    skipped_count += 1
-                #    continue
+                if existing and existing.price and existing.price > 0:
+                    skipped_count += 1
+                    continue
 
                 # Generar precio válido
                 price = assign_price(product_type)

@@ -150,9 +150,12 @@ class ProductListView(ListView):
             )
 
         # 🔎 Filtros
-        product_type = self.request.GET.get("type")
-        if product_type:
-            queryset = queryset.filter(type=product_type)
+        category = self.request.GET.get("category")
+        if category:
+            # aquí buscamos tanto si tiene prefijo como si está limpio
+            queryset = queryset.filter(
+                Q(category=category) | Q(category__endswith=f":{category}")
+            )
 
         nutriscore = self.request.GET.get("nutriscore")
         if nutriscore:
@@ -171,7 +174,16 @@ class ProductListView(ListView):
         context = super().get_context_data(**kwargs)
 
         # valores únicos para los select
-        context["types"] = Product.objects.values_list("type", flat=True).distinct()
+        raw_categories = Product.objects.values_list("category", flat=True).distinct()
+
+        def clean_category(c):
+            if c and ":" in c:
+                return c.split(":", 1)[1]
+            return c
+
+        categories = [clean_category(c) for c in raw_categories if c]
+
+        context["categories"] = categories
         context["nutriscores"] = Product.objects.values_list("nutriscore", flat=True).distinct()
 
         # mantener filtros actuales, pero quitar "page"
@@ -179,5 +191,5 @@ class ProductListView(ListView):
         if "page" in current_filters:
             current_filters.pop("page")
         context["current_filters"] = current_filters
-
+        
         return context
