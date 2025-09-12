@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.http import HttpResponse
 from django.http import JsonResponse
+from .decorators import exclude_admin
 
 
 def build_cart_response(cart):
@@ -63,9 +64,11 @@ def remove_from_cart(request, product_id):
     return redirect("cart_detail")
 
 @login_required
+@exclude_admin
 def cart_detail(request):
-    customer = get_object_or_404(Customer, user=request.user)
-    cart, created = Cart.objects.get_or_create(customer=customer)
+    # Aquí ya no necesitas preguntar por admin
+    customer, _ = Customer.objects.get_or_create(user=request.user)
+    cart, _ = Cart.objects.get_or_create(customer=customer)
     items = ItemCart.objects.filter(cart=cart)
     suma = sum(item.get_subtotal() for item in items)
     total_price = round(suma, 2)

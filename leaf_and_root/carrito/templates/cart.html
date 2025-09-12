@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% block title %}Carrito{% endblock %}
+{% block title %}Shopping cart{% endblock %}
 {% block content %}
-<h1>Carrito de compras</h1>
+<h1>Shopping cart</h1>
 {% if cart %}
 <ul>
     {% for item in cart %}
@@ -9,6 +9,6 @@
     {% endfor %}
 </ul>
 {% else %}
-<p>Tu carrito está vacío.</p>
+<p>Your shoppingcart is empty.</p>
 {% endif %}
 {% endblock %}

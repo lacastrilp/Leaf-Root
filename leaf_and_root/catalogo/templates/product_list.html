@@ -5,27 +5,27 @@
 <div class="container mt-4">
     <!-- Barra superior -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Catálogo de Productos</h2>
+        <h2 class="fw-bold">Products Catalog</h2>
         <div>
             {% if user.is_authenticated %}
-                <span class="me-2">Hola, {{ user.username }}</span>
+                <span class="me-2">Hi, {{ user.username }}</span>
                 
             
             {% endif %}
         </div>
     </div>
-    <!-- 🔎 Barra de búsqueda y filtros -->
+    <!-- Barra de búsqueda y filtros -->
 <form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4">
     <!-- Búsqueda -->
     <div class="col-md-3">
-        <input type="text" name="q" class="form-control" placeholder="Buscar productos..."
+        <input type="text" name="q" class="form-control" placeholder="Search products..."
                 value="{{ request.GET.q|default:'' }}">
     </div>
 
     <!-- Categoría -->
     <div class="col-md-2">
         <select name="category" class="form-control mb-2">
-            <option value="">Todas las categorías</option>
+            <option value="">All categories</option>
             {% for c in categories %}
                 <option value="{{ c }}" {% if request.GET.category == c %}selected{% endif %}>
                     {{ c }}
@@ -34,36 +34,25 @@
         </select>
     </div>
 
-    <!-- Nutriscore hay que definir bien los valores
-    <div class="col-md-2">
-        <select name="nutriscore" class="form-select">
-            <option value="">Nutriscore</option>
-            {% for n in nutriscores %}
-                <option value="{{ n }}" {% if request.GET.nutriscore == n %}selected{% endif %}>{{ n|upper }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    -->
-
     <!-- Sort by precios -->
     <div class="col-md-2">
         <select name="sort" class="form-select">
-            <option value="">Ordenar por</option>
-            <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Precio: Menor a mayor</option>
-            <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Precio: Mayor a menor</option>
+            <option value="">Sort by price</option>
+            <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Lowest to highest</option>
+            <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Highest to lowest</option>
         </select>
     </div>
 
     <!-- Botón -->
     <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
     </div>
 </form>
 
     <!-- Botón agregar producto solo admin -->
     {% if user.is_staff %}
         <div class="mb-3 text-end">
-            <a href="{% url 'add_product' %}" class="btn btn-success">➕ Agregar producto</a>
+            <a href="{% url 'add_product' %}" class="btn btn-success">Add product</a>
         </div>
     {% endif %}
 
@@ -75,21 +64,21 @@
                     {% if product.image_url %}
                         <img src="{{ product.image_url }}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{{ product.name }}">
                     {% else %}
-                        <img src="https://via.placeholder.com/200" class="card-img-top" alt="Sin imagen">
+                        <img src="https://via.placeholder.com/200" class="card-img-top" alt="No image available">
                     {% endif %}
 
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text text-muted">Precio: <strong>${{ product.price }}</strong></p>
+                        <p class="card-text text-muted">Price: <strong>${{ product.price }}</strong></p>
                         <div class="mt-auto">
                             {% if user.is_staff %}
-                                <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">✏️ Editar</a>
-                                <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">🗑 Eliminar</a>
+                                <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
                             {% else %}
                                 <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
                                     {% csrf_token %}
                                     <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" class="btn btn-sm btn-success">Agregar al carrito</button>
+                                    <button type="submit" class="btn btn-sm btn-success">Add to shopping cart</button>
                                 </form>
                             {% endif %}
                         </div>
@@ -97,7 +86,7 @@
                 </div>
             </div>
         {% empty %}
-            <p class="text-center text-muted">No hay productos disponibles.</p>
+            <p class="text-center text-muted">There aren't any products yet.</p>
         {% endfor %}
     </div>
 </div>
@@ -110,10 +99,10 @@
             <!-- Botón Primera y Anterior -->
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page=1&{{ current_filters.urlencode }}">Primera</a>
+                    <a class="page-link" href="?page=1&{{ current_filters.urlencode }}">First</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">Anterior</a>
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">Previous</a>
                 </li>
             {% endif %}
 
@@ -133,10 +122,10 @@
             <!-- Botón Siguiente y Última -->
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">Siguiente</a>
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">Next</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">Última</a>
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">Last</a>
                 </li>
             {% endif %}
 

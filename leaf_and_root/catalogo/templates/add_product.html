@@ -1,21 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>{% if product %}Editar Producto{% else %}Agregar Producto{% endif %}</h2>
+<h2>{% if product %}Edit Product{% else %}Add Product{% endif %}</h2>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
 
     <div class="mb-3">
-        <label for="id_image_url">Vista previa de imagen:</label><br>
+        <label for="id_image_url">Image Preview:</label><br>
         <img id="preview" 
             src="{% if product and product.image_url %}{{ product.image_url }}{% endif %}" 
-            alt="Vista previa" 
+            alt="Image Preview" 
             style="max-width: 200px; max-height: 200px; object-fit: cover; border:1px solid #ccc; padding:4px;">
     </div>
 
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
 <script>
 document.getElementById("id_image_url").addEventListener("input", function(event) {
@@ -23,7 +22,4 @@ document.getElementById("id_image_url").addEventListener("input", function(event
 });
 </script>
 
-
-
 {% endblock %}
-
