@@ -7,11 +7,13 @@
     {{ form.as_p }}
 
     <div class="mb-3">
-        <label for="id_image">Image Preview:</label><br>
-        <img id="preview" src="{% if product and product.image %}{{ product.image.url }}{% endif %}" 
-             alt="Vista previa" 
-             style="max-width: 200px; max-height: 200px; object-fit: cover; border:1px solid #ccc; padding:4px;">
+        <label for="id_image_url">Image Preview:</label><br>
+        <img id="preview" 
+            src="{% if product and product.image_url %}{{ product.image_url }}{% endif %}" 
+            alt="View Preview" 
+            style="max-width: 200px; max-height: 200px; object-fit: cover; border:1px solid #ccc; padding:4px;">
     </div>
+
 
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
