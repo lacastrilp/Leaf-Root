@@ -64,11 +64,20 @@
                 // Si ya no está (porque la cantidad llegó a 0), recargamos
                 location.reload();
             }
-            // Actualizar totales
+
+            // Actualizar totales dentro de la página
             document.querySelector("h2").textContent = `My shopping cart (${data.total_items} items)`;
             document.querySelector("h4").textContent = `Total: $${data.total_price}`;
+
+            // 🔥 Actualizar los contadores globales
+            const counter = document.getElementById("cartCounter");
+            if (counter) counter.textContent = data.total_items;
+
+            const counterSidebar = document.getElementById("cartCounterSidebar");
+            if (counterSidebar) counterSidebar.textContent = data.total_items;
         });
     }
+
 
     document.querySelectorAll(".increase-btn").forEach(btn => {
         btn.addEventListener("click", function() {

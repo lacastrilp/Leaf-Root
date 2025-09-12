@@ -19,16 +19,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                {% if user.is_authenticated%}
-                    <li class="nav-item">
-                        {% if user.is_authenticated and not user.is_staff and not user.is_superuser %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cart_detail' %}">
-                                    Shopping Cart ({{ user.customer.cart.total_items|default:"0" }})
-                                </a>
-                            </li>
-                        {% endif %}
-                    </li>
+                {% if user.is_authenticated %}
+                    {% if not user.is_staff and not user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cart_detail' %}">
+                                Shopping Cart (<span id="cartCounter">{{ user.customer.cart.total_items|default:"0" }}</span>)
+                            </a>
+                            
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
@@ -40,6 +39,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
                 {% endif %}
             </ul>
+
         </div>
     </div>
 </nav>
@@ -53,7 +53,9 @@
 <!-- Sidebar carrito -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="cartSidebar" aria-labelledby="cartSidebarLabel">
     <div class="offcanvas-header">
-        <h5 id="cartSidebarLabel">My shopping cart</h5>
+        <h5 id="cartSidebarLabel">
+            My shopping cart (<span id="cartCounterSidebar">{{ user.customer.cart.total_items|default:"0" }}</span>)
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body" id="cartContent">
@@ -160,6 +162,13 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <a href="/cart/" class="btn btn-primary w-100 mt-3">View shopping cart</a>
         `;
+
+        const counter = document.getElementById("cartCounter");
+        if (counter) counter.textContent = data.total_items;
+
+        const counterSidebar = document.getElementById("cartCounterSidebar");
+        if (counterSidebar) counterSidebar.textContent = data.total_items;
+
 
         // Mostrar sidebar
         const sidebarElement = document.getElementById("cartSidebar");
