@@ -82,7 +82,6 @@ def cart_detail(request):
 def update_cart_quantity(request, product_id):
     customer, _ = Customer.objects.get_or_create(user=request.user)
     cart, _ = Cart.objects.get_or_create(customer=customer)
-
     item = get_object_or_404(ItemCart, cart=cart, product_id=product_id)
     quantity = int(request.POST.get("quantity", 1))
 
@@ -108,4 +107,3 @@ class RemoveFromCartView(LoginRequiredMixin, View):
         return HttpResponse(f"{product.name} eliminado del carrito")
 
 
-# Create your views here.

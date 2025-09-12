@@ -18,24 +18,20 @@
             <tr>
                 <td>{{ item.product.name }}</td>
                 <td>
-                    <form method="post" action="{% url 'update_cart_quantity' item.product.id_product %}" class="update-form">
-                        {% csrf_token %}
-                        <select name="quantity" class="form-select form-select-sm mt-2" style="width:80px;">
-                            {% for i in quantity_range %}
-                                <option value="{{ i }}" {% if item.quantity == i %}selected{% endif %}>{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                    </form>
-                </td>
-                <td>${{ item.product.price }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>${{ item.get_subtotal }}</td>
-                <td>
+                    <div class="d-flex align-items-center">
+                        <button type="button" class="btn btn-sm btn-outline-secondary decrease-btn" data-id="{{ item.product.id_product }}">-</button>
+                        <span class="mx-2 quantity" id="qty-{{ item.product.id_product }}">{{ item.quantity }}</span>
+                        <button type="button" class="btn btn-sm btn-outline-secondary increase-btn" data-id="{{ item.product.id_product }}">+</button>
+                    </div>
+                    </td>
+                    <td>${{ item.product.price }}</td>
+                    <td id="subtotal-{{ item.product.id_product }}">${{ item.get_subtotal }}</td>
+                    <td>
                     <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}" class="remove-form">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                     </form>
-                </td>
+                    </td>
             </tr>
             {% empty %}
             <tr>
@@ -45,5 +41,56 @@
         </tbody>
     </table>
     <h4>Total: ${{ total_price }}</h4>
+
+    <script>
+    function updateCart(productId, newQuantity) {
+        fetch(`/cart/update/${productId}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "quantity=" + newQuantity
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Buscar el item actualizado
+            const item = data.cart_items.find(i => i.id === productId);
+            if (item) {
+                document.querySelector(`#qty-${productId}`).textContent = item.quantity;
+                document.querySelector(`#subtotal-${productId}`).textContent = "$" + item.subtotal;
+            } else {
+                // Si ya no está (porque la cantidad llegó a 0), recargamos
+                location.reload();
+            }
+            // Actualizar totales
+            document.querySelector("h2").textContent = `🛒 Mi Carrito (${data.total_items} items)`;
+            document.querySelector("h4").textContent = `Total: $${data.total_price}`;
+        });
+    }
+
+    document.querySelectorAll(".increase-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const productId = parseInt(this.dataset.id);
+            const currentQty = parseInt(document.querySelector(`#qty-${productId}`).textContent);
+            updateCart(productId, currentQty + 1);
+        });
+    });
+
+    document.querySelectorAll(".decrease-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
+            const productId = parseInt(this.dataset.id);
+            const currentQty = parseInt(document.querySelector(`#qty-${productId}`).textContent);
+            if (currentQty > 1) {
+                updateCart(productId, currentQty - 1);
+            } else {
+                // Si baja de 1, eliminamos el item
+                updateCart(productId, 0);
+            }
+        });
+    });
+</script>
+
 </div>
 {% endblock %}
