@@ -8,7 +8,7 @@ urlpatterns = [
     path("products/admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
     # Administración
     path("admin/dashboard/", views.AdminDashboardView.as_view(), name="admin_dashboard"),
-    # Apps
+        # Apps
     path('cart/', include('carrito.urls')), 
     path('catalogo/', include('catalogo.urls')),
     path('orders/', include('ordenes.urls')),

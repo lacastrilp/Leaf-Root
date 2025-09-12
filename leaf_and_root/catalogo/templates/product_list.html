@@ -14,6 +14,48 @@
             {% endif %}
         </div>
     </div>
+    <!-- 🔎 Barra de búsqueda y filtros -->
+<form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4">
+    <!-- Búsqueda -->
+    <div class="col-md-3">
+        <input type="text" name="q" class="form-control" placeholder="Buscar..."
+                value="{{ request.GET.q }}">
+    </div>
+
+    <!-- Tipo dinámico -->
+    <div class="col-md-2">
+        <select name="type" class="form-select">
+            <option value="">Tipo</option>
+            {% for t in types %}
+                <option value="{{ t }}" {% if request.GET.type == t %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Nutriscore -->
+    <div class="col-md-2">
+        <select name="nutriscore" class="form-select">
+            <option value="">Nutriscore</option>
+            {% for n in nutriscores %}
+                <option value="{{ n }}" {% if request.GET.nutriscore == n %}selected{% endif %}>{{ n }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Sort by precios -->
+    <div class="col-md-2">
+        <select name="sort" class="form-select">
+            <option value="">Ordenar por</option>
+            <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Precio: Menor a mayor</option>
+            <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Precio: Mayor a menor</option>
+        </select>
+    </div>
+
+    <!-- Botón -->
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+    </div>
+</form>
 
     <!-- Botón agregar producto solo admin -->
     {% if user.is_staff %}
@@ -56,7 +98,46 @@
         {% endfor %}
     </div>
 </div>
+<!-- Paginación -->
+<div class="center my-4">
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">Anterior</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Anterior</span>
+            </li>
+            {% endif %}
+
+            {% for num in paginator.page_range %}
+                {% if num == page_obj.number %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}&{{ current_filters.urlencode }}">{{ num }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">Siguiente</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Siguiente</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
 
 {% endblock %}
-
-

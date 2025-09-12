@@ -3,14 +3,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.views import LoginView as AuthLoginView
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView, ListView, TemplateView
-from carrito.models import Cart, ItemCart
-from ordenes.models import Order
-from catalogo.models import Product, Review, Wishlist
+from urllib3 import request
+from catalogo.models import Product, Review
 from users.models import Customer # 👈 agrega Custome
-from .forms import RegisterForm, ReviewForm, ProductForm, CustomerRegistrationForm
+from .forms import ReviewForm, ProductForm
+from django.db.models import Q
 
 
 def is_admin(user):
@@ -50,14 +50,7 @@ class ProductSearchView(ListView):
         query = self.request.GET.get("q", "")
         return Product.objects.filter(name__icontains=query)
     
-class ProductListView(ListView):
-    model = Product
-    template_name = "product_list.html"
-    context_object_name = "products"
-    
-def product_list(request):
-    products = Product.objects.all()
-    return render(request, 'product_list.html', {'products': products})
+
 
 # ---------- Reseñas ----------
 class SubmitReviewView(LoginRequiredMixin, View):
@@ -134,3 +127,57 @@ def delete_product(request, pk):
         product.delete()
         return redirect("product_list")
     return render(request, "delete_product.html", {"product": product})
+
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'product_list.html', {'products': products})
+
+
+class ProductListView(ListView):
+    model = Product
+    template_name = "product_list.html"
+    context_object_name = "products"
+    paginate_by = 12  # Paginación, 12 productos por página
+
+    def get_queryset(self):
+        queryset = Product.objects.all()
+
+        # 🔎 Búsqueda
+        q = self.request.GET.get("q")
+        if q:
+            queryset = queryset.filter(
+                Q(name__icontains=q) | Q(description__icontains=q)
+            )
+
+        # 🔎 Filtros
+        product_type = self.request.GET.get("type")
+        if product_type:
+            queryset = queryset.filter(type=product_type)
+
+        nutriscore = self.request.GET.get("nutriscore")
+        if nutriscore:
+            queryset = queryset.filter(nutriscore=nutriscore)
+
+        # 🔎 Ordenar por precio
+        sort = self.request.GET.get("sort")
+        if sort == "price_asc":
+            queryset = queryset.order_by("price")
+        elif sort == "price_desc":
+            queryset = queryset.order_by("-price")
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # valores únicos para los select
+        context["types"] = Product.objects.values_list("type", flat=True).distinct()
+        context["nutriscores"] = Product.objects.values_list("nutriscore", flat=True).distinct()
+
+        # mantener filtros actuales, pero quitar "page"
+        current_filters = self.request.GET.copy()
+        if "page" in current_filters:
+            current_filters.pop("page")
+        context["current_filters"] = current_filters
+
+        return context

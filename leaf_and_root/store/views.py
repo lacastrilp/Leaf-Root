@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.decorators import user_passes_test
 from ordenes.models import Order
 from catalogo.models import Product, Review
+from django.db.models import Q
 
 
 # ---------- Solo admins ----------
@@ -31,7 +32,5 @@ class AdminDashboardView(UserPassesTestMixin, TemplateView):
         context["orders"] = Order.objects.all()
         context["reviews"] = Review.objects.filter(approved=False)
         return context
-
-
 
 
