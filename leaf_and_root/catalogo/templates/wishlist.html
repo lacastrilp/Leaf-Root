@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Mi Wishlist{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Wishlist</h2>
+
+{% if items %}
+<div class="row">
+  {% for item in items %}
+  <div class="col-md-4 mb-3">
+    <div class="card shadow-sm">
+      <img src="{{ item.product.image.url }}" class="card-img-top" alt="{{ item.product.name }}">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.product.name }}</h5>
+        <p class="card-text">${{ item.product.price }}</p>
+        <form method="post" action="{% url 'remove_from_wishlist' item.product.id_product %}">
+          {% csrf_token %}
+          <button class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p>No tienes productos en tu lista de deseos.</p>
+{% endif %}
+{% endblock %}

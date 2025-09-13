@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView, ListView, TemplateView
-from urllib3 import request
 from catalogo.models import Product, Review
 from users.models import Customer # 👈 agrega Custome
+from .models import Wishlist, Product
 from .forms import ReviewForm, ProductForm
 from django.db.models import Q
 
@@ -197,3 +197,23 @@ class ProductListView(ListView):
         context["current_filters"] = current_filters
         
         return context
+    
+@login_required
+def wishlist_view(request):
+    customer = request.user.customer
+    items = Wishlist.objects.filter(customer=customer)
+    return render(request, 'wishlist.html', {'items': items})
+
+@login_required
+def add_to_wishlist(request, product_id):
+    customer = request.user.customer
+    product = get_object_or_404(Product, id_product=product_id)
+    Wishlist.objects.get_or_create(customer=customer, product=product)
+    return redirect('wishlist')
+
+@login_required
+def remove_from_wishlist(request, product_id):
+    customer = request.user.customer
+    product = get_object_or_404(Product, id_product=product_id)
+    Wishlist.objects.filter(customer=customer, product=product).delete()
+    return redirect('wishlist')

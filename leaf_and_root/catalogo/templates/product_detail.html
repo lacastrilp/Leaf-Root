@@ -18,6 +18,12 @@
   <button type="submit" class="btn btn-sm btn-success">Add to shopping cart</button>
 </form>
 
+<form method="post" action="{% url 'add_to_wishlist' product.id_product %}">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-outline-success"> Añadir a Wishlist</button>
+</form>
+
+
 
 <h3>Reviews</h3>
 
