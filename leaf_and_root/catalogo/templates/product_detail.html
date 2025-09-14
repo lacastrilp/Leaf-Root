@@ -17,9 +17,9 @@
   <button type="submit" class="btn btn-sm btn-success">Add to shopping cart</button>
 </form>
 
-<form method="post" action="{% url 'add_to_wishlist' product.id_product %}">
+<form method="post" action="{% url 'add_to_wishlist' product.pk %}">
   {% csrf_token %}
-  <button type="submit" class="btn btn-outline-success"> Añadir a Wishlist</button>
+  <button type="submit" class="btn btn-sm btn-primary mt-2">Add to wishlist</button>
 </form>
 
 
@@ -48,5 +48,6 @@
     <a href="{% url 'login' %}?next={{ request.path }}">Login to write a review</a>
   </p>
 {% endif %}
+<script src="{% static 'store/js/product-modal.js' %}"></script> <!-- JS específico de product detail -->
 <script src="{% static 'carrito/js/cart.js' %}"></script> <!-- JS global de carrito -->
 {% endblock %}

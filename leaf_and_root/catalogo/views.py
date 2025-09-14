@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.urls import reverse
 from django.views import View
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -209,12 +210,15 @@ def wishlist_view(request):
 def add_to_wishlist(request, product_id):
     customer = request.user.customer
     product = get_object_or_404(Product, id_product=product_id)
+
     Wishlist.objects.get_or_create(customer=customer, product=product)
-    return redirect('wishlist')
+
+    return redirect("wishlist")
 
 @login_required
 def remove_from_wishlist(request, product_id):
     customer = request.user.customer
     product = get_object_or_404(Product, id_product=product_id)
     Wishlist.objects.filter(customer=customer, product=product).delete()
-    return redirect('wishlist')
+    # Redirigir a donde estaba el usuario
+    return redirect("wishlist")
