@@ -1,0 +1,88 @@
+/* ===== ESTILOS GLOBALES ===== */
+
+/* Tipografía global */
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+/* BOTONES */
+button,
+.btn {
+    border-radius: 12px; /* bordes redondeados */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover suave para botones */
+button:hover,
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Botones primarios (Bootstrap) */
+.btn-primary {
+    background-color: #4CAF50; /* verde principal */
+    border-color: #4CAF50;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+}
+
+/* Botones de carrito (Buy) */
+.add-to-cart-form .btn {
+    border-radius: 12px;
+}
+
+/* INPUTS, SELECTS Y TEXTAREA */
+input,
+select,
+textarea,
+.form-control {
+    border-radius: 12px; /* redondeados */
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+}
+
+/* INPUTS tipo number en el home */
+.add-to-cart-form input[type="number"] {
+    max-width: 80px; /* ajusta tamaño */
+}
+
+/* SELECTS de cantidad en carrito */
+.form-select {
+    border-radius: 12px;
+}
+
+/* BARRA DE BÚSQUEDA Y FILTROS */
+#search-bar,
+.filter-btn,
+.category-select {
+    border-radius: 20px;
+    padding: 8px 12px;
+}
+
+/* TARJETAS PRODUCTOS */
+.card {
+    border-radius: 12px;
+}
+
+/* OPCIONAL: sombra suave para inputs y botones */
+input, select, textarea, button, .btn {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.navbar-nav .nav-link .bi-heart {
+    color: white;
+    transition: color 0.3s;
+}
+
+.navbar-nav .nav-link:hover .bi-heart {
+    color: #ff4d4d;
+}
+/* Badge de contador */
+.navbar-nav .badge {
+    font-size: 0.7rem;
+}

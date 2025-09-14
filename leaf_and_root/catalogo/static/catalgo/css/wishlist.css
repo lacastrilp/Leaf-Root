@@ -1,0 +1,24 @@
+/* Estilos para el mensaje de wishlist */
+#wishlistMessage {
+  display: none;                 /* Oculto por defecto */
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+/* Cuando se muestre (el JS le quita la clase d-none) */
+#wishlistMessage.show {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animación suave al aparecer */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
