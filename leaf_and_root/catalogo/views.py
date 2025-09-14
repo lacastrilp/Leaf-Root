@@ -55,6 +55,77 @@ class ProductSearchView(ListView):
         query = self.request.GET.get("q", "")
         return Product.objects.filter(name__icontains=query)
     
+class ProductListView(ListView):
+    model = Product
+    template_name = "product_list.html"
+    context_object_name = "products"
+    paginate_by = 9  # Paginación, 9 productos por página
+
+    def get_queryset(self):
+        queryset = Product.objects.all()
+
+        # 🔎 Búsqueda
+        q = self.request.GET.get("q")
+        if q:
+            queryset = queryset.filter(
+                Q(name__icontains=q) | Q(description__icontains=q) |
+                Q(category__icontains=q)
+            )
+
+        # 🔎 Filtros
+        category = self.request.GET.get("category")
+        if category:
+            # aquí buscamos tanto si tiene prefijo como si está limpio
+            queryset = queryset.filter(
+                Q(category=category) | Q(category__endswith=f":{category}") | 
+                Q(category__startswith=f"{category}:") 
+            )
+
+        # 🔎 Nuevo filtro vegan / vegetarian
+        diet = self.request.GET.get("diet")
+        if diet == "vegan":
+            # filtrar si contienen cualquier variante de vegan
+            queryset = queryset.filter(labels__icontains="vegan")
+        elif diet == "vegetarian":
+            # primero vegetarian, pero excluir los que también son vegan
+            queryset = queryset.filter(labels__icontains="vegetarian").exclude(labels__icontains="vegan")
+
+        # 🔎 Ordenar por precio
+        sort = self.request.GET.get("sort")
+        if sort == "price_asc":
+            queryset = queryset.order_by("price")
+        elif sort == "price_desc":
+            queryset = queryset.order_by("-price")
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # valores únicos para los select
+        raw_categories = Product.objects.values_list("category", flat=True).distinct()
+
+        def clean_category(c):
+            if c and ":" in c:
+                return c.split(":", 1)[1]
+            return c
+
+        categories = [clean_category(c) for c in raw_categories if c]
+
+        context["categories"] = categories
+        
+
+        # mantener filtros actuales, pero quitar "page"
+        current_filters = self.request.GET.copy()
+        if "page" in current_filters:
+            current_filters.pop("page")
+        context["current_filters"] = current_filters
+
+        context["diet_selected"] = self.request.GET.get("diet", "")
+
+
+        
+        return context
 
 
 # ---------- Reseñas ----------
@@ -138,66 +209,6 @@ def product_list(request):
     return render(request, 'product_list.html', {'products': products})
 
 
-class ProductListView(ListView):
-    model = Product
-    template_name = "product_list.html"
-    context_object_name = "products"
-    paginate_by = 9  # Paginación, 9 productos por página
-
-    def get_queryset(self):
-        queryset = Product.objects.all()
-
-        # 🔎 Búsqueda
-        q = self.request.GET.get("q")
-        if q:
-            queryset = queryset.filter(
-                Q(name__icontains=q) | Q(description__icontains=q)
-            )
-
-        # 🔎 Filtros
-        category = self.request.GET.get("category")
-        if category:
-            # aquí buscamos tanto si tiene prefijo como si está limpio
-            queryset = queryset.filter(
-                Q(category=category) | Q(category__endswith=f":{category}")
-            )
-
-        nutriscore = self.request.GET.get("nutriscore")
-        if nutriscore:
-            queryset = queryset.filter(nutriscore=nutriscore)
-
-        # 🔎 Ordenar por precio
-        sort = self.request.GET.get("sort")
-        if sort == "price_asc":
-            queryset = queryset.order_by("price")
-        elif sort == "price_desc":
-            queryset = queryset.order_by("-price")
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # valores únicos para los select
-        raw_categories = Product.objects.values_list("category", flat=True).distinct()
-
-        def clean_category(c):
-            if c and ":" in c:
-                return c.split(":", 1)[1]
-            return c
-
-        categories = [clean_category(c) for c in raw_categories if c]
-
-        context["categories"] = categories
-        context["nutriscores"] = Product.objects.values_list("nutriscore", flat=True).distinct()
-
-        # mantener filtros actuales, pero quitar "page"
-        current_filters = self.request.GET.copy()
-        if "page" in current_filters:
-            current_filters.pop("page")
-        context["current_filters"] = current_filters
-        
-        return context
 
 
 @login_required
