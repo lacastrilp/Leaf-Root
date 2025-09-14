@@ -38,14 +38,15 @@ def add_to_cart(request, product_id):
     cart, _ = Cart.objects.get_or_create(customer=customer)
 
     quantity = int(request.POST.get("quantity", 1))
-    if quantity > product.stock:
-        quantity = product.stock
     item, created_item = ItemCart.objects.get_or_create(cart=cart, product=product)
 
-    if not created_item:
-        item.quantity += quantity
+    # 👇 Validar contra stock
+    if created_item:
+        item.quantity = min(quantity, product.stock)
     else:
-        item.quantity = quantity
+        new_qty = item.quantity + quantity
+        item.quantity = min(new_qty, product.stock)
+
     item.save()
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -91,6 +92,8 @@ def update_cart_quantity(request, product_id):
     cart, _ = Cart.objects.get_or_create(customer=customer)
     item = get_object_or_404(ItemCart, cart=cart, product_id=product_id)
     quantity = int(request.POST.get("quantity", 1))
+
+    # 👇 Bloquear cantidades mayores al stock
     if quantity > item.product.stock:
         quantity = item.product.stock
 
