@@ -3,103 +3,75 @@
 {% block content %}
 <div class="container mt-4">
     <h2>My shopping cart ({{ total_items }} items)</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Subtotal</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in items %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <button type="button" class="btn btn-sm btn-outline-secondary decrease-btn" data-id="{{ item.product.id_product }}">-</button>
-                        <span class="mx-2 quantity" id="qty-{{ item.product.id_product }}">{{ item.quantity }}</span>
-                        <button type="button" class="btn btn-sm btn-outline-secondary increase-btn" data-id="{{ item.product.id_product }}">+</button>
-                    </div>
-                    </td>
-                    <td>${{ item.product.price }}</td>
-                    <td id="subtotal-{{ item.product.id_product }}">${{ item.get_subtotal }}</td>
-                    <td>
-                    <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}" class="remove-form">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                    </form>
-                    </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" class="text-center">There aren't any items in your shopping cart.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <h4>Total: ${{ total_price }}</h4>
+
+    {# 👉 Incluimos la tabla parcial #}
+    {% include "cart_items.html" %}
 
     <script>
-    function updateCart(productId, newQuantity) {
-        fetch(`/cart/update/${productId}/`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: "quantity=" + newQuantity
-        })
-        .then(res => res.json())
-        .then(data => {
-            // Buscar el item actualizado
-            const item = data.cart_items.find(i => i.id === productId);
-            if (item) {
-                document.querySelector(`#qty-${productId}`).textContent = item.quantity;
-                document.querySelector(`#subtotal-${productId}`).textContent = "$" + item.subtotal;
-            } else {
-                // Si ya no está (porque la cantidad llegó a 0), recargamos
-                location.reload();
-            }
+        function updateCart(productId, newQuantity) {
+            fetch(`/cart/update/${productId}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "quantity=" + newQuantity
+            })
+            .then(res => res.json())
+            .then(data => {
+                const item = data.cart_items.find(i => i.id === productId);
+                const qtyElem = document.querySelector(`#qty-${productId}`);
+                const maxStock = parseInt(qtyElem.dataset.stock);
 
-            // Actualizar totales dentro de la página
-            document.querySelector("h2").textContent = `My shopping cart (${data.total_items} items)`;
-            document.querySelector("h4").textContent = `Total: $${data.total_price}`;
+                if (item) {
+                    qtyElem.textContent = item.quantity;
+                    document.querySelector(`#subtotal-${productId}`).textContent = "$" + item.subtotal;
 
-            // 🔥 Actualizar los contadores globales
-            const counter = document.getElementById("cartCounter");
-            if (counter) counter.textContent = data.total_items;
+                    // Desactivar el botón "+" si alcanzó el stock
+                    const plusBtn = document.querySelector(`.increase-btn[data-id='${productId}']`);
+                    plusBtn.disabled = item.quantity >= maxStock;
+                } else {
+                    location.reload();
+                }
 
-            const counterSidebar = document.getElementById("cartCounterSidebar");
-            if (counterSidebar) counterSidebar.textContent = data.total_items;
+                document.querySelector("h2").textContent = `My shopping cart (${data.total_items} items)`;
+                document.querySelector("h4").textContent = `Total: $${data.total_price}`;
+
+                const counter = document.getElementById("cartCounter");
+                if (counter) counter.textContent = data.total_items;
+
+                const counterSidebar = document.getElementById("cartCounterSidebar");
+                if (counterSidebar) counterSidebar.textContent = data.total_items;
+            });
+        }
+
+        document.querySelectorAll(".increase-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const productId = parseInt(this.dataset.id);
+                const qtyElem = document.querySelector(`#qty-${productId}`);
+                const currentQty = parseInt(qtyElem.textContent);
+                const maxStock = parseInt(qtyElem.dataset.stock);
+
+                if (currentQty < maxStock) {
+                    updateCart(productId, currentQty + 1);
+                } else {
+                    alert("❌ No puedes agregar más de las unidades disponibles en inventario.");
+                }
+            });
         });
-    }
 
-
-    document.querySelectorAll(".increase-btn").forEach(btn => {
-        btn.addEventListener("click", function() {
-            const productId = parseInt(this.dataset.id);
-            const currentQty = parseInt(document.querySelector(`#qty-${productId}`).textContent);
-            updateCart(productId, currentQty + 1);
+        document.querySelectorAll(".decrease-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const productId = parseInt(this.dataset.id);
+                const currentQty = parseInt(document.querySelector(`#qty-${productId}`).textContent);
+                if (currentQty > 1) {
+                    updateCart(productId, currentQty - 1);
+                } else {
+                    updateCart(productId, 0); // 0 → se elimina el producto
+                }
+            });
         });
-    });
-
-    document.querySelectorAll(".decrease-btn").forEach(btn => {
-        btn.addEventListener("click", function() {
-            const productId = parseInt(this.dataset.id);
-            const currentQty = parseInt(document.querySelector(`#qty-${productId}`).textContent);
-            if (currentQty > 1) {
-                updateCart(productId, currentQty - 1);
-            } else {
-                // Si baja de 1, eliminamos el item
-                updateCart(productId, 0);
-            }
-        });
-    });
-</script>
-
+    </script>
 </div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from itertools import product
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -37,6 +38,8 @@ def add_to_cart(request, product_id):
     cart, _ = Cart.objects.get_or_create(customer=customer)
 
     quantity = int(request.POST.get("quantity", 1))
+    if quantity > product.stock:
+        quantity = product.stock
     item, created_item = ItemCart.objects.get_or_create(cart=cart, product=product)
 
     if not created_item:
@@ -88,6 +91,8 @@ def update_cart_quantity(request, product_id):
     cart, _ = Cart.objects.get_or_create(customer=customer)
     item = get_object_or_404(ItemCart, cart=cart, product_id=product_id)
     quantity = int(request.POST.get("quantity", 1))
+    if quantity > item.product.stock:
+        quantity = item.product.stock
 
     if quantity > 0:
         item.quantity = quantity

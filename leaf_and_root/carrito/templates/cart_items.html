@@ -16,7 +16,13 @@
                 <td>
                     <div class="d-flex align-items-center">
                         <button type="button" class="btn btn-sm btn-outline-secondary decrease-btn" data-id="{{ item.product.id_product }}">-</button>
-                        <span class="mx-2 quantity" id="qty-{{ item.product.id_product }}">{{ item.quantity }}</span>
+                        
+                        <!-- 👉 Aquí guardamos el stock en un atributo -->
+                        <span class="mx-2 quantity" id="qty-{{ item.product.id_product }}" 
+                              data-stock="{{ item.product.stock }}">
+                            {{ item.quantity }}
+                        </span>
+                        
                         <button type="button" class="btn btn-sm btn-outline-secondary increase-btn" data-id="{{ item.product.id_product }}">+</button>
                     </div>
                 </td>

@@ -10,11 +10,19 @@
 
 <p><strong>Price:</strong> ${{ product.price }}</p>
 <p><strong>Stock:</strong> {{ product.stock }}</p>
+{% if product.stock < 5 and product.stock > 0 %}
+  <p class="text-warning">Hurry! Only {{ product.stock }} units left in stock.</p>
+{% elif product.stock == 0 %}
+  <p class="text-danger">Out of stock</p>
+{% endif %}
 <p>{{ product.description }}</p>
 <form method="post" action="{% url 'add_to_cart' product.pk %}?next={% url 'cart_detail' %}">
   {% csrf_token %}
   <input type="hidden" name="quantity" value="1">
-  <button type="submit" class="btn btn-sm btn-success">Add to shopping cart</button>
+  <button type="submit" class="btn btn-sm btn-success"
+          {% if product.stock == 0 %}disabled{% endif %}>
+      Add to shopping cart
+  </button>
 </form>
 
 <form method="post" action="{% url 'add_to_wishlist' product.pk %}">

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-
 {% block content %}
+{% load static %}
 
 <div class="container mt-4">
     <!-- Barra superior -->
@@ -81,11 +81,21 @@
                                 <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
                             {% else %}
-                                <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" class="btn btn-sm btn-success">Add to shopping cart</button>
-                                </form>
+                                {% if product.stock > 0 %}
+                                    <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" 
+                                                class="btn btn-sm btn-success"
+                                                {% if product.stock == 0 %}
+                                                    disabled
+                                                {% endif %}>
+                                            Add to shopping cart
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <button class="btn btn-sm btn-secondary" disabled>Out of stock</button>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -139,5 +149,8 @@
     </nav>
     {% endif %}
 </div>
+
+<script src="{% static 'store/js/product-modal.js' %}"></script> <!-- JS específico de product list -->
+<script src="{% static 'carrito/js/cart.js' %}"></script> <!-- JS específico de carrito -->
 
 {% endblock %}
