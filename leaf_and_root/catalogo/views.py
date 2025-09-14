@@ -141,7 +141,7 @@ class ProductListView(ListView):
     model = Product
     template_name = "product_list.html"
     context_object_name = "products"
-    paginate_by = 12  # Paginación, 12 productos por página
+    paginate_by = 9  # Paginación, 9 productos por página
 
     def get_queryset(self):
         queryset = Product.objects.all()
@@ -197,7 +197,8 @@ class ProductListView(ListView):
         context["current_filters"] = current_filters
         
         return context
-    
+
+
 @login_required
 def wishlist_view(request):
     customer = request.user.customer

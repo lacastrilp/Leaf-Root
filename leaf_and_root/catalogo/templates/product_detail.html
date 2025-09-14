@@ -1,6 +1,5 @@
 
 {% load static %}
-{% block title %}{{ product.name }}{% endblock %}
 <style src="{% static 'carrito/css/cart.css' %}"></style>
 
 {% block content %}
@@ -12,7 +11,7 @@
 <p><strong>Price:</strong> ${{ product.price }}</p>
 <p><strong>Stock:</strong> {{ product.stock }}</p>
 <p>{{ product.description }}</p>
-<form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
+<form method="post" action="{% url 'add_to_cart' product.pk %}?next={% url 'cart_detail' %}">
   {% csrf_token %}
   <input type="hidden" name="quantity" value="1">
   <button type="submit" class="btn btn-sm btn-success">Add to shopping cart</button>

@@ -1,0 +1,39 @@
+{% if items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <button type="button" class="btn btn-sm btn-outline-secondary decrease-btn" data-id="{{ item.product.id_product }}">-</button>
+                        <span class="mx-2 quantity" id="qty-{{ item.product.id_product }}">{{ item.quantity }}</span>
+                        <button type="button" class="btn btn-sm btn-outline-secondary increase-btn" data-id="{{ item.product.id_product }}">+</button>
+                    </div>
+                </td>
+                <td>${{ item.product.price }}</td>
+                <td id="subtotal-{{ item.product.id_product }}">${{ item.get_subtotal }}</td>
+                <td>
+                    <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}" class="remove-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Total: ${{ total_price }}</h4>
+{% else %}
+    <p class="text-center">Your shopping cart is empty.</p>
+{% endif %}
