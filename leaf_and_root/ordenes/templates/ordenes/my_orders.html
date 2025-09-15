@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Mis Órdenes{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Mis Órdenes</h2>
+
+    {% if orders %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Orden</th>
+                    <th>Fecha</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id_order }}</td>
+                    <td>{{ order.order_date }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>${{ order.total }}</td>
+                    <td>
+                        <a href="{% url 'generate_invoice_pdf' order.id_order %}" class="btn btn-sm btn-primary">
+                            Descargar PDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes órdenes aún.</p>
+    {% endif %}
+</div>
+{% endblock %}

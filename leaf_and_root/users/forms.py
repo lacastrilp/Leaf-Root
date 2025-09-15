@@ -56,6 +56,7 @@ class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Nombre de usuario"})
+        self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Correo electrónico"})
         self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Contraseña"})
         self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Repite la contraseña"})
 
@@ -66,3 +67,8 @@ class LoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Usuario"})
         self.fields["password"].widget.attrs.update({"class": "form-control", "placeholder": "Contraseña"})
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ["name", "email", "address", "phone"]

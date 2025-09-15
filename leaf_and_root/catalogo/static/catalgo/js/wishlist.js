@@ -62,3 +62,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.wishlist-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const form = button.closest('form');
+            const productId = form.dataset.productId;
+            const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+            const icon = button.querySelector('.wishlist-icon');
+
+            fetch(`/toggle_wishlist/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // alternar clase filled según respuesta
+                    if (data.in_wishlist) {
+                        icon.classList.add('filled');
+                    } else {
+                        icon.classList.remove('filled');
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});

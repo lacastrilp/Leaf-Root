@@ -86,3 +86,12 @@ input, select, textarea, button, .btn {
 .navbar-nav .badge {
     font-size: 0.7rem;
 }
+
+#searchForm {
+    width: 200px; /* tamaño de la barra */
+    transition: all 0.3s ease;
+}
+
+#searchForm.d-none {
+    display: none !important;
+}

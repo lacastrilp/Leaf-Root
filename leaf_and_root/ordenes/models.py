@@ -30,7 +30,7 @@ class Order(models.Model):
     id_order = models.AutoField(primary_key=True)
     order_date = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Pendiente")
-    cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="orders")
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
     class Meta:
@@ -49,4 +49,15 @@ class Order(models.Model):
         return process_order_payment(self.id_order)
 
 
-# Create your models here.
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey("catalogo.Product", on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # precio en el momento de la compra
+
+    def get_subtotal(self):
+        return self.quantity * self.price
+
+    def __str__(self):
+        return f"{self.product.name} x {self.quantity} (${self.price:.2f})"
+

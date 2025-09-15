@@ -17,11 +17,6 @@
     </div>
     <!-- Barra de búsqueda y filtros -->
 <form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4">
-    <!-- Búsqueda -->
-    <div class="col-md-3">
-        <input type="text" name="q" class="form-control" placeholder="Search products..."
-                value="{{ request.GET.q|default:'' }}">
-    </div>
 
     <!-- Categoría -->
     <div class="col-md-2">
@@ -44,7 +39,7 @@
         </select>
     </div>
     <!-- Filtros vegan / vegetarian -->
-    <div class="text-center my-3">
+    <div class="col-md-2">
         {% comment %} Botón Vegan {% endcomment %}
         {% if diet_selected == "vegan" %}
             <!-- Si ya está seleccionado, quitarlo -->
@@ -93,7 +88,7 @@
     <!-- Lista de productos -->
     <div class="row">
         {% for product in products %}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-3 mb-4">
                 <div class="card shadow-sm h-100">
 
                     <!-- 🏷️ Etiqueta vegano/vegetariano -->
@@ -104,10 +99,10 @@
                     {% endif %}
 
                     <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
-                        class="wishlist-form position-absolute bottom-0 end-0 m-2">
+                        class="wishlist-form position-absolute bottom-0 end-0 m-2" data-product-id="{{ product.pk }}">
                         {% csrf_token %}
                         <button type="submit" class="btn p-0 border-0 bg-transparent">
-                            <i class="bi bi-heart wishlist-icon" 
+                            <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill{% else %}bi-heart{% endif %}" 
                             style="font-size:1.5rem; color:#666;"></i>
                         </button>
                     </form>
@@ -202,5 +197,6 @@
 
 <script src="{% static 'store/js/product-modal.js' %}"></script> <!-- JS específico de product list -->
 <script src="{% static 'carrito/js/cart.js' %}"></script> <!-- JS específico de carrito -->
+<script src="{% static 'catalogo/js/wishlist.js' %}"></script> <!-- JS específico de wishlist -->
 
 {% endblock %}

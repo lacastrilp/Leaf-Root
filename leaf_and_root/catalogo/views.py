@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth.decorators import login_required, user_passes_test
-
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView, ListView, TemplateView
 from catalogo.models import Product, Review
@@ -12,6 +12,8 @@ from users.models import Customer # 👈 agrega Custome
 from .models import Wishlist, Product
 from .forms import ReviewForm, ProductForm
 from django.db.models import Q
+from django.contrib.auth.models import User
+
 
 
 def is_admin(user):
@@ -59,7 +61,7 @@ class ProductListView(ListView):
     model = Product
     template_name = "product_list.html"
     context_object_name = "products"
-    paginate_by = 9  # Paginación, 9 productos por página
+    paginate_by = 12  # Paginación, 9 productos por página
 
     def get_queryset(self):
         queryset = Product.objects.all()
@@ -101,11 +103,11 @@ class ProductListView(ListView):
         for product in queryset:
             labels = product.labels.lower() if product.labels else ""
             if "vegan" in labels:
-                product.diet_label = "vegan"
+                self.diet_label = "vegan"
             elif "vegetarian" in labels:
-                product.diet_label = "vegetarian"
+                self.diet_label = "vegetarian"
             else:
-                product.diet_label = ""
+                self.diet_label = ""
 
         return queryset
 
@@ -132,6 +134,16 @@ class ProductListView(ListView):
         context["current_filters"] = current_filters
 
         context["diet_selected"] = self.request.GET.get("diet", "")
+
+            # Lista de IDs de wishlist del usuario autenticado
+        if self.request.user.is_authenticated:
+            customer = getattr(self.request.user, "customer", None)
+            if customer:
+                context["wishlist_product_ids"] = Wishlist.objects.filter(customer=customer).values_list("product_id", flat=True)
+            else:
+                context["wishlist_product_ids"] = []
+        else:
+            context["wishlist_product_ids"] = []
 
 
         
@@ -252,4 +264,3 @@ def toggle_wishlist(request, product_id):
 
     # fallback normal (no AJAX)
     return redirect("wishlist")
-
