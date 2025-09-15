@@ -38,7 +38,7 @@
           <button type="submit" class="btn btn-success btn-sm">Add to cart</button>
         </form>
 
-        <form method="post" action="{% url 'toggle_wishlist' item.product.id_product %}" class="d-inline">
+        <form method="post" action="{% url 'remove_from_wishlist' item.product.id_product %}" class="d-inline">
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.path }}">
           <button type="submit" class="btn btn-danger btn-sm">Remove</button>

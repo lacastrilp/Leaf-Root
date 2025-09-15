@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<style src="{% static 'catalogo/css/wishlist.css' %}"></style>
 
 <div class="container mt-4">
     <!-- Barra superior -->
@@ -96,22 +95,6 @@
         {% for product in products %}
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm h-100">
-
-                    <!-- 🏷️ Etiqueta vegano/vegetariano -->
-                    {% if product.diet_label == "vegan" %}
-                        <span class="badge bg-success position-absolute top-0 end-0 m-2">Vegan</span>
-                    {% elif product.diet_label == "vegetarian" %}
-                        <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Vegetarian</span>
-                    {% endif %}
-
-                    <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
-                        class="wishlist-form position-absolute bottom-0 end-0 m-2">
-                        {% csrf_token %}
-                        <button type="submit" class="btn p-0 border-0 bg-transparent">
-                            <i class="bi bi-heart wishlist-icon" 
-                            style="font-size:1.5rem; color:#666;"></i>
-                        </button>
-                    </form>
                     {% if product.image_url %}
                         <a href="{% url 'product_detail' product.pk %}" class ="product-link">
                             <img src="{{ product.image_url }}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{{ product.name }}">

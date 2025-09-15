@@ -27,38 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }, 3000);
             }
         })
-        .catch(err => console.error("Wishlist error:", err));document.addEventListener("DOMContentLoaded", () => {
-    const forms = document.querySelectorAll(".wishlist-form");
-
-    forms.forEach(form => {
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            fetch(form.action, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": form.querySelector("[name=csrfmiddlewaretoken]").value,
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: new FormData(form)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    const icon = form.querySelector(".wishlist-icon");
-                    if (data.in_wishlist) {
-                        icon.classList.remove("bi-heart");
-                        icon.classList.add("bi-heart-fill", "text-danger");
-                    } else {
-                        icon.classList.remove("bi-heart-fill", "text-danger");
-                        icon.classList.add("bi-heart");
-                    }
-                }
-            })
-            .catch(err => console.error("Wishlist error:", err));
-        });
-    });
-});
-
+        .catch(err => console.error("Wishlist error:", err));
     });
 });

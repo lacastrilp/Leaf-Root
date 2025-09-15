@@ -22,34 +22,3 @@
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-/* Corazones en productos */
-.wishlist-icon {
-    font-size: 1.5rem;
-    color: black;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.wishlist-form:hover .wishlist-icon:not(.text-danger) {
-    color: #dc3545;
-}
-
-/* Corazones en productos */
-.wishlist-icon {
-    font-size: 1.5rem;
-    color: black;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.wishlist-icon.active {
-    color: #ff4d4d; /* rojo cuando está en favoritos */
-}
-
-.badge {
-    border-radius: 50px !important;
-    padding: 0.35em 0.8em;
-    font-size: 0.75rem;
-    font-weight: 600;
-}

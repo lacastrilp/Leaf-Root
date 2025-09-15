@@ -75,7 +75,7 @@ input, select, textarea, button, .btn {
 }
 
 .navbar-nav .nav-link .bi-heart {
-    color: black;
+    color: white;
     transition: color 0.3s;
 }
 
