@@ -13,24 +13,17 @@ from .models import Wishlist, Product
 from .forms import ReviewForm, ProductForm
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
 
 
 
 def is_admin(user):
     return user.is_staff
 
-# ---------- Home ----------
-class HomeView(TemplateView):
-    template_name = "home.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["products"] = Product.objects.all()
-        return context
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    return render(request, "store/partials/product_detail_modal.html", {"product": product})
+    return render(request, "product_detail.html", {"product": product})
 
 # ---------- Productos ----------
 class ProductDetailView(DetailView):
@@ -243,24 +236,26 @@ from django.http import JsonResponse
 
 @login_required
 def toggle_wishlist(request, product_id):
-    customer = request.user.customer
-    product = get_object_or_404(Product, id_product=product_id)
+    product = get_object_or_404(Product, pk=product_id)
+    wishlist, created = Wishlist.objects.get_or_create(customer=request.user.customer, product=product)
 
-    # buscar si ya está en wishlist
-    wishlist_item = Wishlist.objects.filter(customer=customer, product=product)
-    if wishlist_item.exists():
-        wishlist_item.delete()
-        in_wishlist = False
-    else:
-        Wishlist.objects.create(customer=customer, product=product)
-        in_wishlist = True
+    if not created:
+        wishlist.delete()
 
-    # si es AJAX → devolvemos JSON
+    # --- Si es AJAX, devolver JSON para modal ---
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        return JsonResponse({
-            "success": True,
-            "in_wishlist": in_wishlist
-        })
+        html = render_to_string("product_detail.html", {"product": product}, request=request)
+        return JsonResponse({"html": html})
+    # --- Si no es AJAX, manejar redirecciones ---
+    next_url = request.META.get("HTTP_REFERER")  # de dónde vino la petición
 
-    # fallback normal (no AJAX)
-    return redirect("wishlist")
+    # Si la página anterior es un product_detail, redirigir allí
+    if next_url and f"/products/{product.pk}/" in next_url:
+        return redirect("product_detail", pk=product.pk)
+
+    # Si no, devolver a la página donde estaba
+    if next_url:
+        return redirect(next_url)
+
+    # fallback
+    return redirect("wishlist_view")

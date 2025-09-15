@@ -8,6 +8,8 @@ from .models import Customer
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import CustomerForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 class LoginView(AuthLoginView):
     template_name = "users/login.html"
@@ -23,6 +25,19 @@ class RegisterView(FormView):
         user = form.save()
         login(self.request, user)
         return redirect("home")
+    
+@csrf_exempt
+def check_user_email(request):
+    username = request.GET.get("username")
+    email = request.GET.get("email")
+    data = {"username_exists": False, "email_exists": False}
+
+    if username:
+        data["username_exists"] = User.objects.filter(username=username).exists()
+    if email:
+        data["email_exists"] = User.objects.filter(email=email).exists()
+
+    return JsonResponse(data)
 
 @login_required
 def account_home(request):

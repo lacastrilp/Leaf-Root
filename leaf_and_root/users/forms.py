@@ -43,7 +43,6 @@ class CustomerRegistrationForm(forms.ModelForm):
         return customer
     
 class RegisterForm(UserCreationForm):
-    """Formulario de registro de usuarios básicos"""
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Correo electrónico"})
@@ -59,6 +58,18 @@ class RegisterForm(UserCreationForm):
         self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Correo electrónico"})
         self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Contraseña"})
         self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Repite la contraseña"})
+
+    def clean_username(self):
+        username = self.cleaned_data["username"]
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Este nombre de usuario ya está en uso.")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Este correo electrónico ya está registrado.")
+        return email
 
 
 class LoginForm(AuthenticationForm):
