@@ -8,13 +8,13 @@
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h2 class="fw-bold mb-2">{{ product.name }}</h2>
 
-    <!-- Wishlist -->
+
     <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
           class="wishlist-form ms-auto" data-product-id="{{ product.pk }}">
       {% csrf_token %}
       <button type="submit" class="btn p-0 border-0 bg-transparent">
           <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" 
-              style="font-size:1.8rem;"></i>
+             style="font-size:1.8rem;"></i>
       </button>
     </form>
   </div>
@@ -60,13 +60,14 @@
       <p class="mt-3"><strong>Description:</strong><br>{{ product.description }}</p>
 
       <!-- Botón añadir al carrito -->
-      <form method="post" action="{% url 'add_to_cart' product.pk %}" class="mt-3 cart-form">
-          {% csrf_token %}
-          <input type="hidden" name="quantity" value="1">
-          <button type="submit" class="btn btn-lg w-100 {% if product.stock == 0 %}btn-secondary{% else %}btn-success{% endif %}"
-                  {% if product.stock == 0 %}disabled{% endif %}>
-            <i class="bi bi-cart-plus"></i> Add to shopping cart
-          </button>
+      <form method="post" action="{% url 'add_to_cart' product.pk %}?next={% url 'cart_detail' %}" class="mt-3">
+        {% csrf_token %}
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" 
+                class="btn btn-lg w-100 {% if product.stock == 0 %}btn-secondary{% else %}btn-success{% endif %}"
+                {% if product.stock == 0 %}disabled{% endif %}>
+          <i class="bi bi-cart-plus"></i> Add to shopping cart
+        </button>
       </form>
     </div>
   </div>

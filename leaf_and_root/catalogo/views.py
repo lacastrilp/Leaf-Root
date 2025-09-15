@@ -236,26 +236,18 @@ from django.http import JsonResponse
 
 @login_required
 def toggle_wishlist(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    wishlist, created = Wishlist.objects.get_or_create(customer=request.user.customer, product=product)
+    customer = request.user.customer
+    product = get_object_or_404(Product, id_product=product_id)
 
-    if not created:
-        wishlist.delete()
+    # buscar si ya está en wishlist
+    wishlist_item = Wishlist.objects.filter(customer=customer, product=product)
+    if wishlist_item.exists():
+        wishlist_item.delete()
+        in_wishlist = False
+    else:
+        Wishlist.objects.create(customer=customer, product=product)
+        in_wishlist = True
 
-    # --- Si es AJAX, devolver JSON para modal ---
-    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        html = render_to_string("product_detail.html", {"product": product}, request=request)
-        return JsonResponse({"html": html})
-    # --- Si no es AJAX, manejar redirecciones ---
-    next_url = request.META.get("HTTP_REFERER")  # de dónde vino la petición
 
-    # Si la página anterior es un product_detail, redirigir allí
-    if next_url and f"/products/{product.pk}/" in next_url:
-        return redirect("product_detail", pk=product.pk)
-
-    # Si no, devolver a la página donde estaba
-    if next_url:
-        return redirect(next_url)
-
-    # fallback
-    return redirect("wishlist_view")
+    # fallback normal (no AJAX)
+    return redirect("wishlist")

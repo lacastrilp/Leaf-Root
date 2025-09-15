@@ -70,6 +70,8 @@
             </a>
         {% endif %}
     </div>
+
+    
     <!-- Botón -->
     <div class="col-md-2">
         <button type="submit" class="btn btn-primary w-100">Filter</button>
@@ -89,21 +91,21 @@
             <div class="col-md-3 mb-4">
                 <div class="card shadow-sm h-100">
 
-                    <!-- 🏷 Etiqueta vegano/vegetariano -->
+                    <!-- 🏷️ Etiqueta vegano/vegetariano -->
                     {% if product.diet_label == "vegan" %}
                         <span class="badge bg-success position-absolute top-0 end-0 m-2">Vegan</span>
                     {% elif product.diet_label == "vegetarian" %}
                         <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Vegetarian</span>
                     {% endif %}
 
-                    <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
-                        class="wishlist-form position-absolute bottom-0 end-0 m-2">
-                        {% csrf_token %}
-                        <button type="submit" class="btn p-0 border-0 bg-transparent">
-                            <i class="bi bi-heart wishlist-icon" 
-                            style="font-size:1.5rem; color:#666;"></i>
-                        </button>
-                    </form>
+                        <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
+                            class="wishlist-form ms-auto" data-product-id="{{ product.pk }}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn p-0 border-0 bg-transparent position-absolute bottom-0 end-0 m-2">
+                                <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" 
+                                    style="font-size:1.8rem;"></i>
+                            </button>
+                        </form>
                     {% if product.image_url %}
                         <a href="{% url 'product_detail' product.pk %}" class ="product-link">
                             <img src="{{ product.image_url }}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{{ product.name }}">
