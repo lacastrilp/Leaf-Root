@@ -22,11 +22,7 @@
                     <td>{{ order.order_date }}</td>
                     <td>{{ order.status }}</td>
                     <td>${{ order.total }}</td>
-                    <td>
-                        <a href="{% url 'generate_invoice_pdf' order.id_order %}" class="btn btn-sm btn-primary">
-                            Descargar PDF
-                        </a>
-                    </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
