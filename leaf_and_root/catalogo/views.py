@@ -96,6 +96,16 @@ class ProductListView(ListView):
             queryset = queryset.order_by("price")
         elif sort == "price_desc":
             queryset = queryset.order_by("-price")
+        
+        # 👉 Aquí procesamos etiquetas antes de devolver queryset
+        for product in queryset:
+            labels = product.labels.lower() if product.labels else ""
+            if "vegan" in labels:
+                product.diet_label = "vegan"
+            elif "vegetarian" in labels:
+                product.diet_label = "vegetarian"
+            else:
+                product.diet_label = ""
 
         return queryset
 
@@ -217,19 +227,29 @@ def wishlist_view(request):
     items = Wishlist.objects.filter(customer=customer)
     return render(request, 'wishlist.html', {'items': items})
 
+from django.http import JsonResponse
+
 @login_required
-def add_to_wishlist(request, product_id):
+def toggle_wishlist(request, product_id):
     customer = request.user.customer
     product = get_object_or_404(Product, id_product=product_id)
 
-    Wishlist.objects.get_or_create(customer=customer, product=product)
+    # buscar si ya está en wishlist
+    wishlist_item = Wishlist.objects.filter(customer=customer, product=product)
+    if wishlist_item.exists():
+        wishlist_item.delete()
+        in_wishlist = False
+    else:
+        Wishlist.objects.create(customer=customer, product=product)
+        in_wishlist = True
 
+    # si es AJAX → devolvemos JSON
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({
+            "success": True,
+            "in_wishlist": in_wishlist
+        })
+
+    # fallback normal (no AJAX)
     return redirect("wishlist")
 
-@login_required
-def remove_from_wishlist(request, product_id):
-    customer = request.user.customer
-    product = get_object_or_404(Product, id_product=product_id)
-    Wishlist.objects.filter(customer=customer, product=product).delete()
-    # Redirigir a donde estaba el usuario
-    return redirect("wishlist")

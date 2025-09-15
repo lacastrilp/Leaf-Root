@@ -14,13 +14,15 @@
 <body>
 
     <!-- NAVBAR SUPERIOR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
 
         <!-- Botón hamburguesa para menú lateral 
         <button class="hamburger btn btn-outline-light me-3" type="button" onclick="toggleSidebar()">☰</button> -->
 
-            <a class="navbar-brand" href="{% url 'home' %}">Leaf an Root</a>
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'store/images/logo.png' %}" alt="Leaf & Root" height="200">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -31,8 +33,13 @@
                 {% if user.is_authenticated %}
                     {% if not user.is_staff and not user.is_superuser %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'cart_detail' %}">
-                                Shopping Cart (<span id="cartCounter">{{ user.customer.cart.total_items|default:"0" }}</span>)
+                            <a class="nav-link position-relative" href="{% url 'cart_detail' %}">
+                                <i class="bi bi-cart3" style="font-size: 1.4rem; color: #000;"></i>
+                                <!-- contador del carrito arriba a la derecha -->
+                                <span id="cartCounter" 
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ user.customer.cart.total_items|default:"0" }}
+                                </span>
                             </a>
                         </li>
 

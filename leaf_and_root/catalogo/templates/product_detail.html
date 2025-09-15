@@ -1,12 +1,33 @@
 
 {% load static %}
 <style src="{% static 'carrito/css/cart.css' %}"></style>
+<style src="{% static 'catalogo/css/wishlist.css' %}"></style>
 
 {% block content %}
-<h1>{{ product.name }}</h1>
+<div class="d-flex align-items-center mb-3">
+  <h1 class="me-3">{{ product.name }}</h1>
+  
+  {% if product.diet_label %} <!--what the helly-->
+    <span class="badge rounded-pill 
+                {% if product.diet_label == 'vegan' %}bg-success
+                {% elif product.diet_label == 'vegetarian' %}bg-warning text-dark
+                {% endif %}">
+      {{ product.diet_label|title }}
+    </span>
+  {% endif %}
+</div>
 {% if product.image_url %}
   <img src="{{ product.image_url }}" alt="{{ product.name }}" width="300">
 {% endif %}
+
+<form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
+  class="wishlist-form position-absolute top-0 end-0 m-2">
+  {% csrf_token %}
+  <button type="submit" class="btn p-0 border-0 bg-transparent">
+      <i class="bi bi-heart wishlist-icon" 
+      style="font-size:1.5rem; color:#666;"></i>
+  </button>
+</form>
 
 <p><strong>Price:</strong> ${{ product.price }}</p>
 <p><strong>Stock:</strong> {{ product.stock }}</p>
@@ -25,10 +46,6 @@
   </button>
 </form>
 
-<form method="post" action="{% url 'add_to_wishlist' product.pk %}">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-outline-success"> Add to Wishlist</button>
-</form>
 
 
 
