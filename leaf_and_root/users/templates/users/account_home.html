@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Mi Cuenta{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>My Account</h2>
+
+    <ul class="list-group mt-3">
+        <li class="list-group-item">
+            <a href="{% url 'account_info_view' %}" class="bi bi-person me-2">Profile Information</a>
+        <li class="list-group-item">
+            <a href="#"><i class="bi bi-box-seam me-2"></i> Orders</a>
+        </li>
+        <li class="list-group-item">
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link p-0 text-danger">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </button>
+            </form>
+        </li>
+    </ul>
+</div>
+{% endblock %}

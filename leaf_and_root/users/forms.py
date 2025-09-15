@@ -66,3 +66,13 @@ class LoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Usuario"})
         self.fields["password"].widget.attrs.update({"class": "form-control", "placeholder": "Contraseña"})
+
+from django import forms
+from .models import Customer
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ["name", "email", "address", "phone"]
+        
+
