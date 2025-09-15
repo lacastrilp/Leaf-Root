@@ -40,12 +40,11 @@ def add_to_cart(request, product_id):
     quantity = int(request.POST.get("quantity", 1))
     item, created_item = ItemCart.objects.get_or_create(cart=cart, product=product)
 
-    # 👇 Validar contra stock
     if created_item:
         item.quantity = min(quantity, product.stock)
     else:
-        new_qty = item.quantity + quantity
-        item.quantity = min(new_qty, product.stock)
+        # si vino doble request casi simultáneo → solo +1
+        item.quantity = min(item.quantity + 1, product.stock)
 
     item.save()
 

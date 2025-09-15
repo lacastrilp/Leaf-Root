@@ -70,8 +70,6 @@
             </a>
         {% endif %}
     </div>
-
-    
     <!-- Botón -->
     <div class="col-md-2">
         <button type="submit" class="btn btn-primary w-100">Filter</button>
@@ -91,7 +89,7 @@
             <div class="col-md-3 mb-4">
                 <div class="card shadow-sm h-100">
 
-                    <!-- 🏷️ Etiqueta vegano/vegetariano -->
+                    <!-- 🏷 Etiqueta vegano/vegetariano -->
                     {% if product.diet_label == "vegan" %}
                         <span class="badge bg-success position-absolute top-0 end-0 m-2">Vegan</span>
                     {% elif product.diet_label == "vegetarian" %}

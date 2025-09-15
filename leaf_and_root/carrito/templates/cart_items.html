@@ -1,5 +1,5 @@
 {% if items %}
-    <table class="table">
+    <table class="table align-middle">
         <thead>
             <tr>
                 <th>Product</th>
@@ -12,12 +12,27 @@
         <tbody>
             {% for item in items %}
             <tr>
-                <td>{{ item.product.name }}</td>
+                <td class="d-flex align-items-center">
+                    <!-- 👉 Imagen pequeña con link al detalle -->
+                    <a href="{% url 'product_detail' item.product.pk %}" class="product-link me-2">
+                        {% if item.product.image_url %}
+                            <img src="{{ item.product.image_url }}"
+                                alt="{{ item.product.name }}"
+                                style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/50"
+                                alt="No image available"
+                                style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
+                        {% endif %}
+                    </a>
+                    <!-- 👉 Nombre del producto -->
+                    <span>{{ item.product.name }}</span>
+                </td>
                 <td>
                     <div class="d-flex align-items-center">
                         <button type="button" class="btn btn-sm btn-outline-secondary decrease-btn" data-id="{{ item.product.id_product }}">-</button>
                         
-                        <!-- 👉 Aquí guardamos el stock en un atributo -->
+                        <!-- 👉 Guardamos stock en atributo -->
                         <span class="mx-2 quantity" id="qty-{{ item.product.id_product }}" 
                               data-stock="{{ item.product.stock }}">
                             {{ item.quantity }}

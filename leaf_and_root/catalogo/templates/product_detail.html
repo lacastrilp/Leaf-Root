@@ -14,7 +14,7 @@
       {% csrf_token %}
       <button type="submit" class="btn p-0 border-0 bg-transparent">
           <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" 
-             style="font-size:1.8rem;"></i>
+              style="font-size:1.8rem;"></i>
       </button>
     </form>
   </div>

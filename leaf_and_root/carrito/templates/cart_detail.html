@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}My shopping cart{% endblock %}
 {% block content %}
 <div class="container mt-4">
@@ -82,5 +83,9 @@
             });
         });
     </script>
+    <script src="{% static 'store/js/product-modal.js' %}"></script> <!-- JS específico de wishlist -->
+    <script src="{% static 'carrito/js/cart.js' %}"></script> <!-- JS global de carrito -->
+
+
 </div>
 {% endblock %}

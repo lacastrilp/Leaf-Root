@@ -103,11 +103,11 @@ class ProductListView(ListView):
         for product in queryset:
             labels = product.labels.lower() if product.labels else ""
             if "vegan" in labels:
-                product.diet_label = "vegan"
+                product.diet_label = "vegan" # type: ignore
             elif "vegetarian" in labels:
-                product.diet_label = "vegetarian"
+                product.diet_label = "vegetarian" # type: ignore
             else:
-                product.diet_label = "plant-based"
+                product.diet_label = "plant-based" # type: ignore
 
         return queryset
 
