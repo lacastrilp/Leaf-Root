@@ -103,11 +103,11 @@ class ProductListView(ListView):
         for product in queryset:
             labels = product.labels.lower() if product.labels else ""
             if "vegan" in labels:
-                self.diet_label = "vegan"
+                product.diet_label = "vegan"
             elif "vegetarian" in labels:
-                self.diet_label = "vegetarian"
+                product.diet_label = "vegetarian"
             else:
-                self.diet_label = ""
+                product.diet_label = "plant-based"
 
         return queryset
 
@@ -174,7 +174,7 @@ class SubmitReviewView(LoginRequiredMixin, View):
             review.customer = customer   # 👈 usa customer, no user
             review.approved = True       # o déjalo False si quieres moderación
             review.save()
-        return redirect("product_detail", product_id=product.pk)
+        return redirect("home")
 
 
 class ModerateReviewView(UserPassesTestMixin, View):
