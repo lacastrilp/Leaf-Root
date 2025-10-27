@@ -90,6 +90,9 @@ def my_orders(request):
     # Construir lista con total de cada orden
     orders_with_totals = []
     for order in orders_queryset:
+        id = order.id_order
+        date = order.order_date
+        estados = order.status    
         items = order.items.all() # type: ignore
         total = sum([item.get_subtotal() for item in items])
         orders_with_totals.append({

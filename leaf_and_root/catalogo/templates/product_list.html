@@ -3,80 +3,71 @@
 {% load static %}
 <style src="{% static 'catalogo/css/wishlist.css' %}"></style>
 
-<div class="container mt-4">
+<div class="container mt-4"> 
     <!-- Barra superior -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Products Catalog</h2>
-        <div>
-            {% if user.is_authenticated %}
-                <span class="me-2">Hi, {{ user.username }}</span>
-                
-            
-            {% endif %}
-        </div>
     </div>
     <!-- Barra de búsqueda y filtros -->
-<form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4">
+    <form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4 ">
 
-    <!-- Categoría -->
-    <div class="col-md-2">
-        <select name="category" class="form-control mb-2">
-            <option value="">All categories</option>
-            {% for c in categories %}
-                <option value="{{ c }}" {% if request.GET.category == c %}selected{% endif %}>
-                    {{ c }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
+        <!-- Categoría -->
+        <div class="col-md-2">
+            <select name="category" class="form-control mb-2">
+                <option value="">All categories</option>
+                {% for c in categories %}
+                    <option value="{{ c }}" {% if request.GET.category == c %}selected{% endif %}>
+                        {{ c }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <!-- Sort by precios -->
-    <div class="col-md-2">
-        <select name="sort" class="form-select">
-            <option value="">Sort by price</option>
-            <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Lowest to highest</option>
-            <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Highest to lowest</option>
-        </select>
-    </div>
-    <!-- Filtros vegan / vegetarian -->
-    <div class="col-md-2">
-        {% comment %} Botón Vegan {% endcomment %}
-        {% if diet_selected == "vegan" %}
-            <!-- Si ya está seleccionado, quitarlo -->
-            <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
-            class="btn btn-success mx-1">
-            Vegan ✕
-            </a>
-        {% else %}
-            <!-- Si no está seleccionado, aplicarlo -->
-            <a href="?diet=vegan{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
-            class="btn btn-outline-success mx-1">
-            Vegan
-            </a>
-        {% endif %}
+        <!-- Sort by precios -->
+        <div class="col-md-2">
+            <select name="sort" class="form-select">
+                <option value="">Sort by price</option>
+                <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Lowest to highest</option>
+                <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Highest to lowest</option>
+            </select>
+        </div>
+        <!-- Filtros vegan / vegetarian -->
+        <div class="col-md-2 d-flex" style="space-between: 10px;">
+            {% comment %} Botón Vegan {% endcomment %}
+            {% if diet_selected == "vegan" %}
+                <!-- Si ya está seleccionado, quitarlo -->
+                <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
+                class="btn btn-success mx-1">
+                Vegan ✕
+                </a>
+            {% else %}
+                <!-- Si no está seleccionado, aplicarlo -->
+                <a href="?diet=vegan{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
+                class="btn btn-outline-success mx-1">
+                Vegan
+                </a>
+            {% endif %}
 
-        {% comment %} Botón Vegetarian {% endcomment %}
-        {% if diet_selected == "vegetarian" %}
-            <!-- Si ya está seleccionado, quitarlo -->
-            <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
-            class="btn btn-success mx-1">
-            Vegetarian ✕
-            </a>
-        {% else %}
-            <!-- Si no está seleccionado, aplicarlo -->
-            <a href="?diet=vegetarian{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
-            class="btn btn-outline-success mx-1">
-            Vegetarian
-            </a>
-        {% endif %}
-    </div>
-
-    
-    <!-- Botón -->
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">Filter</button>
-    </div>
-</form>
+            {% comment %} Botón Vegetarian {% endcomment %}
+            {% if diet_selected == "vegetarian" %}
+                <!-- Si ya está seleccionado, quitarlo -->
+                <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
+                class="btn btn-success mx-1">
+                Vegetarian ✕
+                </a>
+            {% else %}
+                <!-- Si no está seleccionado, aplicarlo -->
+                <a href="?diet=vegetarian{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
+                class="btn btn-outline-success mx-1">
+                Vegetarian
+                </a>
+            {% endif %}
+        </div>
+        <!-- Botón -->
+        <div class="col-md-2" style="margin-left: 20px;">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
 
     <!-- Botón agregar producto solo admin -->
     {% if user.is_staff %}

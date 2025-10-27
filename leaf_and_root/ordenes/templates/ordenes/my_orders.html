@@ -18,9 +18,9 @@
             <tbody>
                 {% for order in orders %}
                 <tr>
-                    <td>#{{ order.id_order }}</td>
-                    <td>{{ order.order_date }}</td>
-                    <td>{{ order.status }}</td>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.date }}</td>
+                    <td>{{ order.estados }}</td>
                     <td>${{ order.total }}</td>
                     
                 </tr>
