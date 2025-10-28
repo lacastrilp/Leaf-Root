@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Remove product{% endblock %}
+
+{% block content %}
+<h3>Are you sure you want to remove the product "{{ product.name }}"?</h3>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Remove</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

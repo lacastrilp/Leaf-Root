@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Invoice{% endblock %}
+{% block content %}
+<h1>Invoice #{{ order.id }}</h1>
+<p>Client: {{ order.user.username }}</p>
+<p>Date: {{ order.created_at }}</p>
+<h3>Products</h3>
+<ul>
+{% for item in order.items.all %}
+    <li>{{ item.product.name }} - {{ item.quantity }} x ${{ item.product.price }}</li>
+{% endfor %}
+</ul>
+<p>Total: ${{ order.total }}</p>
+{% endblock %}

@@ -1,46 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
+{% load static %}
+{% load custom_tags %}
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Mi Tienda{% endblock %}</title>
+    <title>{% block title %}LEAF & ROOT{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'carrito/css/cart.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">Store</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+
+    <!-- NAVBAR SUPERIOR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+
+
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'store/images/logo.png' %}" alt="Leaf & Root" height="60" style="margin-top: 0.01rem; margin-bottom: 0.01rem;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                                        <!-- 🔍 Botón de búsqueda -->
+                        <li class="nav-item me-3">
+                        <button id="searchToggle" class="btn p-0 border-0 bg-transparent">
+                            <i class="bi bi-search" style="font-size:1.3rem; color:#333;"></i>
+                        </button>
+                        </li>
+
+                        <!-- 🔍 Barra de búsqueda oculta -->
+                        <li class="nav-item">
+                        <form id="searchForm" method="get" action="{% url 'product_list' %}" class="d-none">
+                            <input type="text" name="q" class="form-control" placeholder="Search products...">
+                        </form>
+                        </li>
+
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cart_detail' %}">
-                            Carrito ({{ user.customer.cart.total_items|default:"0" }})
+                    {% if not user.is_staff and not user.is_superuser %}
+
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="{% url 'cart_detail' %}">
+                                <i class="bi bi-cart3" style="font-size: 1.4rem; color: #000;"></i>
+                                <!-- contador del carrito arriba a la derecha -->
+                                <span id="cartCounter" 
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ user.customer.cart.total_items|default:"0" }}
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item ms-3">
+                            <a class="nav-link position-relative" href="{% url 'wishlist' %}">
+                                <i class="bi bi-heart" style="font-size: 1.2rem;"></i>
+                                {% if user.customer.wishlist.count %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ user.customer.wishlist.count }}
+                                    <span class="visually-hidden">wishlist items</span>
+                                </span>
+                                {% endif %}
+                            </a>
+                        </li>
+
+                    {% endif %}
+                    <li class="nav-item ms-3">
+                        <a class="nav-link position-relative" href="{% url 'account_home' %}">
+                            <i class="bi bi-person-circle" style="font-size: 1.4rem;"></i>
                         </a>
                     </li>
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link nav-link" style="padding:0; border:none;">Logout</button>
-                        </form>
-                    </li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    <!-- Si no está autenticado, lo mandamos a login -->
+                    <li class="nav-item ms-3">
+                        <a class="nav-link position-relative" href="{% url 'login' %}?next={{ request.path }}">
+                            <i class="bi bi-person-circle" style="font-size: 1.4rem;"></i>
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container mt-4">
-    {% block content %}{% endblock %}
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container mt-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- SIDEBAR DEL CARRITO -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartSidebar" aria-labelledby="cartSidebarLabel">
+        <div class="offcanvas-header">
+            <h5 id="cartSidebarLabel">
+                My shopping cart (<span id="cartCounterSidebar">{{ user.customer.cart.total_items|default:"0" }}</span>)
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" id="cartContent">
+            {% if items %}
+                <ul class="list-group mb-3">
+                {% for item in items %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">{{ item.product.name }}</div>
+                        <form method="post" action="{% url 'update_cart_quantity' item.product.id_product %}">
+                            {% csrf_token %}
+                            <select name="quantity" class="form-select form-select-sm mt-2" style="width:80px;" onchange="this.form.submit()">
+                                {% for i in 1|get_range:item.product.stock %}
+                                    <option value="{{ i }}" {% if item.quantity == i %}selected{% endif %}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <small class="text-muted">Price: ${{ item.product.price }}</small><br>
+                        <small class="text-muted">Subtotal: ${{ item.get_subtotal }}</small>
+                    </div>
+                    <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">✖</button>
+                    </form>
+                </li>
+                {% endfor %}
+                </ul>
+                <div class="d-flex justify-content-between">
+                    <strong>Total:</strong> <span>${{ total_price }}</span>
+                </div>
+                <a href="{% url 'cart_detail' %}" class="btn btn-primary w-100 mt-3">View shopping cart</a>
+            {% else %}
+                <p>There aren't any items in your shopping cart.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="cartOverlay" class="cart-overlay"></div>
+
+    <!-- MODAL DE PRODUCTO -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center p-3">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'carrito/js/cart.js' %}"></script>
+    <script src="{% static 'store/js/base.js' %}"></script>
+
 </body>
 </html>
-
-

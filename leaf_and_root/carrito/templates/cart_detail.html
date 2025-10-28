@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My shopping cart{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>My shopping cart ({{ total_items }} items)</h2>
+
+    {# 👉 Incluimos la tabla parcial #}
+    {% include "cart_items.html" %}
+{% if total_items > 0 %}
+    <div class="text-end mt-4">
+        <a href="{% url 'checkout_review' %}" class="btn btn-success btn-lg">
+            Comprar
+        </a>
+    </div>
+{% endif %}
+
+    {# 👉 Script para manejar los botones + y - #}
+
+    <script>
+        function updateCart(productId, newQuantity) {
+            fetch(`/cart/update/${productId}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "quantity=" + newQuantity
+            })
+            .then(res => res.json())
+            .then(data => {
+                const item = data.cart_items.find(i => i.id === productId);
+                const qtyElem = document.querySelector(`#qty-${productId}`);
+                const maxStock = parseInt(qtyElem.dataset.stock);
+
+                if (item) {
+                    qtyElem.textContent = item.quantity;
+                    document.querySelector(`#subtotal-${productId}`).textContent = "$" + item.subtotal;
+
+                    // Desactivar el botón "+" si alcanzó el stock
+                    const plusBtn = document.querySelector(`.increase-btn[data-id='${productId}']`);
+                    plusBtn.disabled = item.quantity >= maxStock;
+                } else {
+                    location.reload();
+                }
+
+                document.querySelector("h2").textContent = `My shopping cart (${data.total_items} items)`;
+                document.querySelector("h4").textContent = `Total: $${data.total_price}`;
+
+                const counter = document.getElementById("cartCounter");
+                if (counter) counter.textContent = data.total_items;
+
+                const counterSidebar = document.getElementById("cartCounterSidebar");
+                if (counterSidebar) counterSidebar.textContent = data.total_items;
+            });
+        }
+
+        document.querySelectorAll(".increase-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const productId = parseInt(this.dataset.id);
+                const qtyElem = document.querySelector(`#qty-${productId}`);
+                const currentQty = parseInt(qtyElem.textContent);
+                const maxStock = parseInt(qtyElem.dataset.stock);
+
+                if (currentQty < maxStock) {
+                    updateCart(productId, currentQty + 1);
+                } else {
+                    alert("❌ No puedes agregar más de las unidades disponibles en inventario.");
+                }
+            });
+        });
+
+        document.querySelectorAll(".decrease-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const productId = parseInt(this.dataset.id);
+                const currentQty = parseInt(document.querySelector(`#qty-${productId}`).textContent);
+                if (currentQty > 1) {
+                    updateCart(productId, currentQty - 1);
+                } else {
+                    updateCart(productId, 0); // 0 → se elimina el producto
+                }
+            });
+        });
+    </script>
+    <script src="{% static 'store/js/product-modal.js' %}"></script> <!-- JS específico de wishlist -->
+    <script src="{% static 'carrito/js/cart.js' %}"></script> <!-- JS global de carrito -->
+
+
+</div>
+{% endblock %}

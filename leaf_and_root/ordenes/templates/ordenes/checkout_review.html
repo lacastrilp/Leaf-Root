@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Revisar compra{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Revisión de Pedido</h2>
+
+    <h4>Datos del Cliente</h4>
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><strong>Nombre:</strong> {{ customer.name }}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ customer.email }}</li>
+        <li class="list-group-item"><strong>Dirección:</strong> {{ customer.address }}</li>
+        <li class="list-group-item"><strong>Teléfono:</strong> {{ customer.phone }}</li>
+    </ul>
+
+    <h4>Productos</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.product.price }}</td>
+                <td>${{ item.get_subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 class="text-end">Total: ${{ total }}</h3>
+
+    <div class="text-end mt-4">
+        <a href="{% url 'checkout_finalize' %}" class="btn btn-primary btn-lg">
+            Finalizar compra
+        </a>
+    </div>
+</div>
+{% endblock %}
