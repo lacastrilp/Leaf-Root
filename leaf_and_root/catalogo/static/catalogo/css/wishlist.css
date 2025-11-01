@@ -35,14 +35,6 @@
     color: #dc3545;
 }
 
-/* Corazones en productos */
-.wishlist-icon {
-    font-size: 1.5rem;
-    color: black;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
 .wishlist-icon.active {
     color: #ff4d4d; /* rojo cuando está en favoritos */
 }
@@ -53,5 +45,3 @@
     font-size: 0.75rem;
     font-weight: 600;
 }
-
-

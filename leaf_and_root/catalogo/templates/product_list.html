@@ -1,12 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-<style src="{% static 'catalogo/css/wishlist.css' %}"></style>
+<link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
+<link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
+
+<!-- Hero a todo el ancho con la imagen como fondo debajo del texto -->
+<div class="hero-banner" style="background-image: url('{% static 'store/images/veggies.jpg' %}')">
+    <div class="hero-text">
+        <h1 class="display-5 mb-0 text-ink">
+            We're an online store specializing in plant-based products.
+        </h1>
+        <p class="lead space-h1-lead text-muted-1">
+            Our platform promotes a healthy, ethical, and sustainable lifestyle
+            by clearly labeling products as vegan or vegetarian and providing
+            transparent information on their nutritional.
+        </p>
+    </div>
+</div>
 <!-- Página de listado de productos -->
 <div class="container mt-4"> 
     <!-- Barra superior -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Products Catalog</h2>
+        <h2 class="fw-bold text-center">Products Catalog</h2>
     </div>
     <!-- Barra de búsqueda y filtros -->
     <form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4 ">
@@ -186,8 +201,8 @@
     {% endif %}
 </div>
 
-<script src="{% static 'store/js/product-modal.js' %}"></script> <!-- JS específico de product list -->
-<script src="{% static 'carrito/js/cart.js' %}"></script> <!-- JS específico de carrito -->
-<script src="{% static 'catalogo/js/wishlist.js' %}"></script> <!-- JS específico de wishlist -->
+<script src="{% static 'store/js/product-modal.js' %}"></script>
+<script src="{% static 'carrito/js/cart.js' %}"></script>
+<script src="{% static 'catalogo/js/wishlist.js' %}"></script>
 
 {% endblock %}

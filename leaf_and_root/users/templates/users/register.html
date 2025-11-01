@@ -1,113 +1,116 @@
 {% extends 'base.html' %}
-
-{% block title %}Sign up{% endblock %}
-
+{% block title %}Register{% endblock %}
 {% block content %}
-<h1>Sign up</h1>
+{% load static %}
+<link rel="stylesheet" href="{% static 'users/css/auth.css' %}">
 
-<form method="post" id="registrationForm">
-    {% csrf_token %}
+<div class="auth-bg">
+    <div class="auth-card">
+    <h1 class="auth-title">Sign up</h1>
+    <form method="post" id="registrationForm">
+        {% csrf_token %}
+        <!-- Username -->
+        <div class="mb-3">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            <span id="username-error" class="text-danger small"></span>
+        </div>
 
-    <!-- Username -->
-    <div class="mb-3">
-        {{ form.username.label_tag }}
-        {{ form.username }}
-        <span id="username-error" class="text-danger small"></span>
+        <!-- Email -->
+        <div class="mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            <span id="email-error" class="text-danger small"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            <span id="password1-error" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            <span id="password2-error" class="text-danger small"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Create account</button>
+    </form>
+
+    <p class="mt-3 text-center">Already have an account?.</p>
+    <a href="{% url 'login' %}" class="btn btn-secondary" >Log in here</a>
     </div>
-
-    <!-- Email -->
-    <div class="mb-3">
-        {{ form.email.label_tag }}
-        {{ form.email }}
-        <span id="email-error" class="text-danger small"></span>
-    </div>
-
-    <!-- Password -->
-    <div class="mb-3">
-        {{ form.password1.label_tag }}
-        {{ form.password1 }}
-        <span id="password1-error" class="text-danger small"></span>
-    </div>
-
-    <div class="mb-3">
-        {{ form.password2.label_tag }}
-        {{ form.password2 }}
-        <span id="password2-error" class="text-danger small"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Create account</button>
-</form>
-
-<p class="mt-3">Already have an account? <a href="{% url 'login' %}">Log in here</a>.</p>
-
+</div>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const usernameInput = document.querySelector("#id_username");
-    const emailInput = document.querySelector("#id_email");
-    const password1Input = document.querySelector("#id_password1");
-    const password2Input = document.querySelector("#id_password2");
-    const form = document.querySelector("#registrationForm");
+    document.addEventListener("DOMContentLoaded", function() {
+        const usernameInput = document.querySelector("#id_username");
+        const emailInput = document.querySelector("#id_email");
+        const password1Input = document.querySelector("#id_password1");
+        const password2Input = document.querySelector("#id_password2");
+        const form = document.querySelector("#registrationForm");
 
-    // --- Función para chequear username/email con AJAX ---
-    function checkAvailability(field, value) {
-        fetch(`/ajax/check_user_email/?${field}=${encodeURIComponent(value)}`)
-            .then(res => res.json())
-            .then(data => {
-                const errorSpan = document.querySelector(`#${field}-error`);
-                if(data[`${field}_exists`]){
-                    errorSpan.textContent = field === "username" 
-                        ? "Este nombre de usuario ya está en uso."
-                        : "Este correo electrónico ya está registrado.";
-                } else {
-                    errorSpan.textContent = "";
-                }
-            });
-    }
-
-    // --- Validación de contraseña ---
-    function validatePasswords() {
-        const error1 = document.querySelector("#password1-error");
-        const error2 = document.querySelector("#password2-error");
-        let valid = true;
-
-        if(password1Input.value.length < 8){
-            error1.textContent = "La contraseña debe tener al menos 8 caracteres.";
-            valid = false;
-        } else {
-            error1.textContent = "";
+        // --- Función para chequear username/email con AJAX ---
+        function checkAvailability(field, value) {
+            fetch(`/ajax/check_user_email/?${field}=${encodeURIComponent(value)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const errorSpan = document.querySelector(`#${field}-error`);
+                    if(data[`${field}_exists`]){
+                        errorSpan.textContent = field === "username" 
+                            ? "Este nombre de usuario ya está en uso."
+                            : "Este correo electrónico ya está registrado.";
+                    } else {
+                        errorSpan.textContent = "";
+                    }
+                });
         }
 
-        if(password2Input.value !== password1Input.value){
-            error2.textContent = "Las contraseñas no coinciden.";
-            valid = false;
-        } else {
-            error2.textContent = "";
+        // --- Validación de contraseña ---
+        function validatePasswords() {
+            const error1 = document.querySelector("#password1-error");
+            const error2 = document.querySelector("#password2-error");
+            let valid = true;
+
+            if(password1Input.value.length < 8){
+                error1.textContent = "La contraseña debe tener al menos 8 caracteres.";
+                valid = false;
+            } else {
+                error1.textContent = "";
+            }
+
+            if(password2Input.value !== password1Input.value){
+                error2.textContent = "Las contraseñas no coinciden.";
+                valid = false;
+            } else {
+                error2.textContent = "";
+            }
+            return valid;
         }
-        return valid;
-    }
 
-    // --- Eventos ---
-    usernameInput.addEventListener("blur", () => {
-        if(usernameInput.value) checkAvailability("username", usernameInput.value);
+        // --- Eventos ---
+        usernameInput.addEventListener("blur", () => {
+            if(usernameInput.value) checkAvailability("username", usernameInput.value);
+        });
+
+        emailInput.addEventListener("blur", () => {
+            if(emailInput.value) checkAvailability("email", emailInput.value);
+        });
+
+        password1Input.addEventListener("input", validatePasswords);
+        password2Input.addEventListener("input", validatePasswords);
+
+        // --- Evitar envío si hay errores ---
+        form.addEventListener("submit", function(e){
+            let hasErrors = false;
+
+            if(document.querySelector("#username-error").textContent) hasErrors = true;
+            if(document.querySelector("#email-error").textContent) hasErrors = true;
+            if(!validatePasswords()) hasErrors = true;
+
+            if(hasErrors) e.preventDefault();
+        });
     });
-
-    emailInput.addEventListener("blur", () => {
-        if(emailInput.value) checkAvailability("email", emailInput.value);
-    });
-
-    password1Input.addEventListener("input", validatePasswords);
-    password2Input.addEventListener("input", validatePasswords);
-
-    // --- Evitar envío si hay errores ---
-    form.addEventListener("submit", function(e){
-        let hasErrors = false;
-
-        if(document.querySelector("#username-error").textContent) hasErrors = true;
-        if(document.querySelector("#email-error").textContent) hasErrors = true;
-        if(!validatePasswords()) hasErrors = true;
-
-        if(hasErrors) e.preventDefault();
-    });
-});
 </script>
 {% endblock %}

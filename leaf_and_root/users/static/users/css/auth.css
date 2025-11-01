@@ -1,0 +1,83 @@
+/* ...existing code... */
+:root{
+  /* Ajusta este valor a la altura real de tu header */
+  --header-height: 70px;
+}
+.auth-title{
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.auth-bg{
+  /* Altura a pantalla completa (con fallback para navegadores móviles modernos) */
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100svh - var(--header-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../images/logback.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Tarjeta del formulario centrada y con fondo semitransparente */
+.auth-card{
+  width: 100%;
+  max-width: 440px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  margin: 1rem;
+}
+.btn{
+  font-weight: 400;
+  display: block;
+  text-align: center; 
+  align-items: center;
+}
+.btn.btn-primary{
+  margin-top: 0.5rem;
+  background-color: #2a4731;
+  max-width: 300px;
+}
+
+.btn.btn-secondary{
+  margin-top: 0.5rem;
+  background-color: #435f4a;
+  max-width: 300px;
+}
+
+/* Ajustes responsivos y de inputs */
+.auth-card form{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.auth-card .btn{
+  margin-top: 0.5rem;
+}
+/* Si tu header es fijo y se superpone, añade padding-top equivalente */
+body.has-fixed-header .auth-bg{
+  min-height: calc(100vh - var(--header-height));
+  margin-top: var(--header-height);
+}
+
+/* Hacer que el fondo abarque todo el ancho aunque esté dentro de .container */
+.container > .auth-bg{
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+/* El contenedor principal trae mt-4; lo anulamos solo para estas vistas */
+.container.mt-4 > .auth-bg{
+  margin-top: -1.5rem; /* compensa el mt-4 de Bootstrap */
+}
