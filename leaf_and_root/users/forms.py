@@ -6,20 +6,20 @@ from users.models import Customer
 class CustomerRegistrationForm(forms.ModelForm):
     """Formulario para registrar un cliente asociado a un usuario del sistema"""
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Contraseña"})
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Password"})
     )
     password_confirmation = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Confirma tu contraseña"})
+        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Confirm Password"})
     )
 
     class Meta:
         model = Customer
         fields = ["name", "email", "address", "phone"]
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Nombre completo"}),
-            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Correo electrónico"}),
-            "address": forms.TextInput(attrs={"class": "form-control", "placeholder": "Dirección"}),
-            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Teléfono"}),
+            "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full Name"}),
+            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email Address"}),
+            "address": forms.TextInput(attrs={"class": "form-control", "placeholder": "Address"}),
+            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
         }
 
     def clean(self):
@@ -27,7 +27,7 @@ class CustomerRegistrationForm(forms.ModelForm):
         password = cleaned_data.get("password")
         password_confirmation = cleaned_data.get("password_confirmation")
         if password and password_confirmation and password != password_confirmation:
-            raise forms.ValidationError("Las contraseñas no coinciden.")
+            raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
 
     def save(self, commit=True):
@@ -45,7 +45,7 @@ class CustomerRegistrationForm(forms.ModelForm):
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(
         required=True,
-        widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Correo electrónico"})
+        widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email Address"})
     )
 
     class Meta:
@@ -54,30 +54,30 @@ class RegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Nombre de usuario"})
-        self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Correo electrónico"})
-        self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Contraseña"})
-        self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Repite la contraseña"})
+        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Username"})
+        self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Email Address"})
+        self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Password"})
+        self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Confirm Password"})
 
     def clean_username(self):
         username = self.cleaned_data["username"]
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Este nombre de usuario ya está en uso.")
+            raise forms.ValidationError("This username is already taken.")
         return username
 
     def clean_email(self):
         email = self.cleaned_data["email"]
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Este correo electrónico ya está registrado.")
+            raise forms.ValidationError("This email address is already registered.")
         return email
 
 
 class LoginForm(AuthenticationForm):
-    """Formulario de inicio de sesión"""
+    """Login form"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Usuario"})
-        self.fields["password"].widget.attrs.update({"class": "form-control", "placeholder": "Contraseña"})
+        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Username"})
+        self.fields["password"].widget.attrs.update({"class": "form-control", "placeholder": "Password"})
 
 class CustomerForm(forms.ModelForm):
     class Meta:

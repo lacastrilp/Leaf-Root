@@ -33,3 +33,129 @@
 @media (min-width: 992px){
   .hero-banner{ padding-top: 3rem; padding-bottom: 3rem; }
 }
+
+.landing-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #4CAF50;
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.landing-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+    
+}
+.tags{
+  background-color: #4CAF50;
+}
+
+/* Unified style for product badges (Vegan/Vegetarian) */
+.badge.tags{
+  background-color: #4CAF50; /* ensure the green applies even with .badge */
+  color: #fff;
+}
+
+/* Position the badge on the card's top-right */
+.product-card{
+  position: relative;
+}
+.product-card .product-badge{
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+/* TARJETAS PRODUCTOS */
+.card {
+    border-radius: 12px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    background-color: #ffffff;
+}
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    transform: translateY(-4px);
+    background-color: #6ecc7177;
+    
+}
+
+/* Imagen del producto con altura fija */
+.product-image {
+    border-radius: 12px 12px 12px 12px;
+    align-items: center;
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Asegurar que el card-body ocupe el espacio restante */
+.product-card .card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 180px; /* altura mínima para contenido */
+}
+
+/* El título del producto */
+.product-card .card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+    color: #4CAF50;
+    min-height: 3rem; /* espacio mínimo para 2 líneas de título */
+    margin-bottom: 0.75rem;
+}
+
+/* Precio consistente */
+.product-card .card-text {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Los botones siempre al fondo */
+.product-card .mt-auto {
+    margin-top: auto !important;
+} 
+
+/* PAGINACIÓN */
+.pagination-link {
+    color: #4CAF50;
+    border-color: #2f6d31;
+    transition: all 0.2s ease;
+}
+
+.pagination-link:hover {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.pagination-active {
+    background-color: #47a34a !important;
+    border-color: #2f6d31 !important;
+    color: white !important;
+}
+
+.page-item.active .page-link {
+    background-color: #47a34a;
+    border-color: #47a34a;
+}
+
+/* Ícono de corazón en la barra de navegación */
+.navbar-nav .nav-link .bi-heart {
+    color: black;
+    transition: color 0.3s;
+    transform: scale(1);
+    background: none;
+}
+
+.navbar-nav .nav-link:hover .bi-heart {
+    color: #ff4d4d;
+}
+/* Badge de contador */
+.navbar-nav .badge {
+    font-size: 0.7rem;
+}
+

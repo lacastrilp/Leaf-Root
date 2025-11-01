@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views.generic.edit import FormView
 from django.contrib.auth.models import User
 from .models import Customer
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from .forms import CustomerForm
 from django.http import JsonResponse
@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 class LoginView(AuthLoginView):
     template_name = "users/login.html"
+    form_class = LoginForm
 
 class LogoutView(AuthLogoutView):
     template_name = "users/logout.html"

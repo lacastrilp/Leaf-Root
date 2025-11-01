@@ -17,6 +17,7 @@ button,
 button:hover,
 .btn:hover {
     transform: translateY(-2px);
+    align-items: center;
 }
 
 /* Botones primarios (Bootstrap) */
@@ -64,28 +65,6 @@ textarea,
     padding: 8px 12px;
 }
 
-/* TARJETAS PRODUCTOS */
-.card {
-    border-radius: 12px;
-}
-
-/* OPCIONAL: sombra suave para inputs y botones */
-input, select, textarea, button, .btn {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.navbar-nav .nav-link .bi-heart {
-    color: black;
-    transition: color 0.3s;
-}
-
-.navbar-nav .nav-link:hover .bi-heart {
-    color: #ff4d4d;
-}
-/* Badge de contador */
-.navbar-nav .badge {
-    font-size: 0.7rem;
-}
 
 #searchForm {
     width: 200px; /* tamaño de la barra */

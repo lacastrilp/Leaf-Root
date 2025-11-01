@@ -3,6 +3,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
 <link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
+<link rel="stylesheet" href="{% static 'catalogo/css/base.css' %}">
 
 <!-- Hero a todo el ancho con la imagen como fondo debajo del texto -->
 <div class="hero-banner" style="background-image: url('{% static 'store/images/veggies.jpg' %}')">
@@ -20,11 +21,11 @@
 <!-- Página de listado de productos -->
 <div class="container mt-4"> 
     <!-- Barra superior -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-center">Products Catalog</h2>
+    <div class="landing-title mb-4">
+        <h2 class="fw-bold">Products Catalog</h2>
     </div>
     <!-- Barra de búsqueda y filtros -->
-    <form method="get" action="{% url 'product_list' %}" class="row g-2 mb-4 ">
+    <form method="get" action="{% url 'product_list' %}" class="landing-filters row mb-4 align-items-center">
 
         <!-- Categoría -->
         <div class="col-md-2">
@@ -39,7 +40,7 @@
         </div>
 
         <!-- Sort by precios -->
-        <div class="col-md-2">
+        <div class="col-md-3">
             <select name="sort" class="form-select">
                 <option value="">Sort by price</option>
                 <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Lowest to highest</option>
@@ -47,13 +48,13 @@
             </select>
         </div>
         <!-- Filtros vegan / vegetarian -->
-        <div class="col-md-2 d-flex" style="space-between: 10px;">
+        <div class="col-md-2 d-flex" style="margin-left: 0rem;">
             {% comment %} Botón Vegan {% endcomment %}
             {% if diet_selected == "vegan" %}
                 <!-- Si ya está seleccionado, quitarlo -->
                 <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
-                class="btn btn-success mx-1">
-                Vegan ✕
+                class="btn btn-sm btn-success mx-1">
+                Vegan
                 </a>
             {% else %}
                 <!-- Si no está seleccionado, aplicarlo -->
@@ -68,7 +69,7 @@
                 <!-- Si ya está seleccionado, quitarlo -->
                 <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
                 class="btn btn-success mx-1">
-                Vegetarian ✕
+                Vegetarian
                 </a>
             {% else %}
                 <!-- Si no está seleccionado, aplicarlo -->
@@ -77,12 +78,53 @@
                 Vegetarian
                 </a>
             {% endif %}
-        </div>
-        <!-- Botón -->
-        <div class="col-md-2" style="margin-left: 20px;">
-            <button type="submit" class="btn btn-primary">Filter</button>
+            <button type="submit" class="btn btn-success mx-1">Filters</button>
         </div>
     </form>
+
+    <!-- Paginación -->
+<div class="container my-4">
+    {% if is_paginated %}
+    <nav>
+        <ul class="pagination justify-content-left">
+            <!-- Botón Primera y Anterior -->
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link pagination-link" href="?page=1&{{ current_filters.urlencode }}">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link pagination-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">&lt;</a>
+                </li>
+            {% endif %}
+
+            <!-- Números de página -->
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <li class="page-item active">
+                        <span class="page-link pagination-active">{{ num }}</span>
+                    </li>
+                {% elif num >= page_obj.number|add:'-1' and num <= page_obj.number|add:'1' %}
+                    <li class="page-item">
+                        <a class="page-link pagination-link" href="?page={{ num }}&{{ current_filters.urlencode }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Botón Siguiente y Última -->
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link pagination-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">&gt;</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link pagination-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">Last</a>
+                </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
 
     <!-- Botón agregar producto solo admin -->
     {% if user.is_staff %}
@@ -95,30 +137,31 @@
     <div class="row">
         {% for product in products %}
             <div class="col-md-3 mb-4">
-                <div class="card shadow-sm h-100">
+                <div class="card shadow-sm h-100 product-card">
 
                     <!-- 🏷️ Etiqueta vegano/vegetariano -->
                     {% if product.diet_label == "vegan" %}
-                        <span class="badge bg-success position-absolute top-0 end-0 m-2">Vegan</span>
-                    {% elif product.diet_label == "vegetarian" %}
-                        <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">Vegetarian</span>
+                        <span class="badge tags product-badge">Vegan</span>
+                        {% elif product.diet_label == "vegetarian" %}
+                        <span class="badge tags product-badge">Vegetarian</span>
                     {% endif %}
-
+                        <!-- ❤️ Wishlist toggle -->
                         <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
-                            class="wishlist-form ms-auto" data-product-id="{{ product.pk }}">
+                            class="wishlist-form" data-product-id="{{ product.pk }}">
                             {% csrf_token %}
-                            <button type="submit" class="btn p-0 border-0 bg-transparent position-absolute bottom-0 end-0 m-2">
-                                <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" 
-                                    style="font-size:1.8rem;"></i>
+                            <button type="submit" class="wishlist-button" aria-label="Toggle wishlist">
+                                <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill active{% else %}bi-heart{% endif %}"></i>
                             </button>
                         </form>
+                    <!-- Imagen del producto -->
                     {% if product.image_url %}
-                        <a href="{% url 'product_detail' product.pk %}" class ="product-link">
-                            <img src="{{ product.image_url }}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{{ product.name }}">
+                        <a href="{% url 'product_detail' product.pk %}" class="product-link">
+                            <img src="{{ product.image_url }}" class="card-img-top product-image" alt="{{ product.name }}">
                         </a>
+                    <!-- Detalles del producto -->
                     {% else %}
-                    <a href="{% url 'product_detail' product.pk %}" class ="product-link">
-                        <img src="https://via.placeholder.com/200" class="card-img-top" alt="No image available">
+                    <a href="{% url 'product_detail' product.pk %}" class="product-link">
+                        <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="No image available">
                     </a>
                     {% endif %}
 
@@ -141,7 +184,7 @@
                                                 {% if product.stock == 0 %}
                                                     disabled, class="btn btn-sm btn-secondary"
                                                 {% endif %}>
-                                            Add to shopping cart
+                                                Add to shopping cart
                                         </button>
                                     </form>
                                 {% else %}
@@ -156,49 +199,6 @@
             <p class="text-center text-muted">There aren't any products yet.</p>
         {% endfor %}
     </div>
-</div>
-<!-- Paginación -->
-<div class="center my-4">
-    {% if is_paginated %}
-    <nav>
-        <ul class="pagination justify-content-center">
-
-            <!-- Botón Primera y Anterior -->
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1&{{ current_filters.urlencode }}">First</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">Previous</a>
-                </li>
-            {% endif %}
-
-            <!-- Números de página -->
-            {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ num }}</span>
-                    </li>
-                {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}&{{ current_filters.urlencode }}">{{ num }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Botón Siguiente y Última -->
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">Last</a>
-                </li>
-            {% endif %}
-
-        </ul>
-    </nav>
-    {% endif %}
 </div>
 
 <script src="{% static 'store/js/product-modal.js' %}"></script>

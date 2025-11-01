@@ -24,19 +24,35 @@
 }
 
 /* Corazones en productos */
+.wishlist-button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .wishlist-icon {
-    font-size: 1.5rem;
-    color: black;
-    cursor: pointer;
-    transition: color 0.3s;
+  font-size: 1.8rem;           /* tamaño uniforme (antes estaba inline) */
+  color: #222;                 /* color base */
+  transition: color 0.2s ease;
 }
 
-.wishlist-form:hover .wishlist-icon:not(.text-danger) {
-    color: #dc3545;
+/* Hover cuando NO está activo */
+.wishlist-form:hover .wishlist-icon:not(.active) {
+  color: #dc3545;              /* rojo bootstrap-like en hover */
 }
 
+/* Estado activo (en favoritos) */
 .wishlist-icon.active {
-    color: #ff4d4d; /* rojo cuando está en favoritos */
+  color: #ff4d4d;              /* rojo cuando está en favoritos */
+}
+
+/* Posicionamiento dentro de tarjetas de producto */
+.product-card .wishlist-button {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
 }
 
 .badge {

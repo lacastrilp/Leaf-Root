@@ -8,6 +8,8 @@
   margin-top: 2rem;
   margin-bottom: 1rem;
   font-weight: 600;
+  /* color: #f4a900; yellow */
+  color: #4caf50;
 }
 
 .auth-bg{
@@ -25,6 +27,7 @@
 
 /* Tarjeta del formulario centrada y con fondo semitransparente */
 .auth-card{
+  text-align: center;
   width: 100%;
   max-width: 440px;
   background: rgba(255,255,255,0.92);
@@ -33,30 +36,19 @@
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   margin: 1rem;
 }
-.btn{
-  font-weight: 400;
-  display: block;
-  text-align: center; 
-  align-items: center;
-}
-.btn.btn-primary{
-  margin-top: 0.5rem;
-  background-color: #2a4731;
-  max-width: 300px;
-}
-
-.btn.btn-secondary{
-  margin-top: 0.5rem;
-  background-color: #435f4a;
-  max-width: 300px;
-}
 
 /* Ajustes responsivos y de inputs */
 .auth-card form{
   text-align: center;
-  display: flex;
   flex-direction: column;
+  display: flex;
+  align-items: center;
+  width: 100%;
   gap: 0.75rem;
+}
+.auth-card form .mb-3{
+  width: 100%;
+  max-width: 300px;
 }
 .auth-card .btn{
   margin-top: 0.5rem;

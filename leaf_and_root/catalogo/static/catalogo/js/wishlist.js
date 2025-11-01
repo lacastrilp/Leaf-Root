@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const icon = form.querySelector(".wishlist-icon");
             if (data.in_wishlist) {
               icon.classList.remove("bi-heart");
-              icon.classList.add("bi-heart-fill", "text-danger");
+              icon.classList.add("bi-heart-fill", "active");
             } else {
-              icon.classList.remove("bi-heart-fill", "text-danger");
+              icon.classList.remove("bi-heart-fill", "active");
               icon.classList.add("bi-heart");
             }
           }

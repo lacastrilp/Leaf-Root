@@ -1,5 +1,6 @@
 
 {% load static %}
+<link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
 
 {% block content %}
 <div class="container mt-4">
@@ -9,12 +10,11 @@
     <h2 class="fw-bold mb-2">{{ product.name }}</h2>
 
 
-    <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
-          class="wishlist-form ms-auto" data-product-id="{{ product.pk }}">
+  <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
+      class="wishlist-form ms-auto" data-product-id="{{ product.pk }}">
       {% csrf_token %}
-      <button type="submit" class="btn p-0 border-0 bg-transparent">
-          <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}" 
-             style="font-size:1.8rem;"></i>
+    <button type="submit" class="wishlist-button" aria-label="Toggle wishlist">
+      <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill active{% else %}bi-heart{% endif %}"></i>
       </button>
     </form>
   </div>
