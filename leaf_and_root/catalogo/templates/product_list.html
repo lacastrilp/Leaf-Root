@@ -8,7 +8,7 @@
 <!-- Hero a todo el ancho con la imagen como fondo debajo del texto -->
 <div class="hero-banner" style="background-image: url('{% static 'store/images/veggies.jpg' %}')">
     <div class="hero-text">
-        <h1 class="display-5 mb-0 text-ink">
+        <h1 class="display-5 mb-0 text-ink fw-bold">
             We're an online store specializing in plant-based products.
         </h1>
         <p class="lead space-h1-lead text-muted-1">
@@ -18,133 +18,27 @@
         </p>
     </div>
 </div>
-<!-- Página de listado de productos -->
-<div class="container mt-4"> 
-    <!-- Barra superior -->
-    <div class="landing-title mb-4">
-        <h2 class="fw-bold">Products Catalog</h2>
-    </div>
-    <!-- Barra de búsqueda y filtros -->
-    <form method="get" action="{% url 'product_list' %}" class="landing-filters row mb-4 align-items-center">
 
-        <!-- Categoría -->
-        <div class="col-md-2">
-            <select name="category" class="form-control mb-2">
-                <option value="">All categories</option>
-                {% for c in categories %}
-                    <option value="{{ c }}" {% if request.GET.category == c %}selected{% endif %}>
-                        {{ c }}
-                    </option>
-                {% endfor %}
-            </select>
+<!-- Página de inicio -->
+<div class="container mt-5">
+    
+    <!-- Sección de Productos Recomendados -->
+    <div class="mb-5">
+        <div class="mb-4">
+            <h2 class="landing-title">Recommended Products</h2>
+            <a href="{% url 'catalog' %}" class="btn btn-outline-success bi bi-eye"> View All</a>
         </div>
-
-        <!-- Sort by precios -->
-        <div class="col-md-3">
-            <select name="sort" class="form-select">
-                <option value="">Sort by price</option>
-                <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Lowest to highest</option>
-                <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Highest to lowest</option>
-            </select>
-        </div>
-        <!-- Filtros vegan / vegetarian -->
-        <div class="col-md-2 d-flex" style="margin-left: 0rem;">
-            {% comment %} Botón Vegan {% endcomment %}
-            {% if diet_selected == "vegan" %}
-                <!-- Si ya está seleccionado, quitarlo -->
-                <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
-                class="btn btn-sm btn-success mx-1">
-                Vegan
-                </a>
-            {% else %}
-                <!-- Si no está seleccionado, aplicarlo -->
-                <a href="?diet=vegan{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
-                class="btn btn-outline-success mx-1">
-                Vegan
-                </a>
-            {% endif %}
-
-            {% comment %} Botón Vegetarian {% endcomment %}
-            {% if diet_selected == "vegetarian" %}
-                <!-- Si ya está seleccionado, quitarlo -->
-                <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
-                class="btn btn-success mx-1">
-                Vegetarian
-                </a>
-            {% else %}
-                <!-- Si no está seleccionado, aplicarlo -->
-                <a href="?diet=vegetarian{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
-                class="btn btn-outline-success mx-1">
-                Vegetarian
-                </a>
-            {% endif %}
-            <button type="submit" class="btn btn-success mx-1">Filters</button>
-        </div>
-    </form>
-
-    <!-- Paginación -->
-<div class="container my-4">
-    {% if is_paginated %}
-    <nav>
-        <ul class="pagination justify-content-left">
-            <!-- Botón Primera y Anterior -->
-            {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link pagination-link" href="?page=1&{{ current_filters.urlencode }}">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link pagination-link" href="?page={{ page_obj.previous_page_number }}&{{ current_filters.urlencode }}">&lt;</a>
-                </li>
-            {% endif %}
-
-            <!-- Números de página -->
-            {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                    <li class="page-item active">
-                        <span class="page-link pagination-active">{{ num }}</span>
-                    </li>
-                {% elif num >= page_obj.number|add:'-1' and num <= page_obj.number|add:'1' %}
-                    <li class="page-item">
-                        <a class="page-link pagination-link" href="?page={{ num }}&{{ current_filters.urlencode }}">{{ num }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-
-            <!-- Botón Siguiente y Última -->
-            {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link pagination-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">&gt;</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link pagination-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">Last</a>
-                </li>
-            {% endif %}
-
-        </ul>
-    </nav>
-    {% endif %}
-</div>
-
-
-    <!-- Botón agregar producto solo admin -->
-    {% if user.is_staff %}
-        <div class="mb-3 text-end">
-            <a href="{% url 'add_product' %}" class="btn btn-success">Add product</a>
-        </div>
-    {% endif %}
-
-    <!-- Lista de productos -->
-    <div class="row">
-        {% for product in products %}
-            <div class="col-md-3 mb-4">
-                <div class="card shadow-sm h-100 product-card">
-
-                    <!-- 🏷️ Etiqueta vegano/vegetariano -->
-                    {% if product.diet_label == "vegan" %}
-                        <span class="badge tags product-badge">Vegan</span>
+        <div class="row">
+            {% for product in recommended_products %}
+                <div class="col-md-3 mb-4">
+                    <div class="card shadow-sm h-100 product-card">
+                        <!-- 🏷️ Etiqueta vegano/vegetariano -->
+                        {% if product.diet_label == "vegan" %}
+                            <span class="badge tags product-badge">Vegan</span>
                         {% elif product.diet_label == "vegetarian" %}
-                        <span class="badge tags product-badge">Vegetarian</span>
-                    {% endif %}
+                            <span class="badge tags product-badge">Vegetarian</span>
+                        {% endif %}
+                        
                         <!-- ❤️ Wishlist toggle -->
                         <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
                             class="wishlist-form" data-product-id="{{ product.pk }}">
@@ -153,51 +47,117 @@
                                 <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill active{% else %}bi-heart{% endif %}"></i>
                             </button>
                         </form>
-                    <!-- Imagen del producto -->
-                    {% if product.image_url %}
-                        <a href="{% url 'product_detail' product.pk %}" class="product-link">
-                            <img src="{{ product.image_url }}" class="card-img-top product-image" alt="{{ product.name }}">
-                        </a>
-                    <!-- Detalles del producto -->
-                    {% else %}
-                    <a href="{% url 'product_detail' product.pk %}" class="product-link">
-                        <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="No image available">
-                    </a>
-                    {% endif %}
+                        
+                        <!-- Imagen del producto -->
+                        {% if product.image_url %}
+                            <a href="{% url 'product_detail' product.pk %}" class="product-link">
+                                <img src="{{ product.image_url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                            </a>
+                        {% else %}
+                            <a href="{% url 'product_detail' product.pk %}" class="product-link">
+                                <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="No image available">
+                            </a>
+                        {% endif %}
 
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">
-                            <a href="{% url 'product_detail' product.pk %}" class="product-link text-dark text-decoration-none">{{ product.name }}</a>
-                        </h5>
-                        <p class="card-text text-muted">Price: <strong>${{ product.price }}</strong></p>
-                        <div class="mt-auto">
-                            {% if user.is_staff %}
-                                <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
-                            {% else %}
-                                {% if product.stock > 0 %}
-                                    <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="quantity" value="1">
-                                        <button type="submit" 
-                                                class="btn btn-sm btn-success"
-                                                {% if product.stock == 0 %}
-                                                    disabled, class="btn btn-sm btn-secondary"
-                                                {% endif %}>
-                                                Add to shopping cart
-                                        </button>
-                                    </form>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a href="{% url 'product_detail' product.pk %}" class="product-link text-dark text-decoration-none">{{ product.name }}</a>
+                            </h5>
+                            <p class="card-text text-muted">Price: <strong>${{ product.price }}</strong></p>
+                            <div class="mt-auto">
+                                {% if user.is_staff %}
+                                    <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
                                 {% else %}
-                                    <button class="btn btn-sm btn-secondary" disabled>Out of stock</button>
+                                    {% if product.stock > 0 %}
+                                        <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Add to shopping cart
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <button class="btn btn-sm btn-secondary" disabled>Out of stock</button>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            <p class="text-center text-muted">There aren't any products yet.</p>
-        {% endfor %}
+            {% empty %}
+                <p class="text-center text-muted">No recommended products available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Sección de Vistos Recientemente -->
+    <div class="mb-5">
+        <div class="mb-4">
+            <h2 class="landing-title">Recently Viewed</h2>
+        </div>
+        
+        <div class="row">
+            {% for product in recently_viewed %}
+                <div class="col-md-3 mb-4">
+                    <div class="card shadow-sm h-100 product-card">
+                        <!-- 🏷️ Etiqueta vegano/vegetariano -->
+                        {% if product.diet_label == "vegan" %}
+                            <span class="badge tags product-badge">Vegan</span>
+                        {% elif product.diet_label == "vegetarian" %}
+                            <span class="badge tags product-badge">Vegetarian</span>
+                        {% endif %}
+                        
+                        <!-- ❤️ Wishlist toggle -->
+                        <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
+                            class="wishlist-form" data-product-id="{{ product.pk }}">
+                            {% csrf_token %}
+                            <button type="submit" class="wishlist-button" aria-label="Toggle wishlist">
+                                <i class="bi wishlist-icon {% if product.id in wishlist_product_ids %}bi-heart-fill active{% else %}bi-heart{% endif %}"></i>
+                            </button>
+                        </form>
+                        
+                        <!-- Imagen del producto -->
+                        {% if product.image_url %}
+                            <a href="{% url 'product_detail' product.pk %}" class="product-link">
+                                <img src="{{ product.image_url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                            </a>
+                        {% else %}
+                            <a href="{% url 'product_detail' product.pk %}" class="product-link">
+                                <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="No image available">
+                            </a>
+                        {% endif %}
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a href="{% url 'product_detail' product.pk %}" class="product-link text-dark text-decoration-none">{{ product.name }}</a>
+                            </h5>
+                            <p class="card-text text-muted">Price: <strong>${{ product.price }}</strong></p>
+                            <div class="mt-auto">
+                                {% if user.is_staff %}
+                                    <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
+                                {% else %}
+                                    {% if product.stock > 0 %}
+                                        <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Add to shopping cart
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <button class="btn btn-sm btn-secondary" disabled>Out of stock</button>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">No recently viewed products.</p>
+            {% endfor %}
+        </div>
     </div>
 </div>
 

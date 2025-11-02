@@ -32,6 +32,26 @@ class ProductDetailView(DetailView):
     context_object_name = "product"
     pk_url_kwarg = "product_id"
 
+    def get(self, request, *args, **kwargs):
+        """Override para guardar productos vistos en la sesión"""
+        response = super().get(request, *args, **kwargs)
+        
+        # Guardar en productos vistos recientemente
+        product_id = self.get_object().pk
+        recently_viewed = request.session.get('recently_viewed', [])
+        
+        # Quitar si ya existe para evitar duplicados
+        if product_id in recently_viewed:
+            recently_viewed.remove(product_id)
+        
+        # Agregar al inicio de la lista
+        recently_viewed.insert(0, product_id)
+        
+        # Mantener solo los últimos 10
+        request.session['recently_viewed'] = recently_viewed[:10]
+        request.session.modified = True
+        
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -49,12 +69,68 @@ class ProductSearchView(ListView):
     def get_queryset(self):
         query = self.request.GET.get("q", "")
         return Product.objects.filter(name__icontains=query)
+
+
+class HomeView(TemplateView):
+    """Vista para la página de inicio con productos recomendados y vistos recientemente"""
+    template_name = "product_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Productos recomendados (primeros 4 productos con stock)
+        recommended = Product.objects.filter(stock__gt=0).order_by('-id_product')[:4]
+        for product in recommended:
+            labels = product.labels.lower() if product.labels else ""
+            if "vegan" in labels:
+                product.diet_label = "vegan"  # type: ignore
+            elif "vegetarian" in labels:
+                product.diet_label = "vegetarian"  # type: ignore
+            else:
+                product.diet_label = "plant-based"  # type: ignore  
+        context["recommended_products"] = recommended
+        
+        # Productos vistos recientemente (últimos 4 de la sesión)
+        recently_viewed_ids = self.request.session.get('recently_viewed', [])[:4]
+        if recently_viewed_ids:
+            # Preservar el orden de la sesión
+            recently_viewed = []
+            for pk in recently_viewed_ids:
+                try:
+                    product = Product.objects.get(pk=pk)
+                    labels = product.labels.lower() if product.labels else ""
+                    if "vegan" in labels:
+                        product.diet_label = "vegan"  # type: ignore
+                    elif "vegetarian" in labels:
+                        product.diet_label = "vegetarian"  # type: ignore
+                    else:
+                        product.diet_label = "plant-based"  # type: ignore
+                    recently_viewed.append(product)
+                except Product.DoesNotExist:
+                    pass
+            context["recently_viewed"] = recently_viewed
+        else:
+            context["recently_viewed"] = []
+        
+        # Lista de IDs de wishlist del usuario autenticado
+        if self.request.user.is_authenticated:
+            customer = getattr(self.request.user, "customer", None)
+            if customer:
+                context["wishlist_product_ids"] = Wishlist.objects.filter(customer=customer).values_list("product_id", flat=True)
+            else:
+                context["wishlist_product_ids"] = []
+        else:
+            context["wishlist_product_ids"] = []
+        
+        return context
+
     
 class ProductListView(ListView):
+    """Vista para el catálogo completo de productos con filtros y paginación"""
     model = Product
-    template_name = "product_list.html"
+    template_name = "catalog.html"
     context_object_name = "products"
-    paginate_by = 12  # Paginación, 9 productos por página
+    paginate_by = 12  # Paginación, 12 productos por página
 
     def get_queryset(self):
         queryset = Product.objects.all()
