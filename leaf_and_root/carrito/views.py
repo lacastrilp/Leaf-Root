@@ -69,7 +69,6 @@ def remove_from_cart(request, product_id):
 @login_required
 @exclude_admin
 def cart_detail(request):
-    # Aquí ya no necesitas preguntar por admin
     customer, _ = Customer.objects.get_or_create(user=request.user)
     cart, _ = Cart.objects.get_or_create(customer=customer)
     items = ItemCart.objects.filter(cart=cart)

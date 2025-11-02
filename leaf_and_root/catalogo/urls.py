@@ -5,11 +5,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    # Productos
-    path("products/", views.ProductListView.as_view(), name="product_list"),
+    # Home y Catálogo
+    path("", views.HomeView.as_view(), name="product_list"),  # Home page
+    path("catalog/", views.ProductListView.as_view(), name="catalog"),  # Catálogo completo
     path("product/<int:product_id>/", views.ProductDetailView.as_view(), name="product_detail"),
     path("search/", views.ProductSearchView.as_view(), name="search"),
-    # Carrito
+    # Productos (Admin)
     path('products/add/', views.add_product, name='add_product'),
     path('products/<int:pk>/edit/', views.edit_product, name='edit_product'),
     path('products/<int:pk>/delete/', views.delete_product, name='delete_product'),

@@ -17,10 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
-            wishlistMessage.textContent = data.message;
-            wishlistMessage.classList.remove("d-none");
-            wishlistMessage.classList.add("show");
-            setTimeout(() => wishlistMessage.classList.add("d-none"), 3000);
+            const message = data.message || (data.in_wishlist ? "Added to wishlist" : "Removed from wishlist");
+            if (window.showToast) {
+              window.showToast(message, data.in_wishlist ? "success" : "danger");
+            } else {
+              wishlistMessage.textContent = message;
+              wishlistMessage.classList.remove("d-none");
+              wishlistMessage.classList.add("show");
+              setTimeout(() => wishlistMessage.classList.add("d-none"), 3000);
+            }
           }
         })
         .catch((err) => console.error("Wishlist error:", err));
@@ -49,6 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
               icon.classList.remove("bi-heart-fill", "active");
               icon.classList.add("bi-heart");
+            }
+            const message = data.message || (data.in_wishlist ? "Added to wishlist" : "Removed from wishlist");
+            if (window.showToast) {
+              window.showToast(message, data.in_wishlist ? "success" : "danger");
             }
           }
         })

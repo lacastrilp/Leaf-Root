@@ -2,7 +2,7 @@
 
 .hero-banner{
   position: relative;
-  width: min(92vw, 1100px); /* no ocupa todo el ancho de la pantalla */
+  width: min(96vw, 1100px); /* banner un poco más ancho */
   margin: 0 auto;            /* centrado */
   min-height: 320px;
   min-height: 45svh;         /* altura visible en móviles */
@@ -35,7 +35,7 @@
 }
 
 .landing-title {
-    font-size: 3rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #4CAF50;
     text-align: center;
@@ -157,5 +157,32 @@
 /* Badge de contador */
 .navbar-nav .badge {
     font-size: 0.7rem;
+}
+
+/* Catalog hero: image to the right with button overlay */
+.catalog-hero .catalog-hero-text {
+    padding: 1.25rem 1rem;
+}
+
+.catalog-hero-image{
+    height: 250px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.hero-back-btn{
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+}
+
+@media (max-width: 767px){
+    .catalog-hero-image{ height: 180px; margin-top: 1rem; }
+    .hero-back-btn{ top: 0.5rem; right: 0.5rem; }
 }
 

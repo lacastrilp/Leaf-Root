@@ -1,24 +1,36 @@
 {% extends 'base.html' %}
 
 {% load static %}
-
 {% block content %}
+<link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
+<link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
+
 <div class="container mt-4">
+
   <h2 class="fw-bold mb-4">Wishlist</h2>
 
   {% if items %}
   <div class="row">
     {% for item in items %}
 <div class="col-md-4 mb-4">
-  <div class="card h-100 shadow-sm">
+  <div class="card h-100 product-card shadow-sm position-relative">
+    <!-- Wishlist toggle overlay (filled heart since it's in wishlist) -->
+    <form method="post" action="{% url 'toggle_wishlist' item.product.id_product %}" class="wishlist-toggle-form">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.path }}">
+      <button type="submit" class="wishlist-button" aria-label="Remove from wishlist">
+        <i class="bi bi-heart-fill wishlist-icon active"></i>
+        <span class="visually-hidden">Remove from wishlist</span>
+      </button>
+    </form>
     {% if item.product.image_url %}
-        <a href="{% url 'product_detail' item.product.pk %}" class="product-link">
-            <img src="{{ item.product.image_url }}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{{ item.product.name }}">
-        </a>
+    <a href="{% url 'product_detail' item.product.pk %}" class="product-link">
+      <img src="{{ item.product.image_url }}" class="card-img-top product-image" alt="{{ item.product.name }}">
+    </a>
     {% else %}
-        <a href="{% url 'product_detail' item.product.pk %}" class="product-link">
-            <img src="https://via.placeholder.com/200" class="card-img-top" alt="No image available">
-        </a>
+    <a href="{% url 'product_detail' item.product.pk %}" class="product-link">
+      <img src="https://via.placeholder.com/400x300?text=No+image" class="card-img-top product-image" alt="No image available">
+    </a>
     {% endif %}
 
     <div class="card-body d-flex flex-column">
@@ -36,12 +48,6 @@
           {% csrf_token %}
           <input type="hidden" name="quantity" value="1">
           <button type="submit" class="btn btn-success btn-sm">Add to cart</button>
-        </form>
-
-        <form method="post" action="{% url 'toggle_wishlist' item.product.id_product %}" class="d-inline">
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.path }}">
-          <button type="submit" class="btn btn-danger btn-sm">Remove</button>
         </form>
       </div>
     </div>

@@ -37,10 +37,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: new FormData(this),
                     headers: { "X-Requested-With": "XMLHttpRequest" }
                 })
-                .then(() => {
-                    const url = window.location.origin + this.getAttribute("action")
-                        .replace("toggle_wishlist", "product_detail");
-                    openProductModal(url);
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the heart icon
+                        const icon = this.querySelector(".wishlist-icon");
+                        if (data.in_wishlist) {
+                            icon.classList.remove("bi-heart");
+                            icon.classList.add("bi-heart-fill", "active");
+                        } else {
+                            icon.classList.remove("bi-heart-fill", "active");
+                            icon.classList.add("bi-heart");
+                        }
+                        // Show toast
+                        const message = data.message || (data.in_wishlist ? "Added to wishlist" : "Removed from wishlist");
+                        if (window.showToast) {
+                            window.showToast(message, data.in_wishlist ? "success" : "danger");
+                        }
+                    }
                 })
                 .catch(err => console.error(err));
             });
@@ -55,11 +69,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: new FormData(this),
                     headers: { "X-Requested-With": "XMLHttpRequest" }
                 })
-                .then(() => {
-                    const url = window.location.origin + this.getAttribute("action")
-                        .split("?")[0]
-                        .replace("add_to_cart", "product_detail");
-                    openProductModal(url);
+                .then(res => res.json())
+                .then(data => {
+                    // Show toast on success
+                    if (window.showToast) {
+                        window.showToast("Added to cart", "success");
+                    }
+                    // Optionally reload modal to update stock/cart count
+                    const productId = this.dataset.productId;
+                    if (productId) {
+                        const url = `/catalog/product/${productId}/`;
+                        openProductModal(url);
+                    }
                 })
                 .catch(err => console.error(err));
             });
