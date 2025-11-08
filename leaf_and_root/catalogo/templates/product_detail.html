@@ -13,7 +13,7 @@
       <i class="bi bi-arrow-left" style="font-size: 1.5rem;"></i>
     </button>
     <!-- Título centrado -->
-    <h2 class="product-title mb-0 text-center flex-grow-1">{{ product.name }}</h2>
+    <h2 class="productdetail-title mb-0 text-center flex-grow-1">{{ product.name }}</h2>
     <!-- Wishlist derecha -->
     <form method="post" action="{% url 'toggle_wishlist' product.pk %}" 
       class="wishlist-form" data-product-id="{{ product.pk }}">
@@ -29,13 +29,11 @@
     <div class="col-12 col-md-5 text-center">
       {% if product.image_url %}
         <img src="{{ product.image_url }}" 
-            class="img-fluid rounded shadow-sm w-100" 
-            style="max-height:400px; object-fit:cover;" 
+            class="img-fluid rounded shadow-sm w-10 productdetail-im" 
             alt="{{ product.name }}">
       {% else %}
         <img src="https://via.placeholder.com/400" 
-            class="img-fluid rounded shadow-sm w-100" 
-            style="max-height:400px; object-fit:cover;" 
+            class="img-fluid rounded shadow-sm w-100 productdetail-im"
             alt="No image available">
       {% endif %}
     </div>
@@ -52,7 +50,7 @@
         </span>
       {% endif %}
 
-      <p class="h4 text-primary fw-bold">Price: ${{ product.price }}</p>
+      <p class="h4 product-pricee fw-bold">Price: ${{ product.price }}</p>
       <p><strong>Stock:</strong> {{ product.stock }}</p>
 
       <!-- Alertas de stock -->
