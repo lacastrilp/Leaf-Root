@@ -28,6 +28,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- INTERCEPTAR FORMULARIOS EN EL MODAL ---
     function attachModalListeners() {
+        // Initialize star rating if present in modal content
+        if (window.initStarRating) {
+            window.initStarRating();
+        }
+        // Review submit via AJAX (stay in modal)
+        const reviewForm = document.querySelector("#productModal #reviewForm");
+        if (reviewForm) {
+            reviewForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+                fetch(this.action, {
+                    method: "POST",
+                    body: new FormData(this),
+                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                })
+                .then(res => res.json().catch(() => null))
+                .then(data => {
+                    if (data && data.success) {
+                        if (window.showToast) {
+                            window.showToast(data.message || "Review submitted", "success");
+                        }
+                        const productId = this.dataset.productId;
+                        if (productId) {
+                            const url = `/catalog/product/${productId}/`;
+                            openProductModal(url);
+                        }
+                    } else {
+                        // Try to extract error messages
+                        if (window.showToast) {
+                            const msg = (data && data.message) || "There was a problem submitting your review";
+                            window.showToast(msg, "danger");
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    if (window.showToast) {
+                        window.showToast("Network error submitting review", "danger");
+                    }
+                });
+            });
+        }
         // Wishlist AJAX
         document.querySelectorAll("#productModal .wishlist-form").forEach(form => {
             form.addEventListener("submit", function (e) {
@@ -71,15 +112,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(res => res.json())
                 .then(data => {
-                    // Show toast on success
-                    if (window.showToast) {
-                        window.showToast("Added to cart", "success");
-                    }
-                    // Optionally reload modal to update stock/cart count
-                    const productId = this.dataset.productId;
-                    if (productId) {
-                        const url = `/catalog/product/${productId}/`;
-                        openProductModal(url);
+                    if (data.success) {
+                        // Call the same renderSidebar function from cart.js to open sidebar
+                        if (window.renderCartSidebar) {
+                            window.renderCartSidebar(data);
+                        }
+                        // Show toast
+                        if (window.showToast) {
+                            window.showToast("Added to cart", "success");
+                        }
+                        // Reload modal to update stock
+                        const productId = this.dataset.productId;
+                        if (productId) {
+                            const url = `/catalog/product/${productId}/`;
+                            openProductModal(url);
+                        }
                     }
                 })
                 .catch(err => console.error(err));

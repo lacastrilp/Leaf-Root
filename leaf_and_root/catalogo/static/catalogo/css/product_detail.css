@@ -1,11 +1,14 @@
+/* Star rating component */
+.star-rating { display:inline-flex; gap:0.35rem; cursor:pointer; user-select:none; }
+.star-rating .star { font-size:1.9rem; color:#ffc107; transition:transform .15s; }
+.star-rating .star:hover { transform:scale(1.15); }
+@media (hover:none){ .star-rating .star:hover { transform:none; } }
 .productdetail-title {
     font-size: 1.8rem;
     font-weight: bold;
     color: #4CAF50;
     text-align: center;
-    
 }
-
 /* === Imagen del producto === */
 .productdetail-im {
   max-height: 350px;       /* Altura máxima en pantallas normales */

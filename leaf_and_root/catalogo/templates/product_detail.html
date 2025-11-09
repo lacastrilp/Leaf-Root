@@ -1,5 +1,6 @@
 
 {% load static %}
+{% load custom_tags %}
 <link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
 <link rel="stylesheet" href="{% static 'catalogo/css/product_detail.css' %}">
 
@@ -50,7 +51,18 @@
         </span>
       {% endif %}
 
-      <p class="h4 product-pricee fw-bold">Price: ${{ product.price }}</p>
+      <div class="d-flex align-items-center justify-content-between">
+        <p class="h4 product-pricee fw-bold mb-0">Price: ${{ product.price }}</p>
+        <div class="text-end">
+          {% if avg_rating %}
+            <span class="text-warning"><i class="bi bi-star-fill"></i></span>
+            <span class="fw-semibold">{{ avg_rating|floatformat:1 }}/5</span>
+            <small class="text-muted">({{ review_count }})</small>
+          {% else %}
+            <small class="text-muted">No ratings yet</small>
+          {% endif %}
+        </div>
+      </div>
       <p><strong>Stock:</strong> {{ product.stock }}</p>
 
       <!-- Alertas de stock -->
@@ -76,7 +88,7 @@
   </div>
   <!-- Reseñas -->
   <div class="mt-5">
-    <h3 class="product-title">Reviews</h3>
+    <h3 class="productdetail-title">Reviews</h3>
     <hr>
     {% for review in reviews %}
       <div class="mb-3 p-3 border rounded shadow-sm bg-light">
@@ -84,12 +96,10 @@
           <div>
             <strong>{{ review.customer.name }}</strong>
             <span class="text-warning ms-2">
-              {% for i in "12345" %}
-                {% if forloop.counter <= review.rating %}
-                  ★
-                {% else %}
-                  ☆
-                {% endif %}
+              {% for i in 1|get_range:5 %}
+                {% with t=review.rating|star_type:i %}
+                  <i class="bi {% if t == 'full' %}bi-star-fill{% elif t == 'half' %}bi-star-half{% else %}bi-star{% endif %}"></i>
+                {% endwith %}
               {% endfor %}
             </span>
           </div>
@@ -115,10 +125,17 @@
   {% if user.is_authenticated %}
     <div class="mt-4">
       <h4>Write your review</h4>
-      <form method="post" action="{% url 'submit_review' product.pk %}" class="mt-2">
+      <form method="post" action="{% url 'submit_review' product.pk %}" class="mt-2" id="reviewForm" data-product-id="{{ product.pk }}">
         {% csrf_token %}
-        {{ review_form.as_p }}
-        <button type="submit" class="btn btn-primary">Send review</button>
+        <div class="mb-3">
+          <label class="form-label">Rating</label>
+          <div id="starRating" class="star-rating" aria-label="Rating from 0.5 to 5 stars"></div>
+          <input type="hidden" name="rating" id="ratingInput" value="2.5">
+        </div>
+        <div class="mb-3">
+          {{ review_form.comment }}
+        </div>
+        <button type="submit" class="btn btn-lg btn-success">Send review</button>
       </form>
     </div>
   {% else %}
@@ -132,4 +149,5 @@
 <script src="{% static 'store/js/product-modal.js' %}"></script>
 <script src="{% static 'carrito/js/cart.js' %}"></script>
 <script src="{% static 'catalogo/js/wishlist.js' %}"></script>
+<script src="{% static 'catalogo/js/reviews.js' %}"></script>
 {% endblock %}

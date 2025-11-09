@@ -88,3 +88,21 @@ textarea,
 #searchForm.d-none {
     display: none !important;
 }
+
+/* Cart sidebar z-index fix - debe estar sobre el modal */
+#cartSidebar {
+    z-index: 1060 !important; /* Mayor que modal (1055) */
+}
+
+.offcanvas-backdrop.show {
+    z-index: 1059 !important; /* Backdrop del sidebar sobre modal pero bajo sidebar */
+}
+
+/* Asegurar que el offcanvas sea visible en mobile */
+.offcanvas {
+    z-index: 1060 !important;
+}
+
+.offcanvas.show {
+    z-index: 1060 !important;
+}

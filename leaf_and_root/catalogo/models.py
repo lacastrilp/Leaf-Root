@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 from decimal import Decimal
 from users.models import Customer
@@ -39,7 +40,9 @@ class Wishlist(models.Model):
 class Review(models.Model):
     id_review = models.AutoField(primary_key=True)
     comment = models.TextField()
-    rating = models.IntegerField()
+    rating = models.DecimalField(max_digits=2, decimal_places=1, validators=[
+        MinValueValidator(0.5), MaxValueValidator(5.0)
+    ])
     approved = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

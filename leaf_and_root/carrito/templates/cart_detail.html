@@ -2,15 +2,16 @@
 {% load static %}
 {% block title %}My shopping cart{% endblock %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'catalogo/css/base.css' %}">
 <div class="container mt-4">
-    <h2>My shopping cart ({{ total_items }} items)</h2>
+    <h2 class="mb-4">My shopping cart ({{ total_items }} items)</h2>
 
     {# 👉 Incluimos la tabla parcial #}
     {% include "cart_items.html" %}
 {% if total_items > 0 %}
     <div class="text-end mt-4">
         <a href="{% url 'checkout_review' %}" class="btn btn-success btn-lg">
-            Comprar
+            Buy now (Total: ${{ total_price }})
         </a>
     </div>
 {% endif %}
@@ -66,7 +67,7 @@
                 if (currentQty < maxStock) {
                     updateCart(productId, currentQty + 1);
                 } else {
-                    alert("❌ No puedes agregar más de las unidades disponibles en inventario.");
+                    alert("❌ Can't add more items, not enough stock.");
                 }
             });
         });

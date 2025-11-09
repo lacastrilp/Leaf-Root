@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             `).join("")}
                         </select>
                     </form>
-                    <small class="text-muted">Precio: $${item.price}</small><br>
+                    <small class="text-muted">Price: $${item.price}</small><br>
                     <small class="text-muted">Subtotal: $${item.subtotal}</small>
                 </div>
                 <form method="post" action="/cart/remove/${item.id}/" class="remove-form">
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="d-flex justify-content-between">
                 <strong>Total:</strong> <span>$${data.total_price}</span>
             </div>
-            <a href="/cart/" class="btn btn-primary w-100 mt-3">Ver Carrito</a>
+            <a href="/cart/" class="btn btn-success w-100 mt-3">See cart</a>
         `;
 
         // Mostrar sidebar
@@ -71,10 +71,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         sidebar.show();
 
+        // Asegurar z-index correcto después de mostrar
+        setTimeout(() => {
+            const backdrop = document.querySelector('.offcanvas-backdrop');
+            if (backdrop) {
+                backdrop.style.zIndex = '1059';
+            }
+            sidebarElement.style.zIndex = '1060';
+        }, 10);
+
         // Bind dinámico para selects
         bindUpdateForms();
         bindRemoveForms();
     }
+
+    // Exponer renderSidebar globalmente para que product-modal.js pueda usarlo
+    window.renderCartSidebar = renderSidebar;
 
     // Manejar cambios de cantidad
     function bindUpdateForms() {

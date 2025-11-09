@@ -76,7 +76,11 @@ class LoginForm(AuthenticationForm):
     """Login form"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Username"})
+        # Campo unificado: permite ingresar username o email
+        self.fields["username"].widget.attrs.update({
+            "class": "form-control",
+            "placeholder": "Username or Email"
+        })
         self.fields["password"].widget.attrs.update({"class": "form-control", "placeholder": "Password"})
 
 class CustomerForm(forms.ModelForm):

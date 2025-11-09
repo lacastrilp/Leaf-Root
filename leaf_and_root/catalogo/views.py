@@ -11,7 +11,7 @@ from catalogo.models import Product, Review
 from users.models import Customer # 👈 agrega Custome
 from .models import Wishlist, Product
 from .forms import ReviewForm, ProductForm
-from django.db.models import Q
+from django.db.models import Q, Avg, Count
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 
@@ -56,8 +56,12 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product= self.get_object()  # safer than self.object if object isn't set
-        context["reviews"] = Review.objects.filter(product=product, approved=True)
+        reviews_qs = Review.objects.filter(product=product, approved=True)
+        context["reviews"] = reviews_qs
         context["review_form"] = ReviewForm()  # 👈 form para el POST
+        agg = reviews_qs.aggregate(avg=Avg("rating"), cnt=Count("id_review"))
+        context["avg_rating"] = agg.get("avg")
+        context["review_count"] = agg.get("cnt", 0)
         # IDs de productos en wishlist para marcar el corazón en detalle
         user = self.request.user
         if user.is_authenticated:
@@ -259,7 +263,27 @@ class SubmitReviewView(LoginRequiredMixin, View):
             review.customer = customer   # 👈 usa customer, no user
             review.approved = True       # o déjalo False si quieres moderación
             review.save()
-        return redirect("home")
+            # Si es AJAX, devolver JSON y no redirigir
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                agg = Review.objects.filter(product=product, approved=True).aggregate(
+                    avg=Avg("rating"), cnt=Count("id_review")
+                )
+                return JsonResponse({
+                    "success": True,
+                    "message": "Review submitted",
+                    "avg_rating": float(agg.get("avg") or 0),
+                    "review_count": agg.get("cnt", 0),
+                })
+            # Redirección normal a detalle del producto
+            return redirect("product_detail", product_id=product.pk)
+        # Form inválido
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({
+                "success": False,
+                "message": "Invalid form",
+                "errors": form.errors,
+            }, status=400)
+        return redirect("product_detail", product_id=product.pk)
 
 
 class ModerateReviewView(UserPassesTestMixin, View):
