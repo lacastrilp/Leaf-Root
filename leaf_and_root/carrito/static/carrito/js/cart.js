@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             if (data.success) {
                 renderSidebar(data);
+                if (data.message) {
+                    if (window.showToast) {
+                        window.showToast(data.message, "info");
+                    }
+                }
             }
         });
     });
@@ -104,6 +109,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await response.json();
                 if (data.success) {
                     renderSidebar(data);
+                    if (data.message) {
+                        if (window.showToast) {
+                            window.showToast(data.message, "info");
+                        }
+                    }
                 }
             });
         });

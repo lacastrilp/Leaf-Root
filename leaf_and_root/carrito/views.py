@@ -48,8 +48,15 @@ def add_to_cart(request, product_id):
 
     item.save()
 
+    message = None
+    if item.quantity == product.stock:
+        message = "Reached maximum available quantity!"
+
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        return JsonResponse(build_cart_response(cart))
+        response = build_cart_response(cart)
+        if message:
+            response["message"] = message
+        return JsonResponse(response)
 
     return redirect("cart_detail")
 
@@ -91,9 +98,11 @@ def update_cart_quantity(request, product_id):
     item = get_object_or_404(ItemCart, cart=cart, product_id=product_id)
     quantity = int(request.POST.get("quantity", 1))
 
+    message = None
     # 👇 Bloquear cantidades mayores al stock
     if quantity > item.product.stock:
         quantity = item.product.stock
+        message = "Adjusted to maximum available quantity!"
 
     if quantity > 0:
         item.quantity = quantity
@@ -102,7 +111,10 @@ def update_cart_quantity(request, product_id):
         item.delete()
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        return JsonResponse(build_cart_response(cart))
+        response = build_cart_response(cart)
+        if message:
+            response["message"] = message
+        return JsonResponse(response)
 
     return redirect("cart_detail")
 

@@ -19,8 +19,3 @@
   background-color: #fff;  /* Fondo blanco para imágenes con transparencia */
   transition: transform 0.3s ease; /* Animación suave */
 }
-.productdetail-badge{
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-}

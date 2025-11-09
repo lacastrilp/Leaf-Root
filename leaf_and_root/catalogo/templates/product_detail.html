@@ -2,6 +2,7 @@
 {% load static %}
 {% load custom_tags %}
 <link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
+<link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
 <link rel="stylesheet" href="{% static 'catalogo/css/product_detail.css' %}">
 
 {% block content %}
@@ -28,28 +29,32 @@
   <div class="row g-4">
     <!-- Imagen -->
     <div class="col-12 col-md-5 text-center">
-      {% if product.image_url %}
-        <img src="{{ product.image_url }}" 
-            class="img-fluid rounded shadow-sm w-10 productdetail-im" 
-            alt="{{ product.name }}">
-      {% else %}
-        <img src="https://via.placeholder.com/400" 
-            class="img-fluid rounded shadow-sm w-100 productdetail-im"
-            alt="No image available">
-      {% endif %}
+      <div class="product-card d-inline-block">
+        {# 🏷️ Etiqueta dietaria sobre la imagen; muestra siempre que haya valor #}
+        {% if product.labels %}
+          {% if product.diet_label == "vegan" %}
+            <span class="badge vegan product-badge">Vegan</span>
+          {% elif product.diet_label == "vegetarian" %}
+            <span class="badge vegetarian product-badge">Vegetarian</span>
+          {% endif %}
+        {% endif %}
+
+        {% if product.image_url %}
+          <img src="{{ product.image_url }}" 
+              class="img-fluid rounded shadow-sm w-10 productdetail-im" 
+              alt="{{ product.name }}">
+        {% else %}
+          <img src="https://via.placeholder.com/400" 
+              class="img-fluid rounded shadow-sm w-100 productdetail-im"
+              alt="No image available">
+        {% endif %}
+      </div>
     </div>
 
     <!-- Información -->
     <div class="col-12 col-md-7">
       <!-- Etiqueta dietaria -->
-      {% if product.diet_label %}
-        <span class="badge rounded-pill 
-                    {% if product.diet_label == 'vegan' %}bg-success
-                    {% elif product.diet_label == 'vegetarian' %}bg-warning text-dark
-                    {% endif %} mb-3">
-          {{ product.diet_label|title }}
-        </span>
-      {% endif %}
+      {# La etiqueta dietaria ahora se muestra sobre la imagen, como en las product cards #}
 
       <div class="d-flex align-items-center justify-content-between">
         <p class="h4 product-pricee fw-bold mb-0">Price: ${{ product.price }}</p>
