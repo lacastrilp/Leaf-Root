@@ -1,8 +1,26 @@
 {% extends "base.html" %}
 {% block title %}Mis Órdenes{% endblock %}
 {% block content %}
-<div class="container mt-4">
-    <h2>Mis Órdenes</h2>
+{% load static %}
+<link rel="stylesheet" href="{% static 'users/css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+
+<style>
+.account-bg {
+  background-image: url("{% static 'users/images/veggies.jpg' %}");
+}
+</style>
+
+<div class="auth-bg account-bg">
+
+  <div class="auth-card">
+    <style>
+    .auth-card { position: relative; }
+    .auth-card .back-btn { position: absolute; top: 0.5rem; right: 0.5rem; }
+    </style>
+
+    <a href="{% url 'account_home' %}" class="btn btn-secondary back-btn">Back to Account</a>
+    <h1 class="auth-title">Mis Órdenes</h1>
 
     {% if orders %}
         <table class="table table-striped">
@@ -28,7 +46,8 @@
             </tbody>
         </table>
     {% else %}
-        <p>No tienes órdenes aún.</p>
+        <p>You have no orders yet.</p>
     {% endif %}
+  </div>
 </div>
 {% endblock %}

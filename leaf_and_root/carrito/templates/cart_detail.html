@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}My shopping cart{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'catalogo/css/base.css' %}">
 <div class="container mt-4">
-    <h2 class="mb-4">My shopping cart ({{ total_items }} items)</h2>
+    <h2 class="title mb-4">My shopping cart ({{ total_items }} items)</h2>
+    {% if total_items == 0 %}
+    <div class="text-center mb-3">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+    {% endif %}
 
     {# 👉 Incluimos la tabla parcial #}
     {% include "cart_items.html" %}

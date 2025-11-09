@@ -2,8 +2,23 @@
 {% block title %}Mi Cuenta{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>My Account</h2>
+{% load static %}
+<link rel="stylesheet" href="{% static 'users/css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+
+<style>
+.account-bg {
+  background-image: url("{% static 'users/images/veggies.jpg' %}");
+}
+</style>
+
+<div class="auth-bg account-bg">
+
+  <div class="auth-card">
+    <a href="{% url 'home' %}" class="btn btn-secondary position-absolute" style="top: 0.5rem; left: 2rem;" aria-label="Back to home">
+        <i class="bi bi-arrow-left" style="font-size: 1rem;">Back to Home</i>
+    </a>
+    <h1 class="auth-title">My Account</h1>
     <ul class="list-group mt-3">
         <li class="list-group-item">
             <a href="{% url 'account_info_view' %}"><i class="bi bi-person-circle me-2"></i> Account Information</a>
@@ -19,5 +34,6 @@
             </form>
         </li>
     </ul>
+  </div>
 </div>
 {% endblock %}

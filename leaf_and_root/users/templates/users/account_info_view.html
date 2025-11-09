@@ -1,8 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Personal Information</h2>
+{% load static %}
+<link rel="stylesheet" href="{% static 'users/css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+
+<style>
+.account-bg {
+  background-image: url("{% static 'users/images/veggies.jpg' %}");
+}
+</style>
+
+<div class="auth-bg account-bg">
+
+  <div class="auth-card">
+    <h1 class="auth-title">Personal Information</h1>
     <ul class="list-group">
         <li class="list-group-item"><strong>Name:</strong> {{ customer.name  }}</li>
         <li class="list-group-item"><strong>Email:</strong> {{ customer.email }}</li>
@@ -11,5 +23,6 @@
     </ul>
     <a href="{% url 'account_info_edit' %}" class="btn btn-primary mt-3">Edit Information</a>
     <a href="{% url 'account_home' %}" class="btn btn-secondary mt-3">Back to Account</a>
+  </div>
 </div>
 {% endblock %}
