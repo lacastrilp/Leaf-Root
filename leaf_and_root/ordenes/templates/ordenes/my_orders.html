@@ -15,8 +15,13 @@
 
   <div class="auth-card">
     <style>
-    .auth-card { position: relative; }
+    .auth-card { 
+      position: relative; 
+      max-width: 900px; /* Más grande para la tabla */
+      width: 100%;
+    }
     .auth-card .back-btn { position: absolute; top: 0.5rem; right: 0.5rem; }
+    .table th, .table td { text-align: center; vertical-align: middle; padding: 1rem; }
     </style>
 
     <a href="{% url 'account_home' %}" class="btn btn-secondary back-btn">Back to Account</a>
@@ -26,21 +31,23 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Orden</th>
-                    <th>Fecha</th>
+                    <th>Order</th>
+                    <th>Date</th>
                     <th>Status</th>
                     <th>Total</th>
-                    <th>Acciones</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for order in orders %}
+                {% for order_data in orders %}
                 <tr>
-                    <td>#{{ order.id }}</td>
-                    <td>{{ order.date }}</td>
-                    <td>{{ order.estados }}</td>
-                    <td>${{ order.total }}</td>
-                    
+                    <td>#{{ order_data.order.id_order }}</td>
+                    <td>{{ order_data.order.order_date }}</td>
+                    <td>{{ order_data.order.status }}</td>
+                    <td>${{ order_data.total }}</td>
+                    <td>
+                        <a href="{% url 'generate_invoice_pdf' order_data.order.id_order %}" class="btn btn-sm btn-primary" target="_blank">Download PDF</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -1,13 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Edit Information</h2>
+{% load static %}
+<link rel="stylesheet" href="{% static 'users/css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+
+<style>
+.account-bg {
+  background-image: url("{% static 'users/images/veggies.jpg' %}");
+}
+</style>
+
+<div class="auth-bg account-bg">
+
+  <div class="auth-card">
+    <h1 class="auth-title">Edit Information</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Save changes</button>
         <a href="{% url 'account_info_view' %}" class="btn btn-secondary">Cancel</a>
     </form>
+  </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const addressTextarea = document.querySelector("#id_address");
+    const addressError = document.createElement("span");
+    addressError.className = "text-danger small";
+    addressTextarea.parentNode.appendChild(addressError);
+
+    addressTextarea.addEventListener("input", function() {
+        const address = this.value.trim();
+        let error = "";
+
+        if (address.length < 10) {
+            error = "Address must be at least 10 characters long.";
+        } else if (address.length > 200) {
+            error = "Address must be less than 200 characters.";
+        } else if (!/\d/.test(address)) {
+            error = "Address must include a house number or similar.";
+        } else if (!/[a-zA-Z]/.test(address)) {
+            error = "Address must include street name or location.";
+        }
+
+        addressError.textContent = error;
+        // Disable submit if error
+        const submitBtn = document.querySelector("button[type='submit']");
+        submitBtn.disabled = error !== "";
+    });
+});
+</script>
 {% endblock %}

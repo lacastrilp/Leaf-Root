@@ -14,12 +14,12 @@
   background-repeat: no-repeat;
   padding: 2rem 1.25rem;
   border-radius: 16px;        /* bordes suaves */
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
 }
 
 /* Tarjeta clara detrás del texto, también centrada */
 .hero-text{
-  background: rgba(255,255,255,0.88);  /* muy clarito */
+  background: rgba(255, 255, 255, 0.945);  /* muy clarito */
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   text-align: center;

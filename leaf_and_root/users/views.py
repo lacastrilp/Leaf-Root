@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView as AuthLoginView, LogoutView as AuthLogoutView
 from django.contrib.auth import login
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic.edit import FormView
 from django.contrib.auth.models import User
 from .models import Customer
@@ -74,3 +75,8 @@ def account_info_edit(request):
 
     return render(request, "users/account_info_edit.html", {"form": form})
     # buscar el customer del usuario logueado
+
+
+class ChangePasswordView(PasswordChangeView):
+    template_name = 'users/change_password.html'
+    success_url = reverse_lazy('account_home')

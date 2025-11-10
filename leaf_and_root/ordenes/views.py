@@ -15,7 +15,11 @@ from .models import OrderItem
 class GenerateInvoicePDF(LoginRequiredMixin, View):
     def get(self, request, order_id):
         order = get_object_or_404(Order, pk=order_id)
-        return HttpResponse(f"Factura PDF generada para la orden {order.pk}")
+        # Verificar que la orden pertenece al usuario
+        if order.customer.user != request.user:
+            return HttpResponse("Unauthorized", status=403)
+        pdf_buffer = create_sales_invoice(order.id_order)
+        return FileResponse(pdf_buffer, as_attachment=True, filename=f"factura_{order.id_order}.pdf")
 
 
 @login_required

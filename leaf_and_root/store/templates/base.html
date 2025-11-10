@@ -39,8 +39,8 @@
 
                         <!-- 🔍 Barra de búsqueda oculta -->
                         <li class="nav-item me-3">
-                        <form id="searchForm" method="get" action="{% url 'catalog' %}" class="d-none">
-                            <input type="text" name="q" class="form-control" placeholder="Search products...">
+                        <form id="searchForm" method="get" action="{% url 'catalog' %}" class="{% if request.GET.q %}d-block{% else %}d-none{% endif %}">
+                            <input type="text" name="q" class="form-control" placeholder="Search products..." value="{{ request.GET.q|default:'' }}">
                         </form>
                         </li>
 

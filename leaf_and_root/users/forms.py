@@ -18,9 +18,23 @@ class CustomerRegistrationForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Full Name"}),
             "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email Address"}),
-            "address": forms.TextInput(attrs={"class": "form-control", "placeholder": "Address"}),
+            "address": forms.Textarea(attrs={"class": "form-control", "placeholder": "Address (e.g., Street, City, ZIP Code)", "rows": 3}),
             "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone Number"}),
         }
+
+    def clean_address(self):
+        address = self.cleaned_data.get("address")
+        if address:
+            if len(address) < 10:
+                raise forms.ValidationError("Address must be at least 10 characters long.")
+            if len(address) > 200:
+                raise forms.ValidationError("Address must be less than 200 characters.")
+            # Basic check: ensure it has at least one number and one letter
+            if not any(char.isdigit() for char in address):
+                raise forms.ValidationError("Address must include a house number or similar.")
+            if not any(char.isalpha() for char in address):
+                raise forms.ValidationError("Address must include street name or location.")
+        return address
 
     def clean(self):
         cleaned_data = super().clean()

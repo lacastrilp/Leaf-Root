@@ -21,15 +21,18 @@
     <h1 class="auth-title">My Account</h1>
     <ul class="list-group mt-3">
         <li class="list-group-item">
-            <a href="{% url 'account_info_view' %}"><i class="bi bi-person-circle me-2"></i> Account Information</a>
+            <a href="{% url 'account_info_view' %}"><i class="bi bi-person-circle me-2" style="text-decoration:none;"></i> Account Information</a>
         <li class="list-group-item">
-            <a href="{% url 'my_orders' %}"><i class="bi bi-box-seam me-2"></i> My Orders</a>
+            <a href="{% url 'change_password' %}"><i class="bi bi-key me-2" style="text-decoration:none;"></i> Change Password</a>
+        </li>
+        <li class="list-group-item">
+            <a href="{% url 'my_orders' %}"><i class="bi bi-box-seam me-2" style="text-decoration:none;"></i> My Orders</a>
         </li>
         <li class="list-group-item">
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-link p-0 text-danger">
-                    <i class="bi bi-box-arrow-right me-2"></i> Log Out
+                    <i class="bi bi-box-arrow-right me-2" style="text-decoration:none;"></i> Log Out
                 </button>
             </form>
         </li>
