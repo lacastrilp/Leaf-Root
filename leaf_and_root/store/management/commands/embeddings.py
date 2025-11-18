@@ -97,45 +97,70 @@ def load_or_generate_embeddings(force: bool = False):
     return product_ids, embeddings
 
 
+# Cache para embeddings y IDs
+_cached_embeddings = None
+_cached_ids = None
+
+
+def _load_embeddings_cache():
+    """Carga embeddings y IDs en memoria una sola vez."""
+    global _cached_embeddings, _cached_ids
+    
+    if _cached_embeddings is None or _cached_ids is None:
+        try:
+            import numpy as np  # type: ignore
+            import joblib  # type: ignore
+        except ImportError as e:
+            raise CommandError(
+                "Faltan dependencias: numpy, joblib"
+            ) from e
+        
+        _cached_ids = joblib.load(ID_PATH)
+        _cached_embeddings = np.load(EMBED_PATH)
+    
+    return _cached_ids, _cached_embeddings
+
+
 # ---------- BÚSQUEDA ----------
 def buscar_productos(query_text, top_k=TOP_K):
     """Busca productos similares a una consulta textual."""
     if not os.path.exists(EMBED_PATH) or not os.path.exists(ID_PATH):
         raise CommandError("No hay embeddings. Ejecuta con --build para generarlos.")
 
-    model = _get_model()
     try:
         import numpy as np  # type: ignore
-        import joblib  # type: ignore
-        from sklearn.metrics.pairwise import cosine_similarity  # type: ignore
     except ImportError as e:
-        raise CommandError(
-            "Faltan dependencias para búsqueda: numpy, joblib, scikit-learn. \n"
-            "Instálalas con: pip install numpy joblib scikit-learn"
-        ) from e
+        raise CommandError("Falta numpy") from e
 
+    # Cargar modelo y embeddings en cache
+    model = _get_model()
+    product_ids, embeddings = _load_embeddings_cache()
+
+    # Codificar query (rápido)
     query_vec = model.encode([query_text], convert_to_numpy=True)
 
-    # Cargar embeddings guardados
-    product_ids = joblib.load(ID_PATH)
-    embeddings = np.load(EMBED_PATH)
-
-    sims = cosine_similarity(query_vec, embeddings).flatten()
-    top_idx = np.argsort(-sims)[:top_k]
+    # Calcular similitud (muy rápido con NumPy)
+    sims = np.dot(embeddings, query_vec.T).flatten()
+    top_idx = np.argpartition(-sims, min(top_k, len(sims)-1))[:top_k]
+    top_idx = top_idx[np.argsort(-sims[top_idx])]
 
     resultados = []
     for idx in top_idx:
         prod_id = product_ids[idx]
-        prod = Product.objects.get(pk=prod_id)
-        url = reverse('product_detail', kwargs={'product_id': prod.pk})
-        resultados.append({
-            "id": prod_id,
-            "name": prod.name,
-            "category": prod.category,
-            "price": float(prod.price),
-            "url": url,
-            "score": round(float(sims[idx]), 3),
-        })
+        try:
+            prod = Product.objects.get(pk=prod_id)
+            url = reverse('product_detail', kwargs={'product_id': prod.pk})
+            resultados.append({
+                "id": prod_id,
+                "name": prod.name,
+                "category": prod.category,
+                "price": float(prod.price),
+                "url": url,
+                "score": round(float(sims[idx]), 3),
+            })
+        except Product.DoesNotExist:
+            continue
+    
     return resultados
 
 

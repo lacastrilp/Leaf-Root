@@ -164,7 +164,7 @@ class ProductListView(ListView):
     paginate_by = 12  # Paginación, 12 productos por página
 
     def get_queryset(self):
-        queryset = Product.objects.all()
+        queryset = Product.objects.all().order_by('-id_product')  # Orden por defecto para evitar warning
 
         # 🔎 Búsqueda (intenta embeddings y si no, fallback a icontains)
         q = self.request.GET.get("q")
