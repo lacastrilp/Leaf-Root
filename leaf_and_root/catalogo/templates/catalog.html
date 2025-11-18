@@ -115,7 +115,11 @@
                     </form>
                     
                     <!-- Imagen del producto -->
-                    {% if product.image_url %}
+                    {% if product.image %}
+                        <a href="{% url 'product_detail' product.pk %}" class="product-link">
+                            <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                        </a>
+                    {% elif product.image_url %}
                         <a href="{% url 'product_detail' product.pk %}" class="product-link">
                             <img src="{{ product.image_url }}" class="card-img-top product-image" alt="{{ product.name }}">
                         </a>

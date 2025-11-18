@@ -23,7 +23,11 @@
         <span class="visually-hidden">Remove from wishlist</span>
       </button>
     </form>
-    {% if item.product.image_url %}
+    {% if item.product.image %}
+    <a href="{% url 'product_detail' item.product.pk %}" class="product-link">
+      <img src="{{ item.product.image.url }}" class="card-img-top product-image" alt="{{ item.product.name }}">
+    </a>
+    {% elif item.product.image_url %}
     <a href="{% url 'product_detail' item.product.pk %}" class="product-link">
       <img src="{{ item.product.image_url }}" class="card-img-top product-image" alt="{{ item.product.name }}">
     </a>

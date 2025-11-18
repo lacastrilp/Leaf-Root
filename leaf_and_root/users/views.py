@@ -80,3 +80,75 @@ def account_info_edit(request):
 class ChangePasswordView(PasswordChangeView):
     template_name = 'users/change_password.html'
     success_url = reverse_lazy('account_home')
+
+
+@login_required
+def user_control(request):
+    """Vista para que admins gestionen usuarios"""
+    if not (request.user.is_staff or request.user.is_superuser):
+        return redirect('account_home')
+    
+    if request.method == 'POST':
+        # Procesar cambios masivos
+        user_ids = request.POST.getlist('user_ids')
+        
+        for user_id in user_ids:
+            try:
+                user = User.objects.get(pk=user_id)
+                
+                # No permitir que el usuario se quite sus propios permisos de admin
+                if user.id == request.user.id: # type: ignore
+                    continue
+                
+                # Actualizar estados
+                user.is_active = request.POST.get(f'is_active_{user_id}') == 'on'
+                user.is_staff = request.POST.get(f'is_staff_{user_id}') == 'on'
+                user.is_superuser = request.POST.get(f'is_superuser_{user_id}') == 'on'
+                user.save()
+            except User.DoesNotExist:
+                continue
+        
+        return redirect('user_control')
+    
+    users = User.objects.all().select_related('customer').order_by('-date_joined')
+    return render(request, 'users/user_control.html', {'users': users})
+
+
+@login_required
+def toggle_admin(request, user_id):
+    """Toggle admin status de un usuario"""
+    if not (request.user.is_staff or request.user.is_superuser):
+        return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+    
+    if request.method == 'POST':
+        user = User.objects.get(pk=user_id)
+        user.is_staff = not user.is_staff
+        user.save()
+        
+        return JsonResponse({
+            'success': True,
+            'is_staff': user.is_staff
+        })
+    
+    return JsonResponse({'success': False}, status=400)
+
+
+@login_required
+def delete_user(request, user_id):
+    """Eliminar un usuario"""
+    if not (request.user.is_staff or request.user.is_superuser):
+        return redirect('account_home')
+    
+    if request.method == 'POST':
+        try:
+            user = User.objects.get(pk=user_id)
+            
+            # No permitir eliminar al propio usuario
+            if user.id == request.user.id: # type: ignore
+                return redirect('user_control')
+            
+            user.delete()
+        except User.DoesNotExist:
+            pass
+    
+    return redirect('user_control')

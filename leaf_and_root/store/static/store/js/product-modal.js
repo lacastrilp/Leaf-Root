@@ -132,5 +132,47 @@ document.addEventListener("DOMContentLoaded", function () {
                 .catch(err => console.error(err));
             });
         });
+
+        // Delete review AJAX
+        document.querySelectorAll("#productModal .delete-review-form").forEach(form => {
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                
+                const reviewId = this.dataset.reviewId;
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: "POST",
+                    body: formData,
+                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Eliminar la review del DOM
+                        this.closest(".mb-3").remove();
+                        
+                        // Actualizar contador y promedio
+                        const ratingElement = document.querySelector("#productModal .fw-semibold");
+                        if (ratingElement) {
+                            if (data.review_count > 0) {
+                                ratingElement.textContent = data.avg_rating + "/5";
+                                const countElement = ratingElement.nextElementSibling;
+                                if (countElement) {
+                                    countElement.textContent = `(${data.review_count})`;
+                                }
+                            } else {
+                                ratingElement.parentElement.innerHTML = '<small class="text-muted">No ratings yet</small>';
+                            }
+                        }
+                        
+                        if (window.showToast) {
+                            window.showToast("Review deleted", "success");
+                        }
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        });
     }
 });

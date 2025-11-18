@@ -39,7 +39,11 @@
           {% endif %}
         {% endif %}
 
-        {% if product.image_url %}
+        {% if product.image %}
+          <img src="{{ product.image.url }}" 
+              class="img-fluid rounded shadow-sm w-10 productdetail-im" 
+              alt="{{ product.name }}">
+        {% elif product.image_url %}
           <img src="{{ product.image_url }}" 
               class="img-fluid rounded shadow-sm w-10 productdetail-im" 
               alt="{{ product.name }}">
@@ -109,12 +113,14 @@
             </span>
           </div>
 
-          <!-- Botón eliminar solo para el autor -->
-          {% if user.is_authenticated and review.customer == user %}
-            <form method="post" action="{% url 'delete_review' review.pk %}" class="d-inline">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-            </form>
+          <!-- Botón eliminar para admin o para el autor -->
+          {% if user.is_authenticated %}
+            {% if user.is_staff or user.is_superuser or review.customer.user == user %}
+              <form method="post" action="{% url 'delete_review' review.pk %}" class="d-inline delete-review-form" data-review-id="{{ review.pk }}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+              </form>
+            {% endif %}
           {% endif %}
         </div>
 

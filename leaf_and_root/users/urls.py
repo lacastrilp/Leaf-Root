@@ -11,4 +11,7 @@ urlpatterns = [
     path("account/info/edit/", views.account_info_edit, name="account_info_edit"),
     path("account/change_password/", views.ChangePasswordView.as_view(), name="change_password"),
     path("users/check_user_email/", views.check_user_email, name="check_user_email"),
+    path("account/users/", views.user_control, name="user_control"),
+    path("account/users/toggle_admin/<int:user_id>/", views.toggle_admin, name="toggle_admin"),
+    path("account/users/delete/<int:user_id>/", views.delete_user, name="delete_user"),
 ]

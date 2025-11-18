@@ -19,7 +19,7 @@
 </head>
 <body>
     <!-- NAVBAR SUPERIOR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'store/images/logo.png' %}" alt="Leaf & Root" height="60" style="margin-top: 0.01rem; margin-bottom: 0.01rem;">
@@ -45,6 +45,15 @@
                         </li>
 
                 {% if user.is_authenticated %}
+                    {% if user.is_staff or user.is_superuser %}
+                        <!-- Botón + para agregar producto (solo admins) -->
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'add_product' %}">
+                                <i class="bi bi-plus-circle navbar-icon"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
                     {% if not user.is_staff and not user.is_superuser %}
 
                         <li class="nav-item">

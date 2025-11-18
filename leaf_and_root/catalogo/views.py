@@ -11,10 +11,11 @@ from catalogo.models import Product, Review
 from users.models import Customer # 👈 agrega Custome
 from .models import Wishlist, Product
 from .forms import ReviewForm, ProductForm
-from django.db.models import Q, Avg, Count
+from django.db.models import Q, Avg, Count, Case, When
+from django.core.management.base import CommandError
+import os
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
-
 
 
 def is_admin(user):
@@ -92,26 +93,42 @@ class HomeView(TemplateView):
     template_name = "product_list.html"
 
     def get_context_data(self, **kwargs):
+        from .services import get_personalized_recommendations
+        
         context = super().get_context_data(**kwargs)
         
-        # Productos recomendados (primeros 4 productos con stock)
-        recommended = Product.objects.filter(stock__gt=0).order_by('-id_product')[:4]
-        for product in recommended:
+        # Obtener customer si está autenticado
+        customer = None
+        if self.request.user.is_authenticated:
+            customer = getattr(self.request.user, "customer", None)
+        
+        # Obtener IDs de productos vistos en sesión
+        recently_viewed_ids = self.request.session.get('recently_viewed', [])
+        
+        # 🎯 RECOMENDACIONES PERSONALIZADAS (basadas en compras, wishlist, vistos)
+        recommended = get_personalized_recommendations(
+            customer=customer,
+            session_recently_viewed=recently_viewed_ids,
+            limit=8  # más productos para tener variedad
+        )
+        
+        # Agregar etiquetas de dieta a productos recomendados
+        for product in recommended[:4]:  # mostrar solo los primeros 4 en UI
             labels = product.labels.lower() if product.labels else ""
             if "vegan" in labels:
                 product.diet_label = "vegan"  # type: ignore
             elif "vegetarian" in labels:
                 product.diet_label = "vegetarian"  # type: ignore
             else:
-                product.diet_label = "plant-based"  # type: ignore  
-        context["recommended_products"] = recommended
+                product.diet_label = "plant-based"  # type: ignore
+        
+        context["recommended_products"] = list(recommended[:4])
         
         # Productos vistos recientemente (últimos 4 de la sesión)
-        recently_viewed_ids = self.request.session.get('recently_viewed', [])[:4]
-        if recently_viewed_ids:
+        if recently_viewed_ids[:4]:
             # Preservar el orden de la sesión
             recently_viewed = []
-            for pk in recently_viewed_ids:
+            for pk in recently_viewed_ids[:4]:
                 try:
                     product = Product.objects.get(pk=pk)
                     labels = product.labels.lower() if product.labels else ""
@@ -129,14 +146,10 @@ class HomeView(TemplateView):
             context["recently_viewed"] = []
         
         # Lista de IDs de wishlist del usuario autenticado
-        if self.request.user.is_authenticated:
-            customer = getattr(self.request.user, "customer", None)
-            if customer:
-                context["wishlist_product_ids"] = list(
-                    Wishlist.objects.filter(customer=customer).values_list("product_id", flat=True)
-                )
-            else:
-                context["wishlist_product_ids"] = []
+        if customer:
+            context["wishlist_product_ids"] = list(
+                Wishlist.objects.filter(customer=customer).values_list("product_id", flat=True)
+            )
         else:
             context["wishlist_product_ids"] = []
         
@@ -153,13 +166,29 @@ class ProductListView(ListView):
     def get_queryset(self):
         queryset = Product.objects.all()
 
-        # 🔎 Búsqueda
+        # 🔎 Búsqueda (intenta embeddings y si no, fallback a icontains)
         q = self.request.GET.get("q")
+        used_semantic = False
         if q:
-            queryset = queryset.filter(
-                Q(name__icontains=q) | Q(description__icontains=q) |
-                Q(category__icontains=q)
-            )
+            try:
+                # import tardío para evitar costos si no se usa
+                from store.management.commands.embeddings import EMBED_PATH, ID_PATH, buscar_productos
+                if os.path.exists(EMBED_PATH) and os.path.exists(ID_PATH):
+                    results = buscar_productos(q, top_k=20)
+                    ordered_ids = [r["id"] for r in results]
+                    if ordered_ids:
+                        # filtrar por estos IDs
+                        queryset = Product.objects.filter(pk__in=ordered_ids)
+                        # preservar orden semántico si no hay ordenamiento explícito
+                        when_statements = [When(pk=pk, then=pos) for pos, pk in enumerate(ordered_ids)]
+                        queryset = queryset.annotate(_sem_order=Case(*when_statements)).order_by("_sem_order")
+                        used_semantic = True
+                # si no hay archivos, cae al except general para fallback
+            except Exception:
+                # Fallback: búsqueda textual
+                queryset = Product.objects.filter(
+                    Q(name__icontains=q) | Q(description__icontains=q) | Q(category__icontains=q)
+                )
 
         # 🔎 Filtros
         category = self.request.GET.get("category")
@@ -179,12 +208,13 @@ class ProductListView(ListView):
             # primero vegetarian, pero excluir los que también son vegan
             queryset = queryset.filter(labels__icontains="vegetarian").exclude(labels__icontains="vegan")
 
-        # 🔎 Ordenar por precio
+        # 🔎 Ordenar por precio (si no hay sort, mantener orden semántico si se usó)
         sort = self.request.GET.get("sort")
         if sort == "price_asc":
             queryset = queryset.order_by("price")
         elif sort == "price_desc":
             queryset = queryset.order_by("-price")
+        # else: si no hay sort, ya está ordenado por _sem_order cuando aplicó
         
         # 👉 Aquí procesamos etiquetas antes de devolver queryset
         for product in queryset:
@@ -377,3 +407,34 @@ def toggle_wishlist(request, product_id):
 
     # Fallback normal (no AJAX)
     return redirect("wishlist")
+
+
+@login_required
+def delete_review(request, pk):
+    """Eliminar una review (solo el autor o admin)"""
+    review = get_object_or_404(Review, pk=pk)
+    product = review.product
+    
+    # Verificar permisos: admin o autor
+    if request.user.is_staff or request.user.is_superuser or review.customer.user == request.user:
+        if request.method == "POST":
+            review.delete()
+            
+            # Si es AJAX, devolver JSON
+            is_ajax = request.headers.get("x-requested-with") == "XMLHttpRequest"
+            if is_ajax:
+                # Recalcular promedio y contador
+                reviews_qs = Review.objects.filter(product=product, approved=True)
+                agg = reviews_qs.aggregate(avg=Avg("rating"), cnt=Count("id_review"))
+                avg_rating = agg.get("avg")
+                review_count = agg.get("cnt", 0)
+                
+                return JsonResponse({
+                    "success": True,
+                    "avg_rating": round(avg_rating, 1) if avg_rating else 0,
+                    "review_count": review_count
+                })
+            
+            return redirect("product_detail", product_id=product.pk)
+    
+    return redirect("product_detail", product_id=product.pk)

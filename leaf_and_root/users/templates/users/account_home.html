@@ -28,6 +28,11 @@
         <li class="list-group-item">
             <a href="{% url 'my_orders' %}"><i class="bi bi-box-seam me-2" style="text-decoration:none;"></i> My Orders</a>
         </li>
+        {% if user.is_staff or user.is_superuser %}
+        <li class="list-group-item">
+            <a href="{% url 'user_control' %}"><i class="bi bi-people me-2" style="text-decoration:none;"></i> User Control</a>
+        </li>
+        {% endif %}
         <li class="list-group-item">
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}

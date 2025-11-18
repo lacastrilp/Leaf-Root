@@ -14,6 +14,7 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=0)
     category = models.CharField(max_length=100, blank=True, null=True)
     image_url = models.URLField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
     # Extra (puedes usarlos para filtros avanzados en tu tienda)
     nutriscore = models.CharField(max_length=5, blank=True, null=True)
     labels = models.CharField(max_length=255, blank=True, null=True)

@@ -50,7 +50,7 @@ class ProductForm(forms.ModelForm):
     """Formulario para crear/editar productos"""
     class Meta:
         model = Product
-        fields = ["name", "description", "price", "stock", "category", "image_url", "nutriscore", "labels"]
+        fields = ["name", "description", "price", "stock", "category", "image_url", "image", "nutriscore", "labels"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Product name"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "Description"}),
@@ -58,6 +58,7 @@ class ProductForm(forms.ModelForm):
             "stock": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
             "category": forms.TextInput(attrs={"class": "form-control", "placeholder": "Category"}),
             "image_url": forms.URLInput(attrs={"class": "form-control", "placeholder": "Image URL"}),
+            "image": forms.FileInput(attrs={"class": "form-control", "accept": "image/*"}),
             "nutriscore": forms.TextInput(attrs={"class": "form-control", "placeholder": "NutriScore (a-e)"}),
             "labels": forms.TextInput(attrs={"class": "form-control", "placeholder": "Labels (e.g., vegan, organic)"}),
         }
