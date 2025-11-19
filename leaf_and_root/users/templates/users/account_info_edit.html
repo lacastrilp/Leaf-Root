@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'users/css/auth.css' %}">
@@ -14,12 +14,12 @@
 <div class="auth-bg account-bg">
 
   <div class="auth-card">
-    <h1 class="auth-title">Edit Information</h1>
+    <h1 class="auth-title"> {% trans "Edit Information" %}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Save changes</button>
-        <a href="{% url 'account_info_view' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-success">{% trans "Save changes" %}</button>
+        <a href="{% url 'account_info_view' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
     </form>
   </div>
 </div>

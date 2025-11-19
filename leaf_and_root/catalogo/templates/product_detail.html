@@ -1,6 +1,7 @@
 
 {% load static %}
 {% load custom_tags %}
+{% load i18n %}
 <link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
 <link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
 <link rel="stylesheet" href="{% static 'catalogo/css/product_detail.css' %}">
@@ -61,43 +62,42 @@
       {# La etiqueta dietaria ahora se muestra sobre la imagen, como en las product cards #}
 
       <div class="d-flex align-items-center justify-content-between">
-        <p class="h4 product-pricee fw-bold mb-0">Price: ${{ product.price }}</p>
+        <p class="h4 product-pricee fw-bold mb-0">{% trans "Price" %}: ${{ product.price }}</p>
         <div class="text-end">
           {% if avg_rating %}
             <span class="text-warning"><i class="bi bi-star-fill"></i></span>
             <span class="fw-semibold">{{ avg_rating|floatformat:1 }}/5</span>
             <small class="text-muted">({{ review_count }})</small>
           {% else %}
-            <small class="text-muted">No ratings yet</small>
+            <small class="text-muted">{% trans "No ratings yet" %}</small>
           {% endif %}
         </div>
       </div>
-      <p><strong>Stock:</strong> {{ product.stock }}</p>
+      <p><strong>{% trans "Stock" %}:</strong> {{ product.stock }}</p>
 
       <!-- Alertas de stock -->
       {% if product.stock <= 5 and product.stock > 0 %}
-        <div class="alert alert-warning py-1 small">⚠ Only {{ product.stock }} units left</div>
+        <div class="alert alert-warning py-1 small">⚠ {% trans "Only" %} {{ product.stock }} {% trans "units left" %}</div>
       {% elif product.stock == 0 %}
-        <div class="alert alert-danger py-1 small">Out of stock</div>
+        <div class="alert alert-danger py-1 small">{% trans "Out of stock" %}</div>
       {% endif %}
 
-      <p class="mt-3"><strong>Description:</strong><br>{{ product.description }}</p>
-
+      <p class="mt-3"><strong>{% trans "Description" %}:</strong><br>{{ product.description }}</p>
       <!-- Botón añadir al carrito -->
-      <form method="post" action="{% url 'add_to_cart' product.pk %}?next={% url 'cart_detail' %}" class="mt-3 cart-form" data-product-id="{{ product.pk }}">
+      <form method="post" action="{% url 'add_to_cart' product.pk %}?next={% url 'cart_detail' %}" class="mt-2 cart-form d-flex justify-content-center" data-product-id="{{ product.pk }}">
         {% csrf_token %}
         <input type="hidden" name="quantity" value="1">
         <button type="submit" 
-                class="btn btn-lg w-100 {% if product.stock == 0 %}btn-secondary{% else %}btn-success{% endif %}"
-                {% if product.stock == 0 %}disabled{% endif %}>
-          <i class="bi bi-cart-plus"></i> Add to shopping cart
+            class="btn btn-lg w-90 mx-auto {% if product.stock == 0 %}btn-secondary{% else %}btn-success{% endif %}"
+            {% if product.stock == 0 %}disabled{% endif %}>
+          <i class="bi bi-cart-plus"></i> {% trans "Add to shopping cart" %}
         </button>
       </form>
     </div>
   </div>
   <!-- Reseñas -->
   <div class="mt-5">
-    <h3 class="productdetail-title">Reviews</h3>
+    <h3 class="productdetail-title">{% trans "Reviews" %}</h3>
     <hr>
     {% for review in reviews %}
       <div class="mb-3 p-3 border rounded shadow-sm bg-light">
@@ -118,7 +118,7 @@
             {% if user.is_staff or user.is_superuser or review.customer.user == user %}
               <form method="post" action="{% url 'delete_review' review.pk %}" class="d-inline delete-review-form" data-review-id="{{ review.pk }}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                <button type="submit" class="btn btn-sm btn-outline-danger">{% trans "Delete" %}</button>
               </form>
             {% endif %}
           {% endif %}
@@ -127,7 +127,7 @@
         <p class="mb-0 mt-2">{{ review.comment }}</p>
       </div>
     {% empty %}
-      <p class="text-muted">There aren't any reviews yet.</p>
+      <p class="text-muted">{% trans "There aren't any reviews yet." %}</p>
     {% endfor %}
   </div>
 
@@ -135,23 +135,23 @@
   <!-- Formulario para nueva reseña -->
   {% if user.is_authenticated %}
     <div class="mt-4">
-      <h4>Write your review</h4>
+      <h4>{% trans "Write your review" %}</h4>
       <form method="post" action="{% url 'submit_review' product.pk %}" class="mt-2" id="reviewForm" data-product-id="{{ product.pk }}">
         {% csrf_token %}
         <div class="mb-3">
-          <label class="form-label">Rating</label>
+          <label class="form-label">{% trans "Rating" %}</label>
           <div id="starRating" class="star-rating" aria-label="Rating from 0.5 to 5 stars"></div>
           <input type="hidden" name="rating" id="ratingInput" value="2.5">
         </div>
         <div class="mb-3">
           {{ review_form.comment }}
         </div>
-        <button type="submit" class="btn btn-lg btn-success">Send review</button>
+        <button type="submit" class="btn btn-lg btn-success">{% trans "Send review" %}</button>
       </form>
     </div>
   {% else %}
     <p class="mt-3">
-      <a href="{% url 'login' %}?next={{ request.path }}">Login to write a review</a>
+      <a href="{% url 'login' %}?next={{ request.path }}">{% trans "Login to write a review" %}</a>
     </p>
   {% endif %}
 </div>

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Mi Cuenta{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "My Account" %}{% endblock %}
 
 {% block content %}
 {% load static %}
@@ -7,41 +8,44 @@
 <link rel="stylesheet" href="{% static 'store/css/base.css' %}">
 
 <style>
-.account-bg {
-  background-image: url("{% static 'users/images/veggies.jpg' %}");
-}
+    .account-bg {
+        background-image: url("{% static 'users/images/veggies.jpg' %}");
+    }
 </style>
 
 <div class="auth-bg account-bg">
 
-  <div class="auth-card">
-    <a href="{% url 'home' %}" class="btn btn-secondary position-absolute" style="top: 0.5rem; left: 2rem;" aria-label="Back to home">
-        <i class="bi bi-arrow-left" style="font-size: 1rem;">Back to Home</i>
+    <div class="auth-card">
+    <a href="{% url 'home' %}" class="btn btn-secondary back-btn" style="position: relative; left: -140px; top: 0; display: inline-flex; align-items: center;" aria-label="{% trans 'Back to home' %}">
+        <i class="bi bi-arrow-left me-2" style="font-size: 1rem;"></i> {% trans "Back to Home" %}
     </a>
-    <h1 class="auth-title">My Account</h1>
-    <ul class="list-group mt-3">
-        <li class="list-group-item">
-            <a href="{% url 'account_info_view' %}"><i class="bi bi-person-circle me-2" style="text-decoration:none;"></i> Account Information</a>
-        <li class="list-group-item">
-            <a href="{% url 'change_password' %}"><i class="bi bi-key me-2" style="text-decoration:none;"></i> Change Password</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{% url 'my_orders' %}"><i class="bi bi-box-seam me-2" style="text-decoration:none;"></i> My Orders</a>
-        </li>
+    <h1 class="auth-title">{% trans "My Account" %}</h1>
+    <div class="account-actions mt-3">
+        <a href="{% url 'account_info_view' %}" class="btn btn-primary mb-2">
+            <i class="bi bi-person-circle me-2"></i> {% trans "Account Information" %}
+        </a>
+
         {% if user.is_staff or user.is_superuser %}
-        <li class="list-group-item">
-            <a href="{% url 'user_control' %}"><i class="bi bi-people me-2" style="text-decoration:none;"></i> User Control</a>
-        </li>
+        <a href="{% url 'user_control' %}" class="btn btn-primary mb-2">
+            <i class="bi bi-people me-2"></i> {% trans "User Control" %}
+        </a>
         {% endif %}
-        <li class="list-group-item">
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-link p-0 text-danger">
-                    <i class="bi bi-box-arrow-right me-2" style="text-decoration:none;"></i> Log Out
-                </button>
-            </form>
-        </li>
-    </ul>
+        
+        <a href="{% url 'my_orders' %}" class="btn btn-primary mb-2">
+            <i class="bi bi-box-seam me-2"></i> {% trans "My Orders" %}
+        </a>
+
+        <a href="{% url 'change_password' %}" class="btn btn-primary mb-2">
+            <i class="bi bi-key me-2"></i> {% trans "Change Password" %}
+        </a>
+        
+        <form method="post" action="{% url 'logout' %}" class="mt-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-box-arrow-right me-2"></i> {% trans "Log Out" %}
+            </button>
+        </form>
+    </div>
   </div>
 </div>
 {% endblock %}

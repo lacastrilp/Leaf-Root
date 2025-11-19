@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Invoice{% endblock %}
+{% load i18n %}
 {% block content %}
-<h1>Invoice #{{ order.id }}</h1>
-<p>Client: {{ order.user.username }}</p>
-<p>Date: {{ order.created_at }}</p>
-<h3>Products</h3>
+<h1>{% trans "Invoice" %} #{{ order.id }}</h1>
+<p> {% trans "Client" %}: {{ order.user.username }}</p>
+<p>{% trans "Date" %}: {{ order.created_at }}</p>
+<h3>{% trans "Products" %}</h3>
 <ul>
 {% for item in order.items.all %}
     <li>{{ item.product.name }} - {{ item.quantity }} x ${{ item.product.price }}</li>

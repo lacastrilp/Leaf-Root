@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Dashboard Admin{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Dashboard Admin" %}{% endblock %}
 {% block content %}
-<h1>Administration panel</h1>
-<p>Total products: {{ product_count }}</p>
-<p>Total users: {{ user_count }}</p>
-<p>Total orders: {{ order_count }}</p>
+<h1>{% trans "Administration panel" %}</h1>
+<p>{% trans "Total products" %}: {{ product_count }}</p>
+<p>{% trans "Total users" %}: {{ user_count }}</p>
+<p>{% trans "Total orders" %}: {{ order_count }}</p>
 {% endblock %}

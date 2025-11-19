@@ -1,0 +1,357 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <aarteagah@eafit.edu.co>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-18 19:31-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Alejandro Arteaga H <aarteagah@eafit.com>\n"
+"Language-Team: Español \n"
+"Language: Español\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\catalogo\templates\add_product.html:11
+msgid "Name"
+msgstr "Nombre"
+
+#: .\catalogo\templates\add_product.html:16
+#: .\catalogo\templates\product_detail.html:85
+msgid "Description"
+msgstr "Descripción"
+
+#: .\catalogo\templates\add_product.html:21
+#: .\catalogo\templates\catalog.html:139
+#: .\catalogo\templates\product_detail.html:65
+#: .\catalogo\templates\wishlist.html:48 .\store\templates\base.html:148
+msgid "Price"
+msgstr "Precio"
+
+#: .\catalogo\templates\add_product.html:26
+#: .\catalogo\templates\product_detail.html:76
+msgid "Stock"
+msgstr "Unidades"
+
+#: .\catalogo\templates\add_product.html:31
+msgid "Category"
+msgstr "Categoría"
+
+#: .\catalogo\templates\add_product.html:36
+msgid "Image URL"
+msgstr "URL"
+
+#: .\catalogo\templates\add_product.html:41
+msgid "Upload Image"
+msgstr "Cargar Imagen"
+
+#: .\catalogo\templates\add_product.html:46
+msgid "Nutriscore"
+msgstr "Nutriscore"
+
+#: .\catalogo\templates\add_product.html:51
+msgid "Labels"
+msgstr "Etiqueta"
+
+#: .\catalogo\templates\add_product.html:56
+msgid "Image Preview"
+msgstr "Previsualización de imagen"
+
+#: .\catalogo\templates\add_product.html:64
+msgid "Save Product"
+msgstr "Guardar Producto"
+
+#: .\catalogo\templates\catalog.html:16
+msgid "Discover our full catalog"
+msgstr "Catálogo Completo"
+
+#: .\catalogo\templates\catalog.html:17
+msgid ""
+"Browse all our plant-based products, filter by category or diet, and find "
+"the best choices for your lifestyle."
+msgstr "Navega nuestro catálogo, filtra por categorías o dietas y encuentra las mejores opciones para ti"
+
+#: .\catalogo\templates\catalog.html:22 .\catalogo\templates\wishlist.html:66
+#: .\users\templates\users\account_home.html:20
+msgid "Back to Home"
+msgstr "Volver a la página principal"
+
+#: .\catalogo\templates\catalog.html:29
+msgid "Products Catalog"
+msgstr "Catálogo"
+
+#: .\catalogo\templates\catalog.html:36
+msgid "All categories"
+msgstr "Todas las categorías"
+
+#: .\catalogo\templates\catalog.html:48
+msgid "Sort by price"
+msgstr "Filtrar por precios"
+
+#: .\catalogo\templates\catalog.html:49
+msgid "Lowest to highest"
+msgstr "Menor a mayor"
+
+#: .\catalogo\templates\catalog.html:50
+msgid "Highest to lowest"
+msgstr "Mayor a menor"
+
+#: .\catalogo\templates\catalog.html:61 .\catalogo\templates\catalog.html:67
+msgid "Vegan"
+msgstr "Vegano"
+
+#: .\catalogo\templates\catalog.html:77 .\catalogo\templates\catalog.html:83
+msgid "Vegetarian"
+msgstr "Vegetariano"
+
+#: .\catalogo\templates\catalog.html:86
+msgid "Filters"
+msgstr "Filtros"
+
+#: .\catalogo\templates\catalog.html:94
+msgid "Add product"
+msgstr "Agregar Productos"
+
+#: .\catalogo\templates\catalog.html:142
+msgid "Edit"
+msgstr "Editar"
+
+#: .\catalogo\templates\catalog.html:143
+msgid "Remove"
+msgstr "Eliminar"
+
+#: .\catalogo\templates\catalog.html:154
+#: .\catalogo\templates\product_detail.html:93
+msgid "Add to shopping cart"
+msgstr "Agregar al carrito de compras"
+
+#: .\catalogo\templates\catalog.html:158
+#: .\catalogo\templates\product_detail.html:82
+msgid "Out of stock"
+msgstr "Sin disponibilidad"
+
+#: .\catalogo\templates\catalog.html:166
+msgid "There aren't any products yet."
+msgstr "No hay productos disponibles"
+
+#: .\catalogo\templates\catalog.html:203
+msgid "Last"
+msgstr "Último"
+
+#: .\catalogo\templates\product_detail.html:72
+msgid "No ratings yet"
+msgstr "Sin calificaciones"
+
+#: .\catalogo\templates\product_detail.html:80
+msgid "Only"
+msgstr "Solo"
+
+#: .\catalogo\templates\product_detail.html:80
+msgid "units left"
+msgstr "unidades disponibles"
+
+#: .\catalogo\templates\product_detail.html:100
+msgid "Reviews"
+msgstr "Calificaciones"
+
+#: .\catalogo\templates\product_detail.html:121
+#: .\users\templates\users\user_control.html:65
+#: .\users\templates\users\user_control.html:100
+msgid "Delete"
+msgstr "Eliminar"
+
+#: .\catalogo\templates\product_detail.html:130
+msgid "There aren't any reviews yet."
+msgstr "Aún no hay calificaciones disponibles"
+
+#: .\catalogo\templates\product_detail.html:138
+msgid "Write your review"
+msgstr "Escribe tu calificación"
+
+#: .\catalogo\templates\product_detail.html:142
+msgid "Rating"
+msgstr "Calificación"
+
+#: .\catalogo\templates\product_detail.html:149
+msgid "Send review"
+msgstr "Enviar calificación"
+
+#: .\catalogo\templates\product_detail.html:154
+msgid "Login to write a review"
+msgstr "Inicia sesión para calificar"
+
+#: .\catalogo\templates\wishlist.html:11
+msgid "Wishlist"
+msgstr "Wishlist"
+
+#: .\catalogo\templates\wishlist.html:55
+msgid "Add to cart"
+msgstr "Agregar al carrito"
+
+#: .\catalogo\templates\wishlist.html:68
+msgid "Your wishlist is empty."
+msgstr "Tu wishlist está vacia"
+
+#: .\store\templates\base.html:44
+msgid "Search products..."
+msgstr "Buscar productos"
+
+#: .\store\templates\base.html:129
+msgid "My shopping cart"
+msgstr "Mi carrito de compras"
+
+#: .\store\templates\base.html:149
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#: .\store\templates\base.html:159
+msgid "Total"
+msgstr "Total"
+
+#: .\store\templates\base.html:161
+msgid "View shopping cart"
+msgstr "Ver carrito de compras"
+
+#: .\store\templates\base.html:163
+msgid "There aren't any items in your shopping cart."
+msgstr "No hay productos agregados a tu carrito de compras"
+
+#: .\store\templates\base.html:205
+msgid "All rights reserved."
+msgstr "Derechos reservados"
+
+#: .\users\templates\users\account_home.html:3
+#: .\users\templates\users\account_home.html:22
+msgid "My Account"
+msgstr "Mi cuenta"
+
+#: .\users\templates\users\account_home.html:19
+msgid "Back to home"
+msgstr "Volver al menu principal"
+
+#: .\users\templates\users\account_home.html:25
+msgid "Account Information"
+msgstr "Información de la cuenta"
+
+#: .\users\templates\users\account_home.html:30
+#: .\users\templates\users\user_control.html:12
+msgid "User Control"
+msgstr "Control de usuarios"
+
+#: .\users\templates\users\account_home.html:35
+msgid "My Orders"
+msgstr "Mis ordenes"
+
+#: .\users\templates\users\account_home.html:39
+msgid "Change Password"
+msgstr "Cambiar contraseña"
+
+#: .\users\templates\users\account_home.html:45
+msgid "Log Out"
+msgstr "Cerrar sesión"
+
+#: .\users\templates\users\login.html:12
+msgid "Login"
+msgstr "Iniciar sesión"
+
+#: .\users\templates\users\login.html:16
+msgid "Email or Username"
+msgstr "Correo o usuario"
+
+#: .\users\templates\users\login.html:18
+msgid "You can sign in using your email address or your username."
+msgstr "Puedes iniciar sesión con tu correo o usuario"
+
+#: .\users\templates\users\login.html:29
+msgid "Sign in"
+msgstr "Iniciar sesión"
+
+#: .\users\templates\users\login.html:31
+msgid "Don't have an account?"
+msgstr "No tienes una cuenta todavia"
+
+#: .\users\templates\users\login.html:32
+msgid "Register here"
+msgstr "Registrate aquí"
+
+#: .\users\templates\users\register.html:11
+msgid "Sign up"
+msgstr "Registrarse"
+
+#: .\users\templates\users\register.html:37
+msgid "Create account"
+msgstr "Crear una cuenta"
+
+#: .\users\templates\users\register.html:40
+msgid "Already have an account?"
+msgstr "Ya tienes una cuenta"
+
+#: .\users\templates\users\register.html:41
+msgid "Log in here"
+msgstr "Inicia sesión aquí"
+
+#: .\users\templates\users\user_control.html:13
+msgid "Assign or revoke roles"
+msgstr "Asignar o eliminar roles"
+
+#: .\users\templates\users\user_control.html:23
+msgid "User"
+msgstr "Usuario"
+
+#: .\users\templates\users\user_control.html:24
+msgid "Email"
+msgstr "Correo"
+
+#: .\users\templates\users\user_control.html:25
+msgid "Phone"
+msgstr "Teléfono"
+
+#: .\users\templates\users\user_control.html:26
+msgid "Active"
+msgstr "Activo"
+
+#: .\users\templates\users\user_control.html:27
+msgid "Staff"
+msgstr "Staff"
+
+#: .\users\templates\users\user_control.html:28
+msgid "Superuser"
+msgstr "Superusuario"
+
+#: .\users\templates\users\user_control.html:29
+msgid "Actions"
+msgstr "Acciones"
+
+#: .\users\templates\users\user_control.html:71
+msgid "No users found."
+msgstr "No se encontraron usuarios"
+
+#: .\users\templates\users\user_control.html:78
+msgid "Note: You cannot remove your own admin role here."
+msgstr "Nota: No puedes eliminar tu propio rol en esta pantalla"
+
+#: .\users\templates\users\user_control.html:79
+msgid "Save Changes"
+msgstr "Guardar cambios"
+
+#: .\users\templates\users\user_control.html:89
+msgid "Delete User"
+msgstr "Eliminar usuario"
+
+#: .\users\templates\users\user_control.html:93
+msgid "You're about to delete the account"
+msgstr "Estás a punto de eliminar la cuenta"
+
+#: .\users\templates\users\user_control.html:94
+msgid "This action cannot be undone."
+msgstr "Esta acción no se puede deshacer"
+
+#: .\users\templates\users\user_control.html:97
+msgid "Cancel"
+msgstr "Cancelar"

@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
-{% block title %}Results{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Results" %}{% endblock %}
 {% block content %}
-<h1>Search results</h1>
+<h1>{% trans "Search results" %}</h1>
 {% if products %}
     {% for product in products %}
         <p><a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a> - ${{ product.price }}</p>
     {% endfor %}
 {% else %}
-    <p>No products found.</p>
+    <p>{% trans "No products found." %}</p>
 {% endif %}
 {% endblock %}

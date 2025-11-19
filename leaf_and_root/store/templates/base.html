@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
 {% load custom_tags %}
-<html lang="es">
+{% load i18n %}
+<html lang="{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,7 +41,7 @@
                         <!-- 🔍 Barra de búsqueda oculta -->
                         <li class="nav-item me-3">
                         <form id="searchForm" method="get" action="{% url 'catalog' %}" class="{% if request.GET.q %}d-block{% else %}d-none{% endif %}">
-                            <input type="text" name="q" class="form-control" placeholder="Search products..." value="{{ request.GET.q|default:'' }}">
+                            <input type="text" name="q" class="form-control" placeholder="{% trans 'Search products...' %}" value="{{ request.GET.q|default:'' }}">
                         </form>
                         </li>
 
@@ -93,6 +94,23 @@
                         </a>
                     </li>
                 {% endif %}
+                
+                <!-- Selector de idioma -->
+                <li class="nav-item ms-3">
+                    <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}">
+                        <select name="language" onchange="this.form.submit()" class="form-select form-select-sm" style="width: auto;">
+                            {% get_current_language as CURRENT_LANGUAGE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% for lang_code, lang_name in LANGUAGES %}
+                                <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
+                                    {{ lang_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>
@@ -108,7 +126,7 @@
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartSidebar" aria-labelledby="cartSidebarLabel">
         <div class="offcanvas-header">
             <h5 id="cartSidebarLabel">
-                My shopping cart (<span id="cartCounterSidebar">{{ user.customer.cart.total_items|default:"0" }}</span>)
+                {% trans "My shopping cart" %} (<span id="cartCounterSidebar">{{ user.customer.cart.total_items|default:"0" }}</span>)
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -127,8 +145,8 @@
                                 {% endfor %}
                             </select>
                         </form>
-                        <small class="text-muted">Price: ${{ item.product.price }}</small><br>
-                        <small class="text-muted">Subtotal: ${{ item.get_subtotal }}</small>
+                        <small class="text-muted">{% trans "Price" %}: ${{ item.product.price }}</small><br>
+                        <small class="text-muted">{% trans "Subtotal" %}: ${{ item.get_subtotal }}</small>
                     </div>
                     <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}">
                         {% csrf_token %}
@@ -138,11 +156,11 @@
                 {% endfor %}
                 </ul>
                 <div class="d-flex justify-content-between">
-                    <strong>Total:</strong> <span>${{ total_price }}</span>
+                    <strong>{% trans "Total" %}:</strong> <span>${{ total_price }}</span>
                 </div>
-                <a href="{% url 'cart_detail' %}" class="btn btn-primary w-100 mt-3">View shopping cart</a>
+                <a href="{% url 'cart_detail' %}" class="btn btn-primary w-100 mt-3">{% trans "View shopping cart" %}</a>
             {% else %}
-                <p>There aren't any items in your shopping cart.</p>
+                <p>{% trans "There aren't any items in your shopping cart." %}</p>
             {% endif %}
         </div>
     </div>
@@ -184,7 +202,7 @@
 </body>
 <footer class="mt-4 footer">
     <div class="bg-light text-center py-3 mt-4">
-        <p class="mb-0"> 2025 Leaf & Root. All rights reserved.</p>
+        <p class="mb-0"> 2025 Leaf & Root. {% trans "All rights reserved." %}</p>
     </div>
 </footer>
 </html>

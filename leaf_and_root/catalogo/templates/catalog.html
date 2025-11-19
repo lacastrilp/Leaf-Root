@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
+{% load i18n %}
 <link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
 <link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
 <link rel="stylesheet" href="{% static 'store/css/base.css' %}">
@@ -12,27 +13,27 @@
             <div class="row align-items-center" style="background-color: #f6efe8cb; padding: 1rem; border-radius: 0.5rem;">
                 <div class="col-md-6">
                     <div class="catalog-hero-text">
-                        <h1 class="display-5 fw-bold text-ink">Discover our full catalog</h1>
-                        <p class="lead text-muted">Browse all our plant-based products, filter by category or diet, and find the best choices for your lifestyle.</p>
+                        <h1 class="display-5 fw-bold text-ink">{% trans "Discover our full catalog" %}</h1>
+                        <p class="lead text-muted">{% trans "Browse all our plant-based products, filter by category or diet, and find the best choices for your lifestyle." %}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="catalog-hero-image" aria-hidden="true" role="img" style="background-image: url('{% static 'store/images/vegetables.jpg' %}')">
-                        <a href="{% url 'product_list' %}" class="btn btn-secondary hero-back-btn">Back to Home</a>
+                        <a href="{% url 'product_list' %}" class="btn btn-secondary hero-back-btn">{% trans "Back to Home" %}</a>
                     </div>
                 </div>
             </div>
         </section>
     
         <div class="mb-4">
-                <h2 class="landing-title">Products Catalog</h2>
+                <h2 class="landing-title">{% trans "Products Catalog" %}</h2>
         </div>
     <!-- Barra de búsqueda y filtros -->
     <form method="get" action="{% url 'catalog' %}" class="landing-filters row mb-4 align-items-center">
         <!-- Categoría -->
         <div class="col-md-2">
             <select name="category" class="form-control mb-2">
-                <option value="">All categories</option>
+                <option value="">{% trans "All categories" %}</option>
                 {% for c in categories %}
                     <option value="{{ c }}" {% if request.GET.category == c %}selected{% endif %}>
                         {{ c }}
@@ -44,9 +45,9 @@
         <!-- Sort by precios -->
         <div class="col-md-3">
             <select name="sort" class="form-select">
-                <option value="">Sort by price</option>
-                <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>Lowest to highest</option>
-                <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>Highest to lowest</option>
+                <option value="">{% trans "Sort by price" %}</option>
+                <option value="price_asc" {% if request.GET.sort == "price_asc" %}selected{% endif %}>{% trans "Lowest to highest" %}</option>
+                <option value="price_desc" {% if request.GET.sort == "price_desc" %}selected{% endif %}>{% trans "Highest to lowest" %}</option>
             </select>
         </div>
         <!-- Filtros vegan / vegetarian -->
@@ -56,13 +57,13 @@
                 <!-- Si ya está seleccionado, quitarlo -->
                 <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
                 class="btn btn-success mx-1">
-                Vegan
+                {% trans "Vegan" %}
                 </a>
             {% else %}
                 <!-- Si no está seleccionado, aplicarlo -->
                 <a href="?diet=vegan{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
                 class="btn btn-outline-success mx-1">
-                Vegan
+                {% trans "Vegan" %}
                 </a>
             {% endif %}
 
@@ -71,16 +72,16 @@
                 <!-- Si ya está seleccionado, quitarlo -->
                 <a href="?{% for k,v in current_filters.items %}{% if k != 'diet' %}{{k}}={{v}}&{% endif %}{% endfor %}" 
                 class="btn btn-success mx-1">
-                Vegetarian
+                {% trans "Vegetarian" %}
                 </a>
             {% else %}
                 <!-- Si no está seleccionado, aplicarlo -->
                 <a href="?diet=vegetarian{% for k,v in current_filters.items %}{% if k != 'diet' %}&{{k}}={{v}}{% endif %}{% endfor %}" 
                 class="btn btn-outline-success mx-1">
-                Vegetarian
+                {% trans "Vegetarian" %}
                 </a>
             {% endif %}
-            <button type="submit" class="btn btn-outline-success mx-1">Filters</button>
+            <button type="submit" class="btn btn-outline-success mx-1">{% trans "Filters" %}</button>
         </div>
     </form>
 
@@ -88,7 +89,7 @@
     <!-- Botón agregar producto solo admin -->
     {% if user.is_staff %}
         <div class="mb-3 text-end">
-            <a href="{% url 'add_product' %}" class="btn btn-success">Add product</a>
+            <a href="{% url 'add_product' %}" class="btn btn-success">{% trans "Add product" %}</a>
         </div>
     {% endif %}
 
@@ -133,11 +134,11 @@
                         <h5 class="card-title">
                             <a href="{% url 'product_detail' product.pk %}" class="product-link text-dark text-decoration-none">{{ product.name }}</a>
                         </h5>
-                        <p class="card-text text-muted">Price: <strong>${{ product.price }}</strong></p>
+                        <p class="card-text text-muted">{% trans "Price" %}: <strong>${{ product.price }}</strong></p>
                         <div class="mt-auto">
                             {% if user.is_staff %}
-                                <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
+                                <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">{% trans "Edit" %}</a>
+                                <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">{% trans "Remove" %}</a>
                             {% else %}
                                 {% if product.stock > 0 %}
                                     <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
@@ -148,11 +149,11 @@
                                                 {% if product.stock == 0 %}
                                                     disabled, class="btn btn-sm btn-secondary"
                                                 {% endif %}>
-                                                Add to shopping cart
+                                                {% trans "Add to shopping cart" %}
                                         </button>
                                     </form>
                                 {% else %}
-                                    <button class="btn btn-sm btn-secondary" disabled>Out of stock</button>
+                                    <button class="btn btn-sm btn-secondary" disabled>{% trans "Out of stock" %}</button>
                                 {% endif %}
                             {% endif %}
                         </div>
@@ -160,7 +161,7 @@
                 </div>
             </div>
         {% empty %}
-            <p class="text-center text-muted">There aren't any products yet.</p>
+            <p class="text-center text-muted">{% trans "There aren't any products yet." %}</p>
         {% endfor %}
     </div>
         <!-- Paginación -->
@@ -197,7 +198,7 @@
                         <a class="page-link pagination-link" href="?page={{ page_obj.next_page_number }}&{{ current_filters.urlencode }}">&gt;</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link pagination-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">Last</a>
+                        <a class="page-link pagination-link" href="?page={{ page_obj.paginator.num_pages }}&{{ current_filters.urlencode }}">{% trans "Last" %}</a>
                     </li>
                 {% endif %}
 

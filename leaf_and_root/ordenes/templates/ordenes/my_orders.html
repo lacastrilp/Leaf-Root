@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Mis Órdenes{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "My Orders" %}{% endblock %}
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'users/css/auth.css' %}">
@@ -31,11 +32,11 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Order</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Actions</th>
+                    <th>{% trans "Order" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Total" %}</th>
+                    <th>{% trans "Actions" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,7 +54,7 @@
             </tbody>
         </table>
     {% else %}
-        <p>You have no orders yet.</p>
+        <p>{% trans "You have no orders yet." %}</p>
     {% endif %}
   </div>
 </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Exit{% endblock %}
+{% block title %}{% trans "Exit" %}{% endblock %}
 {% block content %}
-<h1>Closed session</h1>
-<a href="{% url 'home' %}">Back to top</a>
+<h1>{% trans "Closed session" %}</h1>
+<a href="{% url 'home' %}">{% trans "Back to top" %}</a>
 {% endblock %}

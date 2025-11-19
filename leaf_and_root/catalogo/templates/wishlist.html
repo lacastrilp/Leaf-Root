@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load i18n %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'catalogo/css/wishlist.css' %}">
 <link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
 
 <div class="container mt-4">
 
-  <h2 class="landing-title mb-4">Wishlist</h2>
+  <h2 class="landing-title mb-4">{% trans "Wishlist" %}</h2>
 
   {% if items %}
   <div class="row">
@@ -18,9 +19,9 @@
     <form method="post" action="{% url 'toggle_wishlist' item.product.id_product %}" class="wishlist-toggle-form">
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ request.path }}">
-      <button type="submit" class="wishlist-button" aria-label="Remove from wishlist">
+      <button type="submit" class="wishlist-button" aria-label="{% trans "Remove from wishlist" %}">
         <i class="bi bi-heart-fill wishlist-icon active"></i>
-        <span class="visually-hidden">Remove from wishlist</span>
+        <span class="visually-hidden">{% trans "Remove from wishlist" %}</span>
       </button>
     </form>
     {% if item.product.image %}
@@ -44,14 +45,14 @@
         </a>
       </h5>
       <p class="card-text text-muted mb-2">
-        Price: <strong>${{ item.product.price }}</strong>
+        {% trans "Price" %}: <strong>${{ item.product.price }}</strong>
       </p>
 
       <div class="mt-auto">
         <form method="post" action="{% url 'add_to_cart' item.product.pk %}" class="add-to-cart-form d-inline">
           {% csrf_token %}
           <input type="hidden" name="quantity" value="1">
-          <button type="submit" class="btn btn-success btn-sm">Add to cart</button>
+          <button type="submit" class="btn btn-success btn-sm">{% trans "Add to cart" %}</button>
         </form>
       </div>
     </div>
@@ -62,9 +63,9 @@
   </div>
   {% else %}
   <div class="text-center mb-3">
-    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+    <a href="{% url 'home' %}" class="btn btn-secondary">{% trans "Back to Home" %}</a>
   </div>
-  <p class="text-muted">Your wishlist is empty.</p>
+  <p class="text-muted">{% trans "Your wishlist is empty." %}</p>
   {% endif %}
 </div>
 <script src="{% static 'store/js/product-modal.js' %}"></script> <!-- JS específico de wishlist -->
