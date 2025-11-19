@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load i18n %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'catalogo/css/base.css' %}">
 <div class="container mt-4">
-    <h2 class="title mb-4">My shopping cart ({{ total_items }} items)</h2>
+    <h2 class="title mb-4">{% trans "My shopping cart" %} ({{ total_items }} {% trans "items" %})</h2>
     {% if total_items == 0 %}
     <div class="text-center mb-3">
-        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary">{% trans "Back to Home" %}</a>
     </div>
     {% endif %}
 
@@ -16,7 +16,7 @@
 {% if total_items > 0 %}
     <div class="text-end mt-4">
         <a href="{% url 'checkout_review' %}" class="btn btn-success btn-lg">
-            Buy now (Total: ${{ total_price }})
+            {% trans "Buy now" %} ({{ total_price }})
         </a>
     </div>
 {% endif %}

@@ -1,18 +1,20 @@
+{% load static %}
+{% load i18n %}
 {% if items %}
-    <table class="table align-middle">
+    <table class="table align-middle cart-table">
         <thead>
             <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Subtotal</th>
+                <th>{% trans "Product" %}</th>
+                <th>{% trans "Quantity" %}</th>
+                <th>{% trans "Price" %}</th>
+                <th>{% trans "Subtotal" %}</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             {% for item in items %}
             <tr>
-                <td class="d-flex align-items-center">
+                <td class="d-flex align-items-center product-cell" data-label="{% trans 'Product' %}">
                     <!-- 👉 Imagen pequeña con link al detalle -->
                     <a href="{% url 'product_detail' item.product.pk %}" class="product-link me-2">
                         {% if item.product.image_url %}
@@ -21,14 +23,14 @@
                                 style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
                         {% else %}
                             <img src="https://via.placeholder.com/50"
-                                alt="No image available"
+                                alt="{% trans "No image available" %}"
                                 style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
                         {% endif %}
                     </a>
                     <!-- 👉 Nombre del producto -->
                     <span>{{ item.product.name }}</span>
                 </td>
-                <td>
+                <td data-label="{% trans 'Quantity' %}">
                     <div class="d-flex align-items-center">
                         <button type="button" class="btn btn-sm btn-outline-secondary decrease-btn" data-id="{{ item.product.id_product }}">-</button>
                         
@@ -41,12 +43,12 @@
                         <button type="button" class="btn btn-sm btn-outline-secondary increase-btn" data-id="{{ item.product.id_product }}">+</button>
                     </div>
                 </td>
-                <td>${{ item.product.price }}</td>
-                <td id="subtotal-{{ item.product.id_product }}">${{ item.get_subtotal }}</td>
-                <td>
+                <td data-label="{% trans 'Price' %}">${{ item.product.price }}</td>
+                <td id="subtotal-{{ item.product.id_product }}" data-label="{% trans 'Subtotal' %}">${{ item.get_subtotal }}</td>
+                <td class="td-actions" data-label="{% trans 'Actions' %}">
                     <form method="post" action="{% url 'remove_from_cart' item.product.id_product %}" class="remove-form">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        <button type="submit" class="btn btn-danger btn-sm">{% trans "Remove" %}</button>
                     </form>
                 </td>
             </tr>
@@ -54,7 +56,7 @@
         </tbody>
     </table>
 
-    <h4>Total: ${{ total_price }}</h4>
+    <h4>{% trans "Total" %}: ${{ total_price }}</h4>
 {% else %}
-    <p class="text-center">Your shopping cart is empty.</p>
+    <p class="text-center">{% trans "Your shopping cart is empty." %}</p>
 {% endif %}

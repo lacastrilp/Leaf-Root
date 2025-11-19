@@ -32,14 +32,14 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                         <!-- Botón de búsqueda -->
-                        <li class="nav-item me-3">
+                        <li class="nav-item">
                         <button id="searchToggle" class="btn p-0 border-0 bg-transparent d-flex align-items-center justify-content-center" style="height: 40px;">
                             <i class="bi bi-search navbar-icon"></i>
                         </button>
                         </li>
 
                         <!-- 🔍 Barra de búsqueda oculta -->
-                        <li class="nav-item me-3">
+                        <li class="nav-item">
                         <form id="searchForm" method="get" action="{% url 'catalog' %}" class="{% if request.GET.q %}d-block{% else %}d-none{% endif %}">
                             <input type="text" name="q" class="form-control" placeholder="{% trans 'Search products...' %}" value="{{ request.GET.q|default:'' }}">
                         </form>
@@ -48,7 +48,7 @@
                 {% if user.is_authenticated %}
                     {% if user.is_staff or user.is_superuser %}
                         <!-- Botón + para agregar producto (solo admins) -->
-                        <li class="nav-item me-3">
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'add_product' %}">
                                 <i class="bi bi-plus-circle navbar-icon"></i>
                             </a>
@@ -68,45 +68,47 @@
                             </a>
                         </li>
 
-                        <li class="nav-item ms-3">
+                        <li class="nav-item">
                             <a class="nav-link position-relative" href="{% url 'wishlist' %}">
                                 <i class="bi bi-heart-fill navbar-icon"></i>
                                 {% if user.customer.wishlist.count %}
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ user.customer.wishlist.count }}
-                                    <span class="visually-hidden">wishlist items</span>
+                                    <span class="visually-hidden">{% trans "wishlist items" %}</span>
                                 </span>
                                 {% endif %}
                             </a>
                         </li>
 
                     {% endif %}
-                    <li class="nav-item ms-3">
+                    <li class="nav-item">
                         <a class="nav-link position-relative" href="{% url 'account_home' %}">
                             <i class="bi bi-person-circle navbar-icon"></i>
                         </a>
                     </li>
                 {% else %}
                     <!-- Si no está autenticado, lo mandamos a login -->
-                    <li class="nav-item ms-3">
+                    <li class="nav-item">
                         <a class="nav-link position-relative" href="{% url 'login' %}?next={{ request.path }}">
                             <i class="bi bi-person-circle navbar-icon"></i>
                         </a>
                     </li>
                 {% endif %}
                 
-                <!-- Selector de idioma -->
-                <li class="nav-item ms-3">
-                    <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                <!-- Selector de idioma (icono toggle) -->
+                <li class="nav-item position-relative" style="z-index:1090;">
+                    <button id="languageToggle" class="btn p-0 border-0 bg-transparent d-flex align-items-center" aria-label="{% trans 'Change language' %}" aria-expanded="false" type="button" style="height:40px;">
+                        <i class="bi bi-translate navbar-icon"></i>
+                    </button>
+                    <form id="languageForm" action="{% url 'set_language' %}" method="post" class="d-none shadow-sm p-2 rounded bg-white position-absolute" style="right:0; min-width:140px;">
                         {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ request.path }}">
-                        <select name="language" onchange="this.form.submit()" class="form-select form-select-sm" style="width: auto;">
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <label for="languageSelect" class="form-label small mb-1">{% trans 'Language' %}</label>
+                        <select name="language" id="languageSelect" class="form-select form-select-sm" autocomplete="off">
                             {% get_current_language as CURRENT_LANGUAGE %}
                             {% get_available_languages as LANGUAGES %}
                             {% for lang_code, lang_name in LANGUAGES %}
-                                <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
-                                    {{ lang_name }}
-                                </option>
+                                <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>{{ lang_name }}</option>
                             {% endfor %}
                         </select>
                     </form>
@@ -197,6 +199,56 @@
     <script src="{% static 'carrito/js/cart.js' %}"></script>
     <script src="{% static 'store/js/base.js' %}"></script>
     <script src="{% static 'catalogo/js/reviews.js' %}"></script>
+        <script>
+            (function(){
+                const sel = document.getElementById('languageSelect');
+                const toggleBtn = document.getElementById('languageToggle');
+                const form = document.getElementById('languageForm');
+
+                // Mostrar/Ocultar formulario al hacer click en el icono
+                if (toggleBtn && form) {
+                    toggleBtn.addEventListener('click', function(e){
+                        e.stopPropagation();
+                        const hidden = form.classList.contains('d-none');
+                        form.classList.toggle('d-none');
+                        toggleBtn.setAttribute('aria-expanded', hidden ? 'true' : 'false');
+                    });
+                    // Cerrar al click afuera
+                    document.addEventListener('click', function(ev){
+                        if (!form.contains(ev.target) && !toggleBtn.contains(ev.target) && !form.classList.contains('d-none')) {
+                            form.classList.add('d-none');
+                            toggleBtn.setAttribute('aria-expanded','false');
+                        }
+                    });
+                }
+
+                if (sel && sel.form) {
+                    sel.addEventListener('change', function(){
+                        const lang = sel.value;
+                        const nextInp = sel.form.querySelector('input[name="next"]');
+                        let path = window.location.pathname || '/';
+                        const search = window.location.search || '';
+
+                        function ensureLeadingSlash(p){ return p.startsWith('/') ? p : '/' + p; }
+
+                        let nextPath = path;
+                        if (lang === 'en') {
+                            if (!path.startsWith('/en/')) {
+                                nextPath = '/en' + ensureLeadingSlash(path);
+                            }
+                        } else {
+                            if (path.startsWith('/en/')) {
+                                nextPath = path.substring(3);
+                                if (nextPath.length === 0) nextPath = '/';
+                            }
+                        }
+
+                        if (nextInp) nextInp.value = nextPath + search;
+                        sel.form.submit();
+                    });
+                }
+            })();
+        </script>
     {% block extra_js %}{% endblock %}
 
 </body>

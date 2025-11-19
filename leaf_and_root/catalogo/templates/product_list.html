@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'catalogo/css/product_list.css' %}">
@@ -9,12 +10,10 @@
 <div class="hero-banner" style="background-image: url('{% static 'store/images/banner.jpg' %}')">
     <div class="hero-text">
         <h1 class="display-5 mb-0 text-ink fw-bold">
-            We're an online store specializing in plant-based products.
+            {% trans "We're an online store specializing in plant-based products." %}
         </h1>
         <p class="lead space-h1-lead text-muted-1">
-            Our platform promotes a healthy, ethical, and sustainable lifestyle
-            by clearly labeling products as vegan or vegetarian and providing
-            transparent information on their nutritional.
+            {% trans "Our platform promotes a healthy, ethical, and sustainable lifestyle by clearly labeling products as vegan or vegetarian and providing transparent information on their nutritional." %}
         </p>
     </div>
 </div>
@@ -25,8 +24,8 @@
     <!-- Sección de Productos Recomendados -->
     <div class="mb-5">
         <div class="mb-4">
-            <h2 class="landing-title">Recommended Products</h2>
-            <a href="{% url 'catalog' %}" class="btn btn-outline-success bi bi-eye"> View All</a>
+            <h2 class="landing-title">{% trans "Recommended Products" %}</h2>
+            <a href="{% url 'catalog' %}" class="btn btn-outline-success bi bi-eye"> {% trans "View All" %}</a>
         </div>
         <div class="row">
             {% for product in recommended_products %}
@@ -34,9 +33,9 @@
                     <div class="card shadow-sm h-100 product-card">
                         <!-- 🏷️ Etiqueta vegano/vegetariano -->
                         {% if product.diet_label == "vegan" %}
-                            <span class="badge tags product-badge">Vegan</span>
+                            <span class="badge tags product-badge">{% trans "Vegan" %}</span>
                         {% elif product.diet_label == "vegetarian" %}
-                            <span class="badge tags product-badge">Vegetarian</span>
+                            <span class="badge tags product-badge">{% trans "Vegetarian" %}</span>
                         {% endif %}
                         
                         <!-- ❤️ Wishlist toggle -->
@@ -59,7 +58,7 @@
                             </a>
                         {% else %}
                             <a href="{% url 'product_detail' product.pk %}" class="product-link">
-                                <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="No image available">
+                                <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="{% trans "No image available" %}">
                             </a>
                         {% endif %}
 
@@ -67,22 +66,22 @@
                             <h5 class="card-title">
                                 <a href="{% url 'product_detail' product.pk %}" class="product-link text-dark text-decoration-none">{{ product.name }}</a>
                             </h5>
-                            <p class="card-text text-muted">Price: <strong>${{ product.price }}</strong></p>
+                            <p class="card-text text-muted">{% trans "Price" %}: <strong>${{ product.price }}</strong></p>
                             <div class="mt-auto">
                                 {% if user.is_staff %}
-                                    <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
+                                    <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">{% trans "Edit" %}</a>
+                                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">{% trans "Remove" %}</a>
                                 {% else %}
                                     {% if product.stock > 0 %}
                                         <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
                                             {% csrf_token %}
                                             <input type="hidden" name="quantity" value="1">
                                             <button type="submit" class="btn btn-sm btn-success">
-                                                Add to shopping cart
+                                                {% trans "Add to shopping cart" %}
                                             </button>
                                         </form>
                                     {% else %}
-                                        <button class="btn btn-sm btn-secondary" disabled>Out of stock</button>
+                                        <button class="btn btn-sm btn-secondary" disabled>{% trans "Out of stock" %}</button>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -90,7 +89,7 @@
                     </div>
                 </div>
             {% empty %}
-                <p class="text-center text-muted">No recommended products available.</p>
+                <p class="text-center text-muted">{% trans "No recommended products available." %}</p>
             {% endfor %}
         </div>
     </div>
@@ -98,7 +97,7 @@
     <!-- Sección de Vistos Recientemente -->
     <div class="mb-5">
         <div class="mb-4">
-            <h2 class="landing-title">Recently Viewed</h2>
+            <h2 class="landing-title">{% trans "Recently Viewed" %}</h2>
         </div>
         
         <div class="row">
@@ -107,9 +106,9 @@
                     <div class="card shadow-sm h-100 product-card">
                         <!-- 🏷️ Etiqueta vegano/vegetariano -->
                         {% if product.diet_label == "vegan" %}
-                            <span class="badge tags product-badge">Vegan</span>
+                            <span class="badge tags product-badge">{% trans "Vegan" %}</span>
                         {% elif product.diet_label == "vegetarian" %}
-                            <span class="badge tags product-badge">Vegetarian</span>
+                            <span class="badge tags product-badge">{% trans "Vegetarian" %}</span>
                         {% endif %}
                         
                         <!-- ❤️ Wishlist toggle -->
@@ -132,7 +131,7 @@
                             </a>
                         {% else %}
                             <a href="{% url 'product_detail' product.pk %}" class="product-link">
-                                <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="No image available">
+                                <img src="https://via.placeholder.com/200" class="card-img-top product-image" alt="{% trans "No image available" %}">
                             </a>
                         {% endif %}
 
@@ -140,22 +139,22 @@
                             <h5 class="card-title">
                                 <a href="{% url 'product_detail' product.pk %}" class="product-link text-dark text-decoration-none">{{ product.name }}</a>
                             </h5>
-                            <p class="card-text text-muted">Price: <strong>${{ product.price }}</strong></p>
+                            <p class="card-text text-muted">{% trans "Price" %}: <strong>${{ product.price }}</strong></p>
                             <div class="mt-auto">
                                 {% if user.is_staff %}
-                                    <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">Remove</a>
+                                    <a href="{% url 'edit_product' product.pk %}" class="btn btn-warning btn-sm">{% trans "Edit" %}</a>
+                                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm">{% trans "Remove" %}</a>
                                 {% else %}
                                     {% if product.stock > 0 %}
                                         <form method="post" action="{% url 'add_to_cart' product.pk %}" class="add-to-cart-form">
                                             {% csrf_token %}
                                             <input type="hidden" name="quantity" value="1">
                                             <button type="submit" class="btn btn-sm btn-success">
-                                                Add to shopping cart
+                                                {% trans "Add to shopping cart" %}
                                             </button>
                                         </form>
                                     {% else %}
-                                        <button class="btn btn-sm btn-secondary" disabled>Out of stock</button>
+                                        <button class="btn btn-sm btn-secondary" disabled>{% trans "Out of stock" %}</button>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -163,7 +162,7 @@
                     </div>
                 </div>
             {% empty %}
-                <p class="text-center text-muted">No recently viewed products.</p>
+                <p class="text-center text-muted">{% trans "No recently viewed products." %}</p>
             {% endfor %}
         </div>
     </div>

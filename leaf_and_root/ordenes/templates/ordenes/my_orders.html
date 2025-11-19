@@ -25,8 +25,8 @@
     .table th, .table td { text-align: center; vertical-align: middle; padding: 1rem; }
     </style>
 
-    <a href="{% url 'account_home' %}" class="btn btn-secondary back-btn">Back to Account</a>
-    <h1 class="auth-title">Mis Órdenes</h1>
+    <a href="{% url 'account_home' %}" class="btn btn-secondary back-btn">{% trans "Back to Account" %}</a>
+    <h1 class="auth-title">{% trans "My Orders" %}</h1>
 
     {% if orders %}
         <table class="table table-striped">
@@ -47,7 +47,7 @@
                     <td>{{ order_data.order.status }}</td>
                     <td>${{ order_data.total }}</td>
                     <td>
-                        <a href="{% url 'generate_invoice_pdf' order_data.order.id_order %}" class="btn btn-sm btn-primary" target="_blank">Download PDF</a>
+                        <a href="{% url 'generate_invoice_pdf' order_data.order.id_order %}" class="btn btn-sm btn-primary" target="_blank">{% trans "Download PDF" %}</a>
                     </td>
                 </tr>
                 {% endfor %}

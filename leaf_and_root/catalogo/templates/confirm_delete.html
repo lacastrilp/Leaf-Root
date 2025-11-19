@@ -1,11 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Remove product{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Remove product" %}{% endblock %}
 
 {% block content %}
-<h3>Are you sure you want to remove the product "{{ product.name }}"?</h3>
+<h3>{% trans "Are you sure you want to remove the product" %} "{{ product.name }}"?</h3>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Remove</button>
-    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">{% trans "Remove" %}</button>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
 </form>
 {% endblock %}

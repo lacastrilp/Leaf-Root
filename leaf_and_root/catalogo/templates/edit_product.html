@@ -1,66 +1,67 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block content %}
 <div class="container" style="max-width: 600px; margin-top: 2rem;">
-    <h2 class="text-center mb-4">Edit Product</h2>
+    <h2 class="text-center mb-4">{% trans "Edit Product" %}</h2>
 
     <form method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-white">
         {% csrf_token %}
         
         <div class="mb-3">
-            <label for="id_name" class="form-label">Name</label>
+            <label for="id_name" class="form-label">{% trans "Name" %}</label>
             {{ form.name }}
         </div>
 
         <div class="mb-3">
-            <label for="id_description" class="form-label">Description</label>
+            <label for="id_description" class="form-label">{% trans "Description" %}</label>
             {{ form.description }}
         </div>
 
         <div class="mb-3">
-            <label for="id_price" class="form-label">Price</label>
+            <label for="id_price" class="form-label">{% trans "Price" %}</label>
             {{ form.price }}
         </div>
 
         <div class="mb-3">
-            <label for="id_stock" class="form-label">Stock</label>
+            <label for="id_stock" class="form-label">{% trans "Stock" %}</label>
             {{ form.stock }}
         </div>
 
         <div class="mb-3">
-            <label for="id_category" class="form-label">Category</label>
+            <label for="id_category" class="form-label">{% trans "Category" %}</label>
             {{ form.category }}
         </div>
 
         <div class="mb-3">
-            <label for="id_image_url" class="form-label">Image URL</label>
+            <label for="id_image_url" class="form-label">{% trans "Image URL" %}</label>
             {{ form.image_url }}
         </div>
 
         <div class="mb-3">
-            <label for="id_image" class="form-label">Upload Image</label>
+            <label for="id_image" class="form-label">{% trans "Upload Image" %}</label>
             {{ form.image }}
         </div>
 
         <div class="mb-3">
-            <label for="id_nutriscore" class="form-label">Nutriscore</label>
+            <label for="id_nutriscore" class="form-label">{% trans "Nutriscore" %}</label>
             {{ form.nutriscore }}
         </div>
 
         <div class="mb-3">
-            <label for="id_labels" class="form-label">Labels</label>
+            <label for="id_labels" class="form-label">{% trans "Labels" %}</label>
             {{ form.labels }}
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Image Preview:</label><br>
+            <label class="form-label">{% trans "Image Preview" %}</label><br>
             <img id="preview" 
                 src="{% if product.image %}{{ product.image.url }}{% elif product.image_url %}{{ product.image_url }}{% endif %}" 
-                alt="Image Preview" 
+                alt="{% trans "Image Preview" %}" 
                 style="max-width: 100%; max-height: 200px; object-fit: cover; border:1px solid #ccc; padding:4px; {% if not product.image and not product.image_url %}display: none;{% endif %}">
         </div>
 
         <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="submit" class="btn btn-primary">{% trans "Save Changes" %}</button>
         </div>
     </form>
 </div>

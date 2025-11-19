@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
 <div class="container" style="max-width: 600px; margin-top: 2rem;">
-    <h2 class="text-center mb-4" style="font-weight: bold; color: #4CAF50;">Add Product</h2>
+    <h2 class="text-center mb-4" style="font-weight: bold; color: #4CAF50;">{% trans "Add Product" %}</h2>
 
     <form method="post" enctype="multipart/form-data" class="shadow p-4 rounded bg-white">
         {% csrf_token %}

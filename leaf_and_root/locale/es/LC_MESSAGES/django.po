@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-18 19:31-0500\n"
+"POT-Creation-Date: 2025-11-18 22:06-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Alejandro Arteaga H <aarteagah@eafit.com>\n"
 "Language-Team: Español \n"
@@ -18,48 +18,140 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: .\carrito\templates\cart.html:4
+#, fuzzy
+#| msgid "My shopping cart"
+msgid "Shopping cart"
+msgstr "Mi carrito de compras"
+
+#: .\carrito\templates\cart.html:12 .\carrito\templates\cart_items.html:61
+#, fuzzy
+#| msgid "Your wishlist is empty."
+msgid "Your shopping cart is empty."
+msgstr "Tu wishlist está vacia"
+
+#: .\carrito\templates\cart_detail.html:7 .\store\templates\base.html:129
+msgid "My shopping cart"
+msgstr "Mi carrito de compras"
+
+#: .\carrito\templates\cart_detail.html:7
+msgid "items"
+msgstr "items"
+
+#: .\carrito\templates\cart_detail.html:10 .\catalogo\templates\catalog.html:22
+#: .\catalogo\templates\wishlist.html:66
+#: .\users\templates\users\account_home.html:20
+msgid "Back to Home"
+msgstr "Volver a la página principal"
+
+#: .\carrito\templates\cart_detail.html:19
+msgid "Buy now"
+msgstr "Comprar ahora"
+
+#: .\carrito\templates\cart_items.html:7
+#: .\ordenes\templates\ordenes\checkout_review.html:23
+#, fuzzy
+#| msgid "Save Product"
+msgid "Product"
+msgstr "Guardar Producto"
+
+#: .\carrito\templates\cart_items.html:8
+#: .\ordenes\templates\ordenes\checkout_review.html:24
+msgid "Quantity"
+msgstr "Cantidad"
+
+#: .\carrito\templates\cart_items.html:9
+#: .\catalogo\templates\add_product.html:21
+#: .\catalogo\templates\catalog.html:139
+#: .\catalogo\templates\edit_product.html:21
+#: .\catalogo\templates\product_detail.html:65
+#: .\catalogo\templates\product_list.html:69
+#: .\catalogo\templates\product_list.html:142
+#: .\catalogo\templates\wishlist.html:48
+#: .\ordenes\templates\ordenes\checkout_review.html:25
+#: .\store\templates\base.html:148
+msgid "Price"
+msgstr "Precio"
+
+#: .\carrito\templates\cart_items.html:10
+#: .\ordenes\templates\ordenes\checkout_review.html:26
+#: .\store\templates\base.html:149
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#: .\carrito\templates\cart_items.html:26
+msgid "No image available"
+msgstr "Imagen no disponible"
+
+#: .\carrito\templates\cart_items.html:51 .\catalogo\templates\catalog.html:143
+#: .\catalogo\templates\confirm_delete.html:10
+#: .\catalogo\templates\delete_product.html:8
+#: .\catalogo\templates\product_list.html:73
+#: .\catalogo\templates\product_list.html:146
+#: .\catalogo\templates\reviews\moderate_review.html:10
+msgid "Remove"
+msgstr "Eliminar"
+
+#: .\carrito\templates\cart_items.html:59 .\ordenes\templates\invoice.html:14
+#: .\ordenes\templates\ordenes\checkout_review.html:41
+#: .\ordenes\templates\ordenes\my_orders.html:38
+#: .\store\templates\base.html:159
+msgid "Total"
+msgstr "Total"
+
+#: .\catalogo\templates\add_product.html:5
+#, fuzzy
+#| msgid "Add product"
+msgid "Add Product"
+msgstr "Agregar Productos"
+
 #: .\catalogo\templates\add_product.html:11
+#: .\catalogo\templates\edit_product.html:11
+#: .\ordenes\templates\ordenes\checkout_review.html:13
+#: .\users\templates\users\account_info_view.html:19
 msgid "Name"
 msgstr "Nombre"
 
 #: .\catalogo\templates\add_product.html:16
+#: .\catalogo\templates\edit_product.html:16
 #: .\catalogo\templates\product_detail.html:85
 msgid "Description"
 msgstr "Descripción"
 
-#: .\catalogo\templates\add_product.html:21
-#: .\catalogo\templates\catalog.html:139
-#: .\catalogo\templates\product_detail.html:65
-#: .\catalogo\templates\wishlist.html:48 .\store\templates\base.html:148
-msgid "Price"
-msgstr "Precio"
-
 #: .\catalogo\templates\add_product.html:26
+#: .\catalogo\templates\edit_product.html:26
 #: .\catalogo\templates\product_detail.html:76
 msgid "Stock"
 msgstr "Unidades"
 
 #: .\catalogo\templates\add_product.html:31
+#: .\catalogo\templates\edit_product.html:31
 msgid "Category"
 msgstr "Categoría"
 
 #: .\catalogo\templates\add_product.html:36
+#: .\catalogo\templates\edit_product.html:36
 msgid "Image URL"
 msgstr "URL"
 
 #: .\catalogo\templates\add_product.html:41
+#: .\catalogo\templates\edit_product.html:41
 msgid "Upload Image"
 msgstr "Cargar Imagen"
 
 #: .\catalogo\templates\add_product.html:46
+#: .\catalogo\templates\edit_product.html:46
 msgid "Nutriscore"
 msgstr "Nutriscore"
 
 #: .\catalogo\templates\add_product.html:51
+#: .\catalogo\templates\edit_product.html:51
 msgid "Labels"
 msgstr "Etiqueta"
 
 #: .\catalogo\templates\add_product.html:56
+#: .\catalogo\templates\edit_product.html:56
+#: .\catalogo\templates\edit_product.html:59
 msgid "Image Preview"
 msgstr "Previsualización de imagen"
 
@@ -75,12 +167,9 @@ msgstr "Catálogo Completo"
 msgid ""
 "Browse all our plant-based products, filter by category or diet, and find "
 "the best choices for your lifestyle."
-msgstr "Navega nuestro catálogo, filtra por categorías o dietas y encuentra las mejores opciones para ti"
-
-#: .\catalogo\templates\catalog.html:22 .\catalogo\templates\wishlist.html:66
-#: .\users\templates\users\account_home.html:20
-msgid "Back to Home"
-msgstr "Volver a la página principal"
+msgstr ""
+"Navega nuestro catálogo, filtra por categorías o dietas y encuentra las "
+"mejores opciones para ti"
 
 #: .\catalogo\templates\catalog.html:29
 msgid "Products Catalog"
@@ -103,10 +192,14 @@ msgid "Highest to lowest"
 msgstr "Mayor a menor"
 
 #: .\catalogo\templates\catalog.html:61 .\catalogo\templates\catalog.html:67
+#: .\catalogo\templates\product_list.html:36
+#: .\catalogo\templates\product_list.html:109
 msgid "Vegan"
 msgstr "Vegano"
 
 #: .\catalogo\templates\catalog.html:77 .\catalogo\templates\catalog.html:83
+#: .\catalogo\templates\product_list.html:38
+#: .\catalogo\templates\product_list.html:111
 msgid "Vegetarian"
 msgstr "Vegetariano"
 
@@ -119,20 +212,22 @@ msgid "Add product"
 msgstr "Agregar Productos"
 
 #: .\catalogo\templates\catalog.html:142
+#: .\catalogo\templates\product_list.html:72
+#: .\catalogo\templates\product_list.html:145
 msgid "Edit"
 msgstr "Editar"
 
-#: .\catalogo\templates\catalog.html:143
-msgid "Remove"
-msgstr "Eliminar"
-
 #: .\catalogo\templates\catalog.html:154
 #: .\catalogo\templates\product_detail.html:93
+#: .\catalogo\templates\product_list.html:80
+#: .\catalogo\templates\product_list.html:153
 msgid "Add to shopping cart"
 msgstr "Agregar al carrito de compras"
 
 #: .\catalogo\templates\catalog.html:158
 #: .\catalogo\templates\product_detail.html:82
+#: .\catalogo\templates\product_list.html:84
+#: .\catalogo\templates\product_list.html:157
 msgid "Out of stock"
 msgstr "Sin disponibilidad"
 
@@ -143,6 +238,36 @@ msgstr "No hay productos disponibles"
 #: .\catalogo\templates\catalog.html:203
 msgid "Last"
 msgstr "Último"
+
+#: .\catalogo\templates\confirm_delete.html:4
+#, fuzzy
+#| msgid "Save Product"
+msgid "Remove product"
+msgstr "Guardar Producto"
+
+#: .\catalogo\templates\confirm_delete.html:7
+#: .\catalogo\templates\delete_product.html:4
+msgid "Are you sure you want to remove the product"
+msgstr "Seguro que quieres eliminar este producto"
+
+#: .\catalogo\templates\confirm_delete.html:11
+#: .\catalogo\templates\delete_product.html:9
+#: .\catalogo\templates\product_form.html:11
+#: .\users\templates\users\account_info_edit.html:22
+#: .\users\templates\users\user_control.html:97
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: .\catalogo\templates\edit_product.html:5
+#, fuzzy
+#| msgid "Add product"
+msgid "Edit Product"
+msgstr "Agregar Productos"
+
+#: .\catalogo\templates\edit_product.html:64
+#: .\users\templates\users\user_control.html:79
+msgid "Save Changes"
+msgstr "Guardar cambios"
 
 #: .\catalogo\templates\product_detail.html:72
 msgid "No ratings yet"
@@ -186,9 +311,90 @@ msgstr "Enviar calificación"
 msgid "Login to write a review"
 msgstr "Inicia sesión para calificar"
 
+#: .\catalogo\templates\product_form.html:10
+msgid "Save"
+msgstr "Guardar"
+
+#: .\catalogo\templates\product_list.html:13
+msgid "We're an online store specializing in plant-based products."
+msgstr "Somos una tienda especializada en productos a base de plantas"
+
+#: .\catalogo\templates\product_list.html:16
+msgid ""
+"Our platform promotes a healthy, ethical, and sustainable lifestyle by "
+"clearly labeling products as vegan or vegetarian and providing transparent "
+"information on their nutritional."
+msgstr ""
+"Nuestra plataforma promueve valores éticos y un estilo de vida sostenible, "
+"brindamos información  transparente sobre nuestros productos mediante "
+"información nutricional y etiquetas"
+
+#: .\catalogo\templates\product_list.html:27
+msgid "Recommended Products"
+msgstr "Productos recomendades"
+
+#: .\catalogo\templates\product_list.html:28
+msgid "View All"
+msgstr "Ver todos"
+
+#: .\catalogo\templates\product_list.html:92
+msgid "No recommended products available."
+msgstr "No hay recomendaciones disponibles"
+
+#: .\catalogo\templates\product_list.html:100
+msgid "Recently Viewed"
+msgstr "Vistos recientemente"
+
+#: .\catalogo\templates\product_list.html:165
+msgid "No recently viewed products."
+msgstr "Sin productos vistos recientemente"
+
+#: .\catalogo\templates\reviews\moderate_review.html:4
+#: .\catalogo\templates\reviews\moderate_review.html:6
+#, fuzzy
+#| msgid "Image Preview"
+msgid "Moderate review"
+msgstr "Previsualización de imagen"
+
+#: .\catalogo\templates\reviews\submit_review.html:3
+#, fuzzy
+#| msgid "Reviews"
+msgid "Review"
+msgstr "Calificaciones"
+
+#: .\catalogo\templates\reviews\submit_review.html:5
+#, fuzzy
+#| msgid "Write your review"
+msgid "Write a review for"
+msgstr "Escribe tu calificación"
+
+#: .\catalogo\templates\reviews\submit_review.html:9
+msgid "Send"
+msgstr "Enviar"
+
+#: .\catalogo\templates\search_results.html:3
+msgid "Results"
+msgstr "Resultados"
+
+#: .\catalogo\templates\search_results.html:5
+#, fuzzy
+#| msgid "Search products..."
+msgid "Search results"
+msgstr "Buscar productos"
+
+#: .\catalogo\templates\search_results.html:11
+#, fuzzy
+#| msgid "No users found."
+msgid "No products found."
+msgstr "No se encontraron usuarios"
+
 #: .\catalogo\templates\wishlist.html:11
 msgid "Wishlist"
 msgstr "Wishlist"
+
+#: .\catalogo\templates\wishlist.html:22 .\catalogo\templates\wishlist.html:24
+msgid "Remove from wishlist"
+msgstr "Eliminar de la wishlist"
 
 #: .\catalogo\templates\wishlist.html:55
 msgid "Add to cart"
@@ -198,21 +404,130 @@ msgstr "Agregar al carrito"
 msgid "Your wishlist is empty."
 msgstr "Tu wishlist está vacia"
 
+#: .\ordenes\templates\invoice.html:2 .\ordenes\templates\invoice.html:5
+msgid "Invoice"
+msgstr "Factura"
+
+#: .\ordenes\templates\invoice.html:6
+msgid "Client"
+msgstr "Cliente"
+
+#: .\ordenes\templates\invoice.html:7
+#: .\ordenes\templates\ordenes\my_orders.html:36
+msgid "Date"
+msgstr "Fecha"
+
+#: .\ordenes\templates\invoice.html:8
+#: .\ordenes\templates\ordenes\checkout_review.html:19
+#, fuzzy
+#| msgid "Save Product"
+msgid "Products"
+msgstr "Guardar Producto"
+
+#: .\ordenes\templates\ordenes\checkout_review.html:3
+#: .\ordenes\templates\ordenes\checkout_review.html:9
+#, fuzzy
+#| msgid "Reviews"
+msgid "Review Purchase"
+msgstr "Calificaciones"
+
+#: .\ordenes\templates\ordenes\checkout_review.html:11
+#, fuzzy
+#| msgid "Account Information"
+msgid "Customer Information"
+msgstr "Información de la cuenta"
+
+#: .\ordenes\templates\ordenes\checkout_review.html:14
+#: .\users\templates\users\account_info_view.html:20
+#: .\users\templates\users\user_control.html:24
+msgid "Email"
+msgstr "Correo"
+
+#: .\ordenes\templates\ordenes\checkout_review.html:15
+#: .\users\templates\users\account_info_view.html:21
+msgid "Address"
+msgstr "Dirección"
+
+#: .\ordenes\templates\ordenes\checkout_review.html:16
+#: .\users\templates\users\account_info_view.html:22
+#: .\users\templates\users\user_control.html:25
+msgid "Phone"
+msgstr "Teléfono"
+
+#: .\ordenes\templates\ordenes\checkout_review.html:45
+msgid "Finalize Purchase"
+msgstr "Finalizar compra"
+
+#: .\ordenes\templates\ordenes\my_orders.html:3
+#: .\ordenes\templates\ordenes\my_orders.html:29
+#: .\users\templates\users\account_home.html:35
+msgid "My Orders"
+msgstr "Mis ordenes"
+
+#: .\ordenes\templates\ordenes\my_orders.html:28
+#: .\users\templates\users\account_info_view.html:25
+#: .\users\templates\users\change_password.html:19
+#, fuzzy
+#| msgid "Back to Home"
+msgid "Back to Account"
+msgstr "Pagina principal"
+
+#: .\ordenes\templates\ordenes\my_orders.html:35
+#, fuzzy
+#| msgid "My Orders"
+msgid "Order"
+msgstr "Mis ordenes"
+
+#: .\ordenes\templates\ordenes\my_orders.html:37
+msgid "Status"
+msgstr "Estado"
+
+#: .\ordenes\templates\ordenes\my_orders.html:39
+#: .\users\templates\users\user_control.html:29
+msgid "Actions"
+msgstr "Acciones"
+
+#: .\ordenes\templates\ordenes\my_orders.html:50
+msgid "Download PDF"
+msgstr "Descargar PDF"
+
+#: .\ordenes\templates\ordenes\my_orders.html:57
+msgid "You have no orders yet."
+msgstr "No tienes ordenes disponibles"
+
+#: .\store\templates\admin\dashboard.html:3
+msgid "Dashboard Admin"
+msgstr "Panel de administrador"
+
+#: .\store\templates\admin\dashboard.html:5
+msgid "Administration panel"
+msgstr "Panel de administrador"
+
+#: .\store\templates\admin\dashboard.html:6
+#, fuzzy
+#| msgid "Add product"
+msgid "Total products"
+msgstr "Agregar Productos"
+
+#: .\store\templates\admin\dashboard.html:7
+#, fuzzy
+#| msgid "Total"
+msgid "Total users"
+msgstr "Total"
+
+#: .\store\templates\admin\dashboard.html:8
+msgid "Total orders"
+msgstr "Total de ordenes"
+
 #: .\store\templates\base.html:44
 msgid "Search products..."
 msgstr "Buscar productos"
 
-#: .\store\templates\base.html:129
-msgid "My shopping cart"
-msgstr "Mi carrito de compras"
-
-#: .\store\templates\base.html:149
-msgid "Subtotal"
-msgstr "Subtotal"
-
-#: .\store\templates\base.html:159
-msgid "Total"
-msgstr "Total"
+#: .\store\templates\base.html:77
+#, fuzzy
+#| msgid "Your wishlist is empty."
+msgid "wishlist items"
+msgstr "Tu wishlist está vacia"
 
 #: .\store\templates\base.html:161
 msgid "View shopping cart"
@@ -222,7 +537,7 @@ msgstr "Ver carrito de compras"
 msgid "There aren't any items in your shopping cart."
 msgstr "No hay productos agregados a tu carrito de compras"
 
-#: .\store\templates\base.html:205
+#: .\store\templates\base.html:220
 msgid "All rights reserved."
 msgstr "Derechos reservados"
 
@@ -233,22 +548,22 @@ msgstr "Mi cuenta"
 
 #: .\users\templates\users\account_home.html:19
 msgid "Back to home"
-msgstr "Volver al menu principal"
+msgstr "Página principal"
 
 #: .\users\templates\users\account_home.html:25
 msgid "Account Information"
 msgstr "Información de la cuenta"
 
 #: .\users\templates\users\account_home.html:30
+#: .\users\templates\users\user_control.html:4
 #: .\users\templates\users\user_control.html:12
 msgid "User Control"
 msgstr "Control de usuarios"
 
-#: .\users\templates\users\account_home.html:35
-msgid "My Orders"
-msgstr "Mis ordenes"
-
 #: .\users\templates\users\account_home.html:39
+#: .\users\templates\users\change_password.html:3
+#: .\users\templates\users\change_password.html:21
+#: .\users\templates\users\change_password.html:39
 msgid "Change Password"
 msgstr "Cambiar contraseña"
 
@@ -256,7 +571,50 @@ msgstr "Cambiar contraseña"
 msgid "Log Out"
 msgstr "Cerrar sesión"
 
-#: .\users\templates\users\login.html:12
+#: .\users\templates\users\account_info_edit.html:17
+#: .\users\templates\users\account_info_view.html:24
+#, fuzzy
+#| msgid "Account Information"
+msgid "Edit Information"
+msgstr "Información de la cuenta"
+
+#: .\users\templates\users\account_info_edit.html:21
+#, fuzzy
+#| msgid "Save Changes"
+msgid "Save changes"
+msgstr "Guardar cambios"
+
+#: .\users\templates\users\account_info_view.html:17
+#, fuzzy
+#| msgid "Account Information"
+msgid "Personal Information"
+msgstr "Información de la cuenta"
+
+#: .\users\templates\users\change_password.html:18
+#, fuzzy
+#| msgid "Create account"
+msgid "Back to account"
+msgstr "Crear una cuenta"
+
+#: .\users\templates\users\change_password.html:25
+#, fuzzy
+#| msgid "Change Password"
+msgid "Current Password"
+msgstr "Cambiar contraseña"
+
+#: .\users\templates\users\change_password.html:30
+#, fuzzy
+#| msgid "Change Password"
+msgid "New Password"
+msgstr "Cambiar contraseña"
+
+#: .\users\templates\users\change_password.html:35
+#, fuzzy
+#| msgid "Change Password"
+msgid "Confirm New Password"
+msgstr "Cambiar contraseña"
+
+#: .\users\templates\users\login.html:2 .\users\templates\users\login.html:12
 msgid "Login"
 msgstr "Iniciar sesión"
 
@@ -278,6 +636,26 @@ msgstr "No tienes una cuenta todavia"
 
 #: .\users\templates\users\login.html:32
 msgid "Register here"
+msgstr "Registrate aquí"
+
+#: .\users\templates\users\logout.html:2
+msgid "Exit"
+msgstr "Salir"
+
+#: .\users\templates\users\logout.html:4
+msgid "Closed session"
+msgstr "Cerrar sesión"
+
+#: .\users\templates\users\logout.html:5
+#, fuzzy
+#| msgid "Back to Home"
+msgid "Back to top"
+msgstr "Página principal"
+
+#: .\users\templates\users\register.html:2
+#, fuzzy
+#| msgid "Register here"
+msgid "Register"
 msgstr "Registrate aquí"
 
 #: .\users\templates\users\register.html:11
@@ -304,14 +682,6 @@ msgstr "Asignar o eliminar roles"
 msgid "User"
 msgstr "Usuario"
 
-#: .\users\templates\users\user_control.html:24
-msgid "Email"
-msgstr "Correo"
-
-#: .\users\templates\users\user_control.html:25
-msgid "Phone"
-msgstr "Teléfono"
-
 #: .\users\templates\users\user_control.html:26
 msgid "Active"
 msgstr "Activo"
@@ -324,10 +694,6 @@ msgstr "Staff"
 msgid "Superuser"
 msgstr "Superusuario"
 
-#: .\users\templates\users\user_control.html:29
-msgid "Actions"
-msgstr "Acciones"
-
 #: .\users\templates\users\user_control.html:71
 msgid "No users found."
 msgstr "No se encontraron usuarios"
@@ -335,10 +701,6 @@ msgstr "No se encontraron usuarios"
 #: .\users\templates\users\user_control.html:78
 msgid "Note: You cannot remove your own admin role here."
 msgstr "Nota: No puedes eliminar tu propio rol en esta pantalla"
-
-#: .\users\templates\users\user_control.html:79
-msgid "Save Changes"
-msgstr "Guardar cambios"
 
 #: .\users\templates\users\user_control.html:89
 msgid "Delete User"
@@ -351,7 +713,3 @@ msgstr "Estás a punto de eliminar la cuenta"
 #: .\users\templates\users\user_control.html:94
 msgid "This action cannot be undone."
 msgstr "Esta acción no se puede deshacer"
-
-#: .\users\templates\users\user_control.html:97
-msgid "Cancel"
-msgstr "Cancelar"

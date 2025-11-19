@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Moderate review{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Moderate review" %}{% endblock %}
 {% block content %}
-<h1>Moderate review</h1>
+<h1>{% trans "Moderate review" %}</h1>
 <p>{{ review.text }}</p>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Remove</button>
+    <button type="submit" class="btn btn-danger">{% trans "Remove" %}</button>
 </form>
 {% endblock %}

@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Review{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Review" %}{% endblock %}
 {% block content %}
-<h1>Write a review for {{ product.name }}</h1>
+<h1>{% trans "Write a review for" %} {{ product.name }}</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Send</button>
+    <button type="submit" class="btn btn-primary">{% trans "Send" %}</button>
 </form>
 {% endblock %}

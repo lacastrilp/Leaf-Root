@@ -48,7 +48,7 @@
                 {% if u.customer %}
                   {{ u.customer.phone|default:"N/A" }}
                 {% else %}
-                  N/A
+                  {% trans "N/A" %}
                 {% endif %}
               </td>
               <td class="text-center">

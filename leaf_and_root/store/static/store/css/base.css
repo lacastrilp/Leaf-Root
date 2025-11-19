@@ -21,6 +21,29 @@ body {
     padding-top: 80px; /* Compensar altura del navbar fijo */
 }
 
+/* ===== NAVBAR ICON LAYOUT ===== */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem; /* espacio uniforme entre iconos */
+}
+.navbar-nav .nav-item { margin: 0 !important; }
+.navbar-nav .nav-link,
+.navbar-nav button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 0.25rem;
+}
+/* For small screens keep horizontal layout */
+@media (max-width: 991.98px) { /* debajo de lg */
+  .navbar-nav { flex-direction: row !important; flex-wrap: wrap; justify-content: center; }
+  .navbar-nav .nav-item { flex: 0 0 auto; }
+}
+
+#languageForm { min-width: 160px; }
+
 /* BOTONES */
 button,
 .btn {
