@@ -1,9 +1,201 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Dashboard Admin" %}{% endblock %}
+{% load static %}
+{% block title %}{% trans "Admin Dashboard" %}{% endblock %}
 {% block content %}
-<h1>{% trans "Administration panel" %}</h1>
-<p>{% trans "Total products" %}: {{ product_count }}</p>
-<p>{% trans "Total users" %}: {{ user_count }}</p>
-<p>{% trans "Total orders" %}: {{ order_count }}</p>
+<link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+
+<div class="container mt-4">
+	<h2 class="title">{% trans "Analytics Dashboard" %}</h2>
+
+	<div class="row g-3 mb-4">
+		<div class="col-md-3 col-sm-6 col-12">
+			<div class="card dashboard-stat-card h-100">
+				<div class="card-body text-center">
+					<h6 class="card-title text-muted">{% trans "Products" %}</h6>
+					<p class="display-6 m-0 fw-bold text-primary">{{ product_count }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-12">
+			<div class="card dashboard-stat-card h-100">
+				<div class="card-body text-center">
+					<h6 class="card-title text-muted">{% trans "Orders" %}</h6>
+					<p class="display-6 m-0 fw-bold text-success">{{ order_count }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-12">
+			<div class="card dashboard-stat-card h-100">
+				<div class="card-body text-center">
+					<h6 class="card-title text-muted">{% trans "Users (approx)" %}</h6>
+					<p class="display-6 m-0 fw-bold text-info">{{ user_count }}</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-6 col-12">
+			<div class="card dashboard-stat-card h-100">
+				<div class="card-body text-center">
+					<h6 class="card-title text-muted">{% trans "Pending Reviews" %}</h6>
+					<p class="display-6 m-0 fw-bold text-warning">{{ pending_reviews|length }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="mb-3">
+		<a href="{% url 'admin_dashboard_export' %}" class="btn btn-success">
+			<i class="bi bi-file-earmark-excel me-2"></i>{% trans "Download Excel Report" %}
+		</a>
+	</div>
+
+	<div class="row g-4">
+		<div class="col-lg-6 col-12">
+			<div class="card dashboard-chart-card h-100">
+				<div class="card-header bg-primary text-white">
+					<i class="bi bi-mouse2 me-2"></i>{% trans "Top Product Clicks" %}
+				</div>
+				<div class="card-body">
+					<div class="chart-container">
+						<canvas id="chartClicks"></canvas>
+					</div>
+					<div class="table-responsive mt-3">
+						<table class="table table-sm table-hover">
+							<thead class="table-light"><tr><th>{% trans "Product" %}</th><th>{% trans "Clicks" %}</th></tr></thead>
+							<tbody>
+								{% for r in top_clicks %}
+								<tr><td>{{ r.product__name }}</td><td><span class="badge bg-primary">{{ r.total }}</span></td></tr>
+								{% empty %}<tr><td colspan="2" class="text-muted text-center">{% trans "No data" %}</td></tr>{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 col-12">
+			<div class="card dashboard-chart-card h-100">
+				<div class="card-header bg-success text-white">
+					<i class="bi bi-bag-check me-2"></i>{% trans "Top Purchased Products" %}
+				</div>
+				<div class="card-body">
+					<div class="chart-container">
+						<canvas id="chartPurchased"></canvas>
+					</div>
+					<div class="table-responsive mt-3">
+						<table class="table table-sm table-hover">
+							<thead class="table-light"><tr><th>{% trans "Product" %}</th><th>{% trans "Quantity" %}</th></tr></thead>
+							<tbody>
+								{% for r in top_purchased %}
+								<tr><td>{{ r.product__name }}</td><td><span class="badge bg-success">{{ r.quantity }}</span></td></tr>
+								{% empty %}<tr><td colspan="2" class="text-muted text-center">{% trans "No data" %}</td></tr>{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-6 col-12">
+			<div class="card dashboard-chart-card h-100">
+				<div class="card-header bg-info text-white">
+					<i class="bi bi-search me-2"></i>{% trans "Top Search Terms" %}
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-sm table-hover">
+							<thead class="table-light"><tr><th>{% trans "Query" %}</th><th>{% trans "Searches" %}</th></tr></thead>
+							<tbody>
+								{% for s in top_searches %}
+								<tr><td>{{ s.query }}</td><td><span class="badge bg-info">{{ s.total }}</span></td></tr>
+								{% empty %}<tr><td colspan="2" class="text-muted text-center">{% trans "No data" %}</td></tr>{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-6 col-12">
+			<div class="card dashboard-chart-card h-100">
+				<div class="card-header bg-secondary text-white">
+					<i class="bi bi-box-seam me-2"></i>{% trans "Stock Levels" %}
+				</div>
+				<div class="card-body">
+					<div class="chart-container">
+						<canvas id="chartStock"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12">
+			<div class="card dashboard-chart-card">
+				<div class="card-header bg-warning text-dark">
+					<i class="bi bi-diagram-3 me-2"></i>{% trans "Products by Category" %}
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-lg-6 col-12 mb-3">
+							<div class="chart-container">
+								<canvas id="chartCategories"></canvas>
+							</div>
+						</div>
+						<div class="col-lg-6 col-12">
+							<div class="table-responsive">
+								<table class="table table-sm table-hover">
+									<thead class="table-light"><tr><th>{% trans "Category" %}</th><th>{% trans "Count" %}</th></tr></thead>
+									<tbody>
+										{% for c in category_counts %}
+										<tr><td>{{ c.category }}</td><td><span class="badge bg-warning text-dark">{{ c.count }}</span></td></tr>
+										{% empty %}<tr><td colspan="2" class="text-muted text-center">{% trans "No data" %}</td></tr>{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+	// Chart.js responsive configuration
+	const commonOptions = {
+		responsive: true,
+		maintainAspectRatio: true,
+		plugins: {
+			legend: { display: true, position: 'top' }
+		}
+	};
+
+	const clicksCtx = document.getElementById('chartClicks');
+	new Chart(clicksCtx, {
+		type:'bar',
+		data:{labels: {{ chart_clicks_labels|safe }}, datasets:[{label:'{% trans "Clicks" %}', data: {{ chart_clicks_values|safe }}, backgroundColor:'#0d6efd', borderRadius: 8}]},
+		options: {...commonOptions, scales: {y: {beginAtZero: true}}}
+	});
+
+	const purchasedCtx = document.getElementById('chartPurchased');
+	new Chart(purchasedCtx, {
+		type:'bar',
+		data:{labels: {{ chart_purchased_labels|safe }}, datasets:[{label:'{% trans "Quantity" %}', data: {{ chart_purchased_values|safe }}, backgroundColor:'#198754', borderRadius: 8}]},
+		options: {...commonOptions, scales: {y: {beginAtZero: true}}}
+	});
+
+	const catCtx = document.getElementById('chartCategories');
+	new Chart(catCtx, {
+		type:'pie',
+		data:{labels: {{ chart_category_labels|safe }}, datasets:[{label:'{% trans "Products" %}', data: {{ chart_category_values|safe }}, backgroundColor:['#0d6efd','#198754','#ffc107','#dc3545','#6f42c1','#20c997','#fd7e14','#0dcaf0']}]},
+		options: commonOptions
+	});
+
+	const stockCtx = document.getElementById('chartStock');
+	new Chart(stockCtx, {
+		type:'line',
+		data:{labels: {{ chart_stock_labels|safe }}, datasets:[{label:'{% trans "Stock" %}', data: {{ chart_stock_values|safe }}, borderColor:'#6f42c1', backgroundColor:'rgba(111,66,193,0.2)', tension:0.3, fill: true}]},
+		options: {...commonOptions, scales: {y: {beginAtZero: true}}}
+	});
+</script>
 {% endblock %}

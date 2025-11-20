@@ -138,3 +138,61 @@ textarea,
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
+
+/* ===== DASHBOARD STYLES ===== */
+.dashboard-stat-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.dashboard-chart-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
+}
+
+.dashboard-chart-card .card-header {
+    border-radius: 12px 12px 0 0;
+    font-weight: 600;
+    padding: 1rem;
+}
+
+.chart-container {
+    position: relative;
+    height: 250px;
+    margin-bottom: 1rem;
+}
+
+/* Responsive dashboard adjustments */
+@media (max-width: 767.98px) {
+    .chart-container {
+        height: 200px;
+    }
+    
+    .dashboard-stat-card .display-6 {
+        font-size: 2rem;
+    }
+    
+    .title {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .chart-container {
+        height: 180px;
+    }
+    
+    .dashboard-stat-card .card-body {
+        padding: 0.75rem;
+    }
+}

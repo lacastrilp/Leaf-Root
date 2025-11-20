@@ -5,14 +5,14 @@ from . import views
 
 urlpatterns = [
     path("", views.redirect_to_home , name="home"),
-    path("products/admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
-    # Administración
+    # Dashboard único + exportación
     path("admin/dashboard/", views.AdminDashboardView.as_view(), name="admin_dashboard"),
-        # Apps
-    path('cart/', include('carrito.urls')), 
+    path("admin/dashboard/export/", views.export_dashboard_excel, name="admin_dashboard_export"),
+    # Apps
+    path('cart/', include('carrito.urls')),
     path('catalogo/', include('catalogo.urls')),
     path('orders/', include('ordenes.urls')),
-    path('users/', include('users.urls')),   
+    path('users/', include('users.urls')),
 ]
 
 if settings.DEBUG:

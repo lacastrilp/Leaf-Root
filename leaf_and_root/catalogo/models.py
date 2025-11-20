@@ -56,3 +56,31 @@ class Review(models.Model):
         return f"Reseña de {self.customer.name} para {self.product.name}"
 
 
+# --- Analítica ---
+class ProductClick(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="clicks")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Clic de Producto"
+        verbose_name_plural = "Clics de Productos"
+
+    def __str__(self):
+        return f"Click {self.product.name} @ {self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
+
+
+class ProductSearchLog(models.Model):
+    query = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    results_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Búsqueda de Producto"
+        verbose_name_plural = "Búsquedas de Productos"
+
+    def __str__(self):
+        return f"Search '{self.query}' ({self.results_count})"
+
+

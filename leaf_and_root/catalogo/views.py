@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import DetailView, ListView, TemplateView
-from catalogo.models import Product, Review
+from catalogo.models import Product, Review, ProductClick, ProductSearchLog
 from users.models import Customer # 👈 agrega Custome
 from .models import Wishlist, Product
 from .forms import ReviewForm, ProductForm
@@ -51,6 +51,13 @@ class ProductDetailView(DetailView):
         # Mantener solo los últimos 10
         request.session['recently_viewed'] = recently_viewed[:10]
         request.session.modified = True
+
+        # Registrar clic (vista de detalle)
+        customer = getattr(request.user, 'customer', None) if request.user.is_authenticated else None
+        try:
+            ProductClick.objects.create(product_id=product_id, user=customer)
+        except Exception:
+            pass  # evitar que un fallo de analítica rompa la vista
         
         return response
 
@@ -189,6 +196,13 @@ class ProductListView(ListView):
                 queryset = Product.objects.filter(
                     Q(name__icontains=q) | Q(description__icontains=q) | Q(category__icontains=q)
                 )
+
+            # Log de búsqueda (si hay término)
+            customer = getattr(self.request.user, 'customer', None) if self.request.user.is_authenticated else None
+            try:
+                ProductSearchLog.objects.create(query=q, user=customer, results_count=queryset.count())
+            except Exception:
+                pass
 
         # 🔎 Filtros
         category = self.request.GET.get("category")

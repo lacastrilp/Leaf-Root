@@ -29,11 +29,16 @@
         <a href="{% url 'user_control' %}" class="btn btn-primary mb-2">
             <i class="bi bi-people me-2"></i> {% trans "User Control" %}
         </a>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-primary mb-2">
+            <i class="bi bi-bar-chart-line me-2"></i> {% trans "Analytics Dashboard" %}
+        </a>
         {% endif %}
         
+        {% if not user.is_staff and not user.is_superuser %}
         <a href="{% url 'my_orders' %}" class="btn btn-primary mb-2">
             <i class="bi bi-box-seam me-2"></i> {% trans "My Orders" %}
         </a>
+        {% endif %}
 
         <a href="{% url 'change_password' %}" class="btn btn-primary mb-2">
             <i class="bi bi-key me-2"></i> {% trans "Change Password" %}
