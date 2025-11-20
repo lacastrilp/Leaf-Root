@@ -89,10 +89,10 @@ def export_dashboard_excel(request):
     
     wb = Workbook()
     ws_clicks = wb.active
-    ws_clicks.title = "Clicks" 
-    ws_clicks.append(["Producto", "Total Clics"]) 
+    ws_clicks.title = "Clicks" #type: ignore
+    ws_clicks.append(["Producto", "Total Clics"]) #type: ignore
     for row in ProductClick.objects.values("product__name").annotate(total=Count("id")).order_by("-total"):
-        ws_clicks.append([row["product__name"], row["total"]])  
+        ws_clicks.append([row["product__name"], row["total"]]) #type: ignore 
 
     ws_search = wb.create_sheet("Busquedas")
     ws_search.append(["Query", "Total", "Resultados promedio"])

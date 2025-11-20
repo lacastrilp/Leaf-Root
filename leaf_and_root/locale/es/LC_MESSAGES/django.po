@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-18 22:06-0500\n"
+"POT-Creation-Date: 2025-11-20 16:06-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Alejandro Arteaga H <aarteagah@eafit.com>\n"
 "Language-Team: Español \n"
@@ -30,7 +30,7 @@ msgstr "Mi carrito de compras"
 msgid "Your shopping cart is empty."
 msgstr "Tu wishlist está vacia"
 
-#: .\carrito\templates\cart_detail.html:7 .\store\templates\base.html:129
+#: .\carrito\templates\cart_detail.html:7 .\store\templates\base.html:131
 msgid "My shopping cart"
 msgstr "Mi carrito de compras"
 
@@ -48,19 +48,23 @@ msgstr "Volver a la página principal"
 msgid "Buy now"
 msgstr "Comprar ahora"
 
-#: .\carrito\templates\cart_items.html:7
+#: .\carrito\templates\cart_items.html:7 .\carrito\templates\cart_items.html:17
 #: .\ordenes\templates\ordenes\checkout_review.html:23
+#: .\store\templates\admin\dashboard.html:64
+#: .\store\templates\admin\dashboard.html:86
 #, fuzzy
 #| msgid "Save Product"
 msgid "Product"
 msgstr "Guardar Producto"
 
-#: .\carrito\templates\cart_items.html:8
+#: .\carrito\templates\cart_items.html:8 .\carrito\templates\cart_items.html:33
 #: .\ordenes\templates\ordenes\checkout_review.html:24
+#: .\store\templates\admin\dashboard.html:86
+#: .\store\templates\admin\dashboard.html:183
 msgid "Quantity"
 msgstr "Cantidad"
 
-#: .\carrito\templates\cart_items.html:9
+#: .\carrito\templates\cart_items.html:9 .\carrito\templates\cart_items.html:46
 #: .\catalogo\templates\add_product.html:21
 #: .\catalogo\templates\catalog.html:139
 #: .\catalogo\templates\edit_product.html:21
@@ -69,19 +73,28 @@ msgstr "Cantidad"
 #: .\catalogo\templates\product_list.html:142
 #: .\catalogo\templates\wishlist.html:48
 #: .\ordenes\templates\ordenes\checkout_review.html:25
-#: .\store\templates\base.html:148
+#: .\store\templates\base.html:150
 msgid "Price"
 msgstr "Precio"
 
 #: .\carrito\templates\cart_items.html:10
+#: .\carrito\templates\cart_items.html:47
 #: .\ordenes\templates\ordenes\checkout_review.html:26
-#: .\store\templates\base.html:149
+#: .\store\templates\base.html:151
 msgid "Subtotal"
 msgstr "Subtotal"
 
 #: .\carrito\templates\cart_items.html:26
+#: .\catalogo\templates\product_list.html:61
+#: .\catalogo\templates\product_list.html:134
 msgid "No image available"
 msgstr "Imagen no disponible"
+
+#: .\carrito\templates\cart_items.html:48
+#: .\ordenes\templates\ordenes\my_orders.html:39
+#: .\users\templates\users\user_control.html:29
+msgid "Actions"
+msgstr "Acciones"
 
 #: .\carrito\templates\cart_items.html:51 .\catalogo\templates\catalog.html:143
 #: .\catalogo\templates\confirm_delete.html:10
@@ -95,7 +108,7 @@ msgstr "Eliminar"
 #: .\carrito\templates\cart_items.html:59 .\ordenes\templates\invoice.html:14
 #: .\ordenes\templates\ordenes\checkout_review.html:41
 #: .\ordenes\templates\ordenes\my_orders.html:38
-#: .\store\templates\base.html:159
+#: .\store\templates\base.html:161
 msgid "Total"
 msgstr "Total"
 
@@ -121,11 +134,13 @@ msgstr "Descripción"
 #: .\catalogo\templates\add_product.html:26
 #: .\catalogo\templates\edit_product.html:26
 #: .\catalogo\templates\product_detail.html:76
+#: .\store\templates\admin\dashboard.html:197
 msgid "Stock"
 msgstr "Unidades"
 
 #: .\catalogo\templates\add_product.html:31
 #: .\catalogo\templates\edit_product.html:31
+#: .\store\templates\admin\dashboard.html:146
 msgid "Category"
 msgstr "Categoría"
 
@@ -419,6 +434,8 @@ msgstr "Fecha"
 
 #: .\ordenes\templates\invoice.html:8
 #: .\ordenes\templates\ordenes\checkout_review.html:19
+#: .\store\templates\admin\dashboard.html:15
+#: .\store\templates\admin\dashboard.html:190
 #, fuzzy
 #| msgid "Save Product"
 msgid "Products"
@@ -460,7 +477,7 @@ msgstr "Finalizar compra"
 
 #: .\ordenes\templates\ordenes\my_orders.html:3
 #: .\ordenes\templates\ordenes\my_orders.html:29
-#: .\users\templates\users\account_home.html:35
+#: .\users\templates\users\account_home.html:39
 msgid "My Orders"
 msgstr "Mis ordenes"
 
@@ -482,11 +499,6 @@ msgstr "Mis ordenes"
 msgid "Status"
 msgstr "Estado"
 
-#: .\ordenes\templates\ordenes\my_orders.html:39
-#: .\users\templates\users\user_control.html:29
-msgid "Actions"
-msgstr "Acciones"
-
 #: .\ordenes\templates\ordenes\my_orders.html:50
 msgid "Download PDF"
 msgstr "Descargar PDF"
@@ -495,29 +507,90 @@ msgstr "Descargar PDF"
 msgid "You have no orders yet."
 msgstr "No tienes ordenes disponibles"
 
-#: .\store\templates\admin\dashboard.html:3
-msgid "Dashboard Admin"
+#: .\store\templates\admin\dashboard.html:4
+#, fuzzy
+#| msgid "Dashboard Admin"
+msgid "Admin Dashboard"
 msgstr "Panel de administrador"
 
-#: .\store\templates\admin\dashboard.html:5
-msgid "Administration panel"
-msgstr "Panel de administrador"
+#: .\store\templates\admin\dashboard.html:9
+#: .\users\templates\users\account_home.html:33
+msgid "Analytics Dashboard"
+msgstr "Panel Analítico"
 
-#: .\store\templates\admin\dashboard.html:6
+#: .\store\templates\admin\dashboard.html:23
+#, fuzzy
+#| msgid "My Orders"
+msgid "Orders"
+msgstr "Mis ordenes"
+
+#: .\store\templates\admin\dashboard.html:31
+msgid "Users (approx)"
+msgstr "Usuarios(aprox)"
+
+#: .\store\templates\admin\dashboard.html:39
+#, fuzzy
+#| msgid "Send review"
+msgid "Pending Reviews"
+msgstr "Enviar calificación"
+
+#: .\store\templates\admin\dashboard.html:48
+msgid "Download Excel Report"
+msgstr "Descargar reporte de Excel"
+
+#: .\store\templates\admin\dashboard.html:56
 #, fuzzy
 #| msgid "Add product"
-msgid "Total products"
+msgid "Top Product Clicks"
 msgstr "Agregar Productos"
 
-#: .\store\templates\admin\dashboard.html:7
-#, fuzzy
-#| msgid "Total"
-msgid "Total users"
-msgstr "Total"
+#: .\store\templates\admin\dashboard.html:64
+#: .\store\templates\admin\dashboard.html:176
+msgid "Clicks"
+msgstr "Clicks"
 
-#: .\store\templates\admin\dashboard.html:8
-msgid "Total orders"
-msgstr "Total de ordenes"
+#: .\store\templates\admin\dashboard.html:68
+#: .\store\templates\admin\dashboard.html:90
+#: .\store\templates\admin\dashboard.html:110
+#: .\store\templates\admin\dashboard.html:150
+msgid "No data"
+msgstr "No hay datos disponibles"
+
+#: .\store\templates\admin\dashboard.html:78
+#, fuzzy
+#| msgid "Add product"
+msgid "Top Purchased Products"
+msgstr "Agregar Productos"
+
+#: .\store\templates\admin\dashboard.html:101
+#, fuzzy
+#| msgid "Search products..."
+msgid "Top Search Terms"
+msgstr "Buscar productos"
+
+#: .\store\templates\admin\dashboard.html:106
+msgid "Query"
+msgstr "Busqueda"
+
+#: .\store\templates\admin\dashboard.html:106
+#, fuzzy
+#| msgid "Search products..."
+msgid "Searches"
+msgstr "Buscar productos"
+
+#: .\store\templates\admin\dashboard.html:121
+msgid "Stock Levels"
+msgstr "Niveles de Inventario"
+
+#: .\store\templates\admin\dashboard.html:134
+#, fuzzy
+#| msgid "Products Catalog"
+msgid "Products by Category"
+msgstr "Catálogo"
+
+#: .\store\templates\admin\dashboard.html:146
+msgid "Count"
+msgstr "Conteo"
 
 #: .\store\templates\base.html:44
 msgid "Search products..."
@@ -529,15 +602,23 @@ msgstr "Buscar productos"
 msgid "wishlist items"
 msgstr "Tu wishlist está vacia"
 
-#: .\store\templates\base.html:161
+#: .\store\templates\base.html:100
+msgid "Change language"
+msgstr "Cambiar Idioma"
+
+#: .\store\templates\base.html:106
+msgid "Language"
+msgstr "Idioma"
+
+#: .\store\templates\base.html:163
 msgid "View shopping cart"
 msgstr "Ver carrito de compras"
 
-#: .\store\templates\base.html:163
+#: .\store\templates\base.html:165
 msgid "There aren't any items in your shopping cart."
 msgstr "No hay productos agregados a tu carrito de compras"
 
-#: .\store\templates\base.html:220
+#: .\store\templates\base.html:257
 msgid "All rights reserved."
 msgstr "Derechos reservados"
 
@@ -560,14 +641,14 @@ msgstr "Información de la cuenta"
 msgid "User Control"
 msgstr "Control de usuarios"
 
-#: .\users\templates\users\account_home.html:39
+#: .\users\templates\users\account_home.html:44
 #: .\users\templates\users\change_password.html:3
 #: .\users\templates\users\change_password.html:21
 #: .\users\templates\users\change_password.html:39
 msgid "Change Password"
 msgstr "Cambiar contraseña"
 
-#: .\users\templates\users\account_home.html:45
+#: .\users\templates\users\account_home.html:50
 msgid "Log Out"
 msgstr "Cerrar sesión"
 
@@ -614,63 +695,57 @@ msgstr "Cambiar contraseña"
 msgid "Confirm New Password"
 msgstr "Cambiar contraseña"
 
-#: .\users\templates\users\login.html:2 .\users\templates\users\login.html:12
+#: .\users\templates\users\login.html:11
 msgid "Login"
 msgstr "Iniciar sesión"
 
-#: .\users\templates\users\login.html:16
+#: .\users\templates\users\login.html:15
 msgid "Email or Username"
 msgstr "Correo o usuario"
 
-#: .\users\templates\users\login.html:18
+#: .\users\templates\users\login.html:17
 msgid "You can sign in using your email address or your username."
 msgstr "Puedes iniciar sesión con tu correo o usuario"
 
-#: .\users\templates\users\login.html:29
+#: .\users\templates\users\login.html:28
 msgid "Sign in"
 msgstr "Iniciar sesión"
 
-#: .\users\templates\users\login.html:31
+#: .\users\templates\users\login.html:30
 msgid "Don't have an account?"
 msgstr "No tienes una cuenta todavia"
 
-#: .\users\templates\users\login.html:32
+#: .\users\templates\users\login.html:31
 msgid "Register here"
 msgstr "Registrate aquí"
 
-#: .\users\templates\users\logout.html:2
+#: .\users\templates\users\logout.html:3
 msgid "Exit"
 msgstr "Salir"
 
-#: .\users\templates\users\logout.html:4
+#: .\users\templates\users\logout.html:5
 msgid "Closed session"
 msgstr "Cerrar sesión"
 
-#: .\users\templates\users\logout.html:5
+#: .\users\templates\users\logout.html:6
 #, fuzzy
 #| msgid "Back to Home"
 msgid "Back to top"
 msgstr "Página principal"
 
-#: .\users\templates\users\register.html:2
-#, fuzzy
-#| msgid "Register here"
-msgid "Register"
-msgstr "Registrate aquí"
-
-#: .\users\templates\users\register.html:11
+#: .\users\templates\users\register.html:10
 msgid "Sign up"
 msgstr "Registrarse"
 
-#: .\users\templates\users\register.html:37
+#: .\users\templates\users\register.html:36
 msgid "Create account"
 msgstr "Crear una cuenta"
 
-#: .\users\templates\users\register.html:40
+#: .\users\templates\users\register.html:39
 msgid "Already have an account?"
 msgstr "Ya tienes una cuenta"
 
-#: .\users\templates\users\register.html:41
+#: .\users\templates\users\register.html:40
 msgid "Log in here"
 msgstr "Inicia sesión aquí"
 
@@ -694,6 +769,10 @@ msgstr "Staff"
 msgid "Superuser"
 msgstr "Superusuario"
 
+#: .\users\templates\users\user_control.html:51
+msgid "N/A"
+msgstr "N/A"
+
 #: .\users\templates\users\user_control.html:71
 msgid "No users found."
 msgstr "No se encontraron usuarios"
@@ -713,3 +792,19 @@ msgstr "Estás a punto de eliminar la cuenta"
 #: .\users\templates\users\user_control.html:94
 msgid "This action cannot be undone."
 msgstr "Esta acción no se puede deshacer"
+
+#~ msgid "Administration panel"
+#~ msgstr "Panel de administrador"
+
+#, fuzzy
+#~| msgid "Total"
+#~ msgid "Total users"
+#~ msgstr "Total"
+
+#~ msgid "Total orders"
+#~ msgstr "Total de ordenes"
+
+#, fuzzy
+#~| msgid "Register here"
+#~ msgid "Register"
+#~ msgstr "Registrate aquí"
