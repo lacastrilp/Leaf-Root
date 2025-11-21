@@ -109,3 +109,43 @@ body.has-fixed-header .auth-bg{
   transform: scale(1.02);
   box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
+
+/* Password visibility toggle inside inputs */
+.password-toggle {
+  position: relative;
+  width: 100%;
+}
+.password-toggle input[type="password"],
+.password-toggle input[type="text"] {
+  padding-right: 3.25rem; /* espacio para el botón */
+  width: 100%;
+}
+.password-toggle .toggle-password {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4caf50;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  transition: color 0.2s ease;
+}
+.password-toggle .toggle-password:hover {
+  color: #45a049;
+}
+.password-toggle .toggle-password:focus {
+  outline: none;
+  box-shadow: 0 0 0 .15rem rgba(76, 175, 80, 0.25);
+  border-radius: .25rem;
+}
+.password-toggle .toggle-password svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
