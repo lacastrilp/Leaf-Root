@@ -31,7 +31,7 @@ LOGOUT_REDIRECT_URL = '/'  # redirige al home después de logout
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-ALLOWED_HOSTS = ['98.92.109.61']
+ALLOWED_HOSTS = ['98.89.178.99']
 
 
 # Application definition
