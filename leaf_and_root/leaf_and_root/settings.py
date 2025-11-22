@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     "cosmetic-s-lac.shop",
     "www.cosmetic-s-lac.shop",
     "98.89.178.99",
+    "127.0.0.1",
 ]
 
 

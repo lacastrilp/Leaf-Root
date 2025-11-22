@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     path("", views.redirect_to_home , name="home"),
+    path("veg-recipe/", views.veg_recipe, name="veg_recipe"),
     # Dashboard único + exportación
     path("admin/dashboard/", views.AdminDashboardView.as_view(), name="admin_dashboard"),
     path("admin/dashboard/export/", views.export_dashboard_excel, name="admin_dashboard_export"),

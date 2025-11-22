@@ -1,3 +1,5 @@
+import requests
+import random
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -123,4 +125,29 @@ def export_dashboard_excel(request):
     wb.save(response)
     return response
 
+def veg_recipe(request):
+    # TheMealDB vegetarian/vegan filter endpoints
+    veg_urls = [
+        'https://www.themealdb.com/api/json/v1/1/filter.php?c=Vegetarian',
+        'https://www.themealdb.com/api/json/v1/1/filter.php?c=Vegan',
+    ]
+    # Pick one category randomly
+    url = random.choice(veg_urls)
+    resp = requests.get(url, timeout=8)
+    meals = resp.json().get('meals', [])
+    recipe = None
+    if meals:
+        meal = random.choice(meals)
+        meal_id = meal['idMeal']
+        detail_url = f'https://www.themealdb.com/api/json/v1/1/lookup.php?i={meal_id}'
+        detail_resp = requests.get(detail_url, timeout=8)
+        recipe = detail_resp.json().get('meals', [{}])[0]
+        # Prefer Spanish if available and language is es
+        lang = getattr(request, 'LANGUAGE_CODE', 'en')
+        if lang.startswith('es'):
+            if recipe.get('strInstructionsES'):
+                recipe['strInstructions'] = recipe['strInstructionsES']
+                if recipe.get('strMealES'):
+                    recipe['strMeal'] = recipe['strMealES']
+    return render(request, 'veg_recipe.html', {'recipe': recipe})
 

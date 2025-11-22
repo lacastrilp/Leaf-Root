@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Veggies Recipes" %}{% endblock %}
+<link rel="stylesheet" href="{% static 'store/css/base.css' %}">
+{% block content %}
+<div class="container py-4 d-flex flex-column align-items-center justify-content-center" style="min-height:60vh;">
+    <div class="card shadow-sm p-4 w-100" style="max-width: 900px;">
+        <div class="row g-4 align-items-center flex-column-reverse flex-md-row">
+            <div class="col-md-6 col-12">
+                <h2 class="mb-3  title text-center text-md-center" id="recipe-title">{{ recipe.strMeal }}</h2>
+                <div class="mb-3 text-center text-md-center">
+                    <span class="badge bg-success">{{ recipe.strCategory }}</span>
+                    {% if recipe.strTags %}
+                        <span class="badge bg-info">{{ recipe.strTags }}</span>
+                    {% endif %}
+                </div>
+                <p class="mb-2"><strong>{% trans "Instructions" %}:</strong></p>
+                <p style="white-space: pre-line;">{{ recipe.strInstructions }}</p>
+            </div>
+            <div class="col-md-6 col-12 d-flex justify-content-center">
+                <img src="{{ recipe.strMealThumb }}" alt="{{ recipe.strMeal }}" class="img-fluid rounded mb-3 mb-md-0" style="max-height:320px;object-fit:cover;">
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                <a href="{{ recipe.strSource|default:recipe.strYoutube }}" target="_blank" class="btn btn-secondary w-100" rel="noopener">{% trans "View Source" %}</a>
+            </div>
+            <div class="col-12 col-md-4">
+                <form method="get" action="" class="w-100">
+                    <button type="submit" class="btn btn-success w-100">{% trans "Show another recipe" %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
