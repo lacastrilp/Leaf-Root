@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     "www.cosmetic-s-lac.shop",
     "98.89.178.99",
     "127.0.0.1",
+    "localhost",
 ]
 
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'catalogo',
     'ordenes',
     'users',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -152,4 +154,12 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ]
+}
+
 

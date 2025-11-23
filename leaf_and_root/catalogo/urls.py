@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-
+from .views import products_api
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path("catalog/", views.ProductListView.as_view(), name="catalog"),  # Catálogo completo
     path("product/<int:product_id>/", views.ProductDetailView.as_view(), name="product_detail"),
     path("search/", views.ProductSearchView.as_view(), name="search"),
+    path("api/products/", products_api, name="products_api"),
     # Productos (Admin)
     path('products/add/', views.add_product, name='add_product'),
     path('products/<int:pk>/edit/', views.edit_product, name='edit_product'),

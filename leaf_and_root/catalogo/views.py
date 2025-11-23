@@ -16,7 +16,9 @@ from django.core.management.base import CommandError
 import os
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
-
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import ProductSerializer
 
 def is_admin(user):
     return user.is_staff
@@ -340,6 +342,11 @@ class ModerateReviewView(UserPassesTestMixin, View):
         review.save()
         return HttpResponse("Reseña moderada")
 
+@api_view(["GET"])
+def products_api(request):
+    products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True, context={"request": request})
+    return Response(serializer.data)
 
 # --- Agregar producto ---
 @login_required
