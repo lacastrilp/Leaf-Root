@@ -1,14 +1,12 @@
 # Leaf & Root - Guía de Instalación
 
-¡Saludos! 😊
-
 **LEAF & ROOT** es una tienda online enfocada en productos de origen vegetal, con un enfoque en opciones veganas y vegetarianas. La plataforma busca fomentar un estilo de vida saludable, ético y sostenible, ofreciendo a los usuarios la posibilidad de identificar de forma clara si cada producto es vegano o vegetariano, y brindando información transparente sobre sus beneficios nutricionales y ambientales.
 
 El proyecto consiste en diseñar, desarrollar y lanzar una plataforma digital de comercio electrónico, que permita a los consumidores acceder fácilmente a productos de origen vegetal, conocer sus características y comprar de manera segura.
 
 ---
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
@@ -28,44 +26,25 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
 ### 1. Descargar el Proyecto
 
-- Ve al [repositorio de Leaf & Root en GitHub](https://github.com/lacastrilp/Leaf-Root).
-- Haz clic en el botón verde **"Code"** y selecciona **"Download ZIP"**.
-- Extrae el contenido.
+- Clona el repositorio
+  ```bash
+  git clone https://github.com/lacastrilp/Leaf-Root
+  ```
 
 ---
 
-### 2. Configurar el Directorio del Proyecto
+### 2. Ingresar a el Directorio del Proyecto
 
-- Extrae la carpeta `Leaf-Root` en una ubicación de tu preferencia (por ejemplo, en tu escritorio o carpeta de documentos).
-- Navega a la carpeta extraída `Leaf-Root`.
-- Copia su ruta completa:
-  - **Windows**: Haz clic en la barra de direcciones del Explorador de archivos y presiona `CTRL + C`.
-  - **Mac**: Haz clic en la barra de direcciones del Finder y presiona `CMD + C`.
-  - **Linux**: Puedes copiar la ruta desde la barra de direcciones o usar `pwd` en la terminal.
-
-### 3. Abrir la Línea de Comandos
+- Navega a la carpeta clonada `Leaf-Root`.
 
 Abre una terminal y navega a la carpeta del proyecto:
 
 ```bash
-cd <RUTA_COPIADA>
+cd Leaf-Root
 ```
-
-Ejemplo (Windows):
-
-```bash
-cd C:\Users\usuario\Desktop\Leaf-Root
-```
-
-Ejemplo (Linux/Mac):
-
-```bash
-cd ~/Desktop/Leaf-Root
-```
-
 ---
 
-### 4. Instalar Dependencias
+### 3. Instalar Dependencias
 
 ```bash
 pip install -r requirements.txt
