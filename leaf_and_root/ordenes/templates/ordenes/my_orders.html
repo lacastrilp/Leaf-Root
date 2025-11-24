@@ -10,25 +10,51 @@
 .account-bg {
   background-image: url("{% static 'users/images/veggies.jpg' %}");
 }
+
+/* Ajuste del card para móviles */
+.auth-card {
+  position: relative;
+  max-width: 100%;
+  width: 95%;
+  margin: 0 auto;
+}
+
+/* Botón en esquina */
+.auth-card .back-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+/* Mejor comportamiento en móviles para celdas */
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.5rem; /* Reducido para móvil */
+  white-space: nowrap; /* Evita saltos raros */
+}
+
+/* Que la columna de acciones nunca se desborde */
+.action-btn {
+  width: 100%;
+  display: block;
+}
 </style>
 
 <div class="auth-bg account-bg">
 
   <div class="auth-card">
-    <style>
-    .auth-card { 
-      position: relative; 
-      max-width: 900px; /* Más grande para la tabla */
-      width: 100%;
-    }
-    .auth-card .back-btn { position: absolute; top: 0.5rem; right: 0.5rem; }
-    .table th, .table td { text-align: center; vertical-align: middle; padding: 1rem; }
-    </style>
 
-    <a href="{% url 'account_home' %}" class="btn btn-secondary back-btn">{% trans "Back to Account" %}</a>
+    <a href="{% url 'account_home' %}" class="btn btn-secondary back-btn">
+      {% trans "Back to Account" %}
+    </a>
+
     <h1 class="auth-title">{% trans "My Orders" %}</h1>
 
     {% if orders %}
+    
+    <!-- Contenedor responsive -->
+    <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -47,15 +73,23 @@
                     <td>{{ order_data.order.status }}</td>
                     <td>${{ order_data.total }}</td>
                     <td>
-                        <a href="{% url 'generate_invoice_pdf' order_data.order.id_order %}" class="btn btn-sm btn-primary" target="_blank">{% trans "Download PDF" %}</a>
+                        <!-- Botón ajustado al ancho -->
+                        <a href="{% url 'generate_invoice_pdf' order_data.order.id_order %}"
+                           class="btn btn-sm btn-primary action-btn"
+                           target="_blank">
+                           {% trans "Download PDF" %}
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+
     {% else %}
         <p>{% trans "You have no orders yet." %}</p>
     {% endif %}
   </div>
 </div>
+
 {% endblock %}
