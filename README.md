@@ -28,11 +28,12 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
 ### 2. Configurar el Directorio del Proyecto
 
-- *(Opcional pero recomendado)* Crea una carpeta llamada `leaf_root` en tu escritorio y mueve la carpeta extraída `Leaf-Root` dentro de ella.
-- Navega a la carpeta `Leaf-Root`.
+- Extrae la carpeta `Leaf-Root` en una ubicación de tu preferencia (por ejemplo, en tu escritorio o carpeta de documentos).
+- Navega a la carpeta extraída `Leaf-Root`.
 - Copia su ruta completa:
-
-  Haz clic en la barra de direcciones del Explorador de archivos y presiona `CTRL + C`.
+  - **Windows**: Haz clic en la barra de direcciones del Explorador de archivos y presiona `CTRL + C`.
+  - **Mac**: Haz clic en la barra de direcciones del Finder y presiona `CMD + C`.
+  - **Linux**: Puedes copiar la ruta desde la barra de direcciones o usar `pwd` en la terminal.
 
 ### 3. Abrir la Línea de Comandos
 
@@ -45,13 +46,13 @@ cd <RUTA_COPIADA>
 Ejemplo (Windows):
 
 ```bash
-cd C:\Users\usuario\Desktop\leaf_root\Leaf-Root
+cd C:\Users\usuario\Desktop\Leaf-Root
 ```
 
 Ejemplo (Linux/Mac):
 
 ```bash
-cd ~/Desktop/leaf_root/Leaf-Root
+cd ~/Desktop/Leaf-Root
 ```
 
 ---
