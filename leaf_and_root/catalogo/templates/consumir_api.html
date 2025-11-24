@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Consumir API Externa | Leaf & Root{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 pt-4">
+
+    <!-- TÍTULO BONITO -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold"> Consumir API Externa</h2>
+        <p class="text-muted">
+            Ingresa la URL de la API del otro equipo para visualizar sus datos en tu aplicación.
+        </p>
+    </div>
+
+    <!-- FORMULARIO -->
+    <form method="GET" class="d-flex justify-content-center mb-4">
+        <div class="input-group" style="max-width: 600px;">
+            <input type="text" name="api_url" class="form-control" 
+                   placeholder="https://ejemplo.com/api/products/">
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-cloud-download"></i> Consumir API
+            </button>
+        </div>
+    </form>
+
+    <!-- RESULTADOS -->
+    {% if productos %}
+        <h4 class="fw-semibold mb-3">Resultados:</h4>
+
+        <div class="row">
+            {% for item in productos %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+
+                            <!-- MOSTRAR CADA CAMPO AUTOMÁTICAMENTE -->
+                            {% for key, value in item.items %}
+                                <p class="mb-1">
+                                    <strong class="text-capitalize">{{ key }}:</strong>
+                                    {{ value }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

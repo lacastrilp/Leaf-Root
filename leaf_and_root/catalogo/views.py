@@ -14,6 +14,7 @@ from .forms import ReviewForm, ProductForm
 from django.db.models import Q, Avg, Count, Case, When
 from django.core.management.base import CommandError
 import os
+import requests
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from rest_framework.response import Response
@@ -390,7 +391,18 @@ def product_list(request):
     products = Product.objects.all()
     return render(request, 'product_list.html', {'products': products})
 
+def consumir_api_dinamica(request):
+    api_url = request.GET.get("api_url")
+    data = []
 
+    if api_url:
+        try:
+            response = requests.get(api_url, timeout=10)
+            data = response.json()
+        except Exception as e:
+            print("Error consumiendo API:", e)
+
+    return render(request, "consumir_api.html", {"productos": data})
 
 
 @login_required

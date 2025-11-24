@@ -22,7 +22,8 @@ urlpatterns = [
     # Wishlist
     path('wishlist/', views.wishlist_view, name='wishlist'),
     path("wishlist/toggle/<int:product_id>/", views.toggle_wishlist, name="toggle_wishlist"),
-
+    
+    path("consumir-api/", views.consumir_api_dinamica, name="consumir_api_dinamica"),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
