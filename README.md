@@ -15,6 +15,14 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 - **Python 3.8 o superior**  
   Descarga desde el sitio oficial:  
   [https://www.python.org/downloads/](https://www.python.org/downloads/)
+  
+  Para verificar tu instalación, ejecuta en la terminal:
+  ```bash
+  python --version
+  pip --version
+  ```
+  
+  Si `python` no funciona, prueba con `python3` en sistemas Linux/Mac.
 
 ## 🚀 Pasos de Instalación
 
@@ -63,6 +71,10 @@ cd ~/Desktop/Leaf-Root
 pip install -r requirements.txt
 ```
 
+**Nota**: Si encuentras problemas de permisos o el comando no funciona, intenta:
+- En Windows/Mac: `python -m pip install -r requirements.txt`
+- En Linux/Mac: `pip3 install -r requirements.txt` o `sudo pip install -r requirements.txt`
+
 ### 5. Navegar al Directorio de la Aplicación
 
 El archivo `manage.py` se encuentra en el subdirectorio `leaf_and_root`:
@@ -71,13 +83,21 @@ El archivo `manage.py` se encuentra en el subdirectorio `leaf_and_root`:
 cd leaf_and_root
 ```
 
-### 6. Ejecutar el Servidor
+### 6. Configurar la Base de Datos (Primera vez)
+
+Si es la primera vez que ejecutas el proyecto, necesitas configurar la base de datos:
+
+```bash
+python manage.py migrate
+```
+
+### 7. Ejecutar el Servidor
 
 ```bash
 python manage.py runserver
 ```
 
-### 7. Abrir la Aplicación Web
+### 8. Abrir la Aplicación Web
 
 Abre tu navegador y ve a:
 
