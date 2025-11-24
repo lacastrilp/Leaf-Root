@@ -40,6 +40,11 @@ ALLOWED_HOSTS = [
     "172.31.73.242",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://cosmetic-s-lac.shop",
+    "https://www.cosmetic-s-lac.shop",
+]
+
 
 # Application definition
 
