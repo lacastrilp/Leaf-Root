@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   web:
+    restart: unless-stopped
     build: .
     container_name: leafroot-web
     ports:
